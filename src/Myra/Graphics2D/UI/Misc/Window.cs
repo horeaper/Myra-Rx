@@ -31,14 +31,16 @@ namespace Myra.Graphics2D.UI
 		[Category("Appearance")]
 		public string Title
 		{
-			get
-			{
-				return _titleLabel.Text;
-			}
-
+			get => _titleLabel.Text;
 			set
 			{
+				if (value == _titleLabel.Text)
+				{
+					return;
+				}
+				
 				_titleLabel.Text = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -46,26 +48,32 @@ namespace Myra.Graphics2D.UI
 		[StylePropertyPath("TitleStyle/TextColor")]
 		public Color TitleTextColor
 		{
-			get
-			{
-				return _titleLabel.TextColor;
-			}
+			get => _titleLabel.TextColor;
 			set
 			{
+				if (value == _titleLabel.TextColor)
+				{
+					return;
+				}
+				
 				_titleLabel.TextColor = value;
+				OnPropertyChanged();
 			}
 		}
 
 		[Category("Appearance")]
 		public SpriteFontBase TitleFont
 		{
-			get
-			{
-				return _titleLabel.Font;
-			}
+			get => _titleLabel.Font;
 			set
 			{
+				if (value == _titleLabel.Font)
+				{
+					return;
+				}
+				
 				_titleLabel.Font = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -81,11 +89,7 @@ namespace Myra.Graphics2D.UI
 		[Content]
 		public override Widget Content
 		{
-			get
-			{
-				return _content;
-			}
-
+			get => _content;
 			set
 			{
 				if (value == Content)
@@ -106,6 +110,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_content = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -116,31 +121,23 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(HorizontalAlignment.Left)]
 		public override HorizontalAlignment HorizontalAlignment
 		{
-			get
-			{
-				return base.HorizontalAlignment;
-			}
-			set
-			{
-				base.HorizontalAlignment = value;
-			}
+			get => base.HorizontalAlignment;
+			set => base.HorizontalAlignment = value;
 		}
 
 		[DefaultValue(VerticalAlignment.Top)]
 		public override VerticalAlignment VerticalAlignment
 		{
-			get
-			{
-				return base.VerticalAlignment;
-			}
-			set
-			{
-				base.VerticalAlignment = value;
-			}
+			get => base.VerticalAlignment;
+			set => base.VerticalAlignment = value;
 		}
 
 		[DefaultValue(DragDirection.Both)]
-		public override DragDirection DragDirection { get => base.DragDirection; set => base.DragDirection = value; }
+		public override DragDirection DragDirection
+		{
+			get => base.DragDirection;
+			set => base.DragDirection = value;
+		}
 
 		[Category("Behavior")]
 		[DefaultValue(Keys.Escape)]
@@ -159,11 +156,11 @@ namespace Myra.Graphics2D.UI
 			AcceptsKeyboardFocus = true;
 			CloseKey = Keys.Escape;
 
-			DragDirection = DragDirection.Both;
+			base.DragDirection = DragDirection.Both;
 
 			Result = false;
-			HorizontalAlignment = HorizontalAlignment.Left;
-			VerticalAlignment = VerticalAlignment.Top;
+			base.HorizontalAlignment = HorizontalAlignment.Left;
+			base.VerticalAlignment = VerticalAlignment.Top;
 
 			TitlePanel = new HorizontalStackPanel
 			{

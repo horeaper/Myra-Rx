@@ -13,9 +13,17 @@ namespace Myra.Graphics2D.UI
 		public bool IsChecked
 		{
 			get => IsPressed;
-			set => IsPressed = value;
-		}
+			set
+			{
+				if (value == IsPressed)
+				{
+					return;
+				}
 
+				IsPressed = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public event EventHandler IsCheckedChanged
 		{

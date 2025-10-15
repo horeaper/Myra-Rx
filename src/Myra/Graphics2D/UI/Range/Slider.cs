@@ -19,6 +19,8 @@ namespace Myra.Graphics2D.UI
 		private readonly SingleItemLayout<Button> _layout;
 
 		private float _value;
+		private float _minimum;
+		private float _maximum;
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -26,20 +28,43 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(0.0f)]
-		public float Minimum { get; set; }
+		public float Minimum
+		{
+			get => _minimum;
+			set
+			{
+				if (value == _minimum)
+				{
+					return;
+				}
+
+				_minimum = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Behavior")]
 		[DefaultValue(100.0f)]
-		public float Maximum { get; set; }
+		public float Maximum
+		{
+			get => _maximum;
+			set
+			{
+				if (value == _maximum)
+				{
+					return;
+				}
+
+				_maximum = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Behavior")]
 		[DefaultValue(0.0f)]
 		public float Value
 		{
-			get
-			{
-				return _value;
-			}
+			get => _value;
 			set
 			{
 				if (value > Maximum)
@@ -61,20 +86,16 @@ namespace Myra.Graphics2D.UI
 
 				var oldValue = _value;
 				_value = value;
+				OnPropertyChanged();
 
 				SyncHintWithValue();
-
 				ValueChanged?.Invoke(this, new ValueChangedEventArgs<float>(oldValue, value));
 			}
 		}
 
 		internal int Hint
 		{
-			get
-			{
-				return Orientation == Orientation.Horizontal ? ImageButton.Left : ImageButton.Top;
-			}
-
+			get => Orientation == Orientation.Horizontal ? ImageButton.Left : ImageButton.Top;
 			set
 			{
 				if (Hint == value)
@@ -105,11 +126,7 @@ namespace Myra.Graphics2D.UI
 
 		public override Desktop Desktop
 		{
-			get
-			{
-				return base.Desktop;
-			}
-
+			get => base.Desktop;
 			internal set
 			{
 				if (Desktop != null)

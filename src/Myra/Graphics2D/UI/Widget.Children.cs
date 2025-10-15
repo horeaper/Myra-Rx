@@ -13,10 +13,24 @@ namespace Myra.Graphics2D.UI
 	{
 		private bool _childrenDirty = true;
 		private readonly List<Widget> _childrenCopy = new List<Widget>();
+		private ILayout _childrenLayout;
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public ILayout ChildrenLayout { get; set; }
+		public ILayout ChildrenLayout
+		{
+			get => _childrenLayout;
+			set
+			{
+				if (value == _childrenLayout)
+				{
+					return;
+				}
+				
+				_childrenLayout = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Browsable(false)]
 		[Content]

@@ -17,14 +17,16 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 		public Color Color
 		{
-			get
-			{
-				return ColorPickerPanel.Color;
-			}
-
+			get => ColorPickerPanel.Color;
 			set
 			{
+				if (value == ColorPickerPanel.Color)
+				{
+					return;
+				}
+				
 				ColorPickerPanel.Color = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -33,7 +35,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			ColorPickerPanel = new ColorPickerPanel();
 
 			Title = "Color Picker";
-			Content = ColorPickerPanel;
+			base.Content = ColorPickerPanel;
 
 			SetStyle(Stylesheet.DefaultStyleName);
 		}

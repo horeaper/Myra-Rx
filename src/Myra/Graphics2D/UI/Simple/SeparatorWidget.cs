@@ -15,7 +15,22 @@ namespace Myra.Graphics2D.UI
 {
 	public abstract class SeparatorWidget : Image
 	{
-		public int Thickness { get; set; }
+		private int _thickness;
+
+		public int Thickness
+		{
+			get => _thickness;
+			set
+			{
+				if (value == _thickness)
+				{
+					return;
+				}
+
+				_thickness = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Browsable(false)]
 		[XmlIgnore]

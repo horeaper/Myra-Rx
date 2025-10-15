@@ -7,42 +7,27 @@ namespace Myra.Graphics2D.UI
 	{
 		public override Orientation Orientation
 		{
-			get
-			{
-				return Orientation.Vertical;
-			}
+			get { return Orientation.Vertical; }
 		}
 
 		[DefaultValue(HorizontalAlignment.Left)]
 		public override HorizontalAlignment HorizontalAlignment
 		{
-			get
-			{
-				return base.HorizontalAlignment;
-			}
-			set
-			{
-				base.HorizontalAlignment = value;
-			}
+			get => base.HorizontalAlignment;
+			set => base.HorizontalAlignment = value;
 		}
 
 		[DefaultValue(VerticalAlignment.Stretch)]
 		public override VerticalAlignment VerticalAlignment
 		{
-			get
-			{
-				return base.VerticalAlignment;
-			}
-			set
-			{
-				base.VerticalAlignment = value;
-			}
+			get => base.VerticalAlignment;
+			set => base.VerticalAlignment = value;
 		}
 
 		public VerticalSlider(string styleName = Stylesheet.DefaultStyleName): base(styleName)
 		{
-			HorizontalAlignment = HorizontalAlignment.Left;
-			VerticalAlignment = VerticalAlignment.Stretch;
+			base.HorizontalAlignment = HorizontalAlignment.Left;
+			base.VerticalAlignment = VerticalAlignment.Stretch;
 		}
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)

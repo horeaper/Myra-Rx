@@ -35,18 +35,24 @@ namespace Myra.Graphics2D.UI
 	{
 		private IImage _image, _overImage, _pressedImage;
 
+		private Color _color = Color.White;
+		private ImageResizeMode _resizeMode;
+
 #if MONOGAME
 		private bool _isAnisotropicFiltering = false;
 
 		public bool IsAnisotropicFiltering
 		{
-			get
-			{
-				return _isAnisotropicFiltering;
-			}
+			get => _isAnisotropicFiltering;
 			set
 			{
+				if (value == _isAnisotropicFiltering)
+ 				{
+					return;
+				}
+
 				_isAnisotropicFiltering = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -55,11 +61,7 @@ namespace Myra.Graphics2D.UI
 		[Category("Appearance")]
 		public IImage Renderable
 		{
-			get
-			{
-				return _image;
-			}
-
+			get => _image;
 			set
 			{
 				if (value == _image)
@@ -68,6 +70,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_image = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -75,11 +78,7 @@ namespace Myra.Graphics2D.UI
 		[Category("Appearance")]
 		public IImage OverRenderable
 		{
-			get
-			{
-				return _overImage;
-			}
-
+			get => _overImage;
 			set
 			{
 				if (value == _overImage)
@@ -88,6 +87,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_overImage = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -95,11 +95,7 @@ namespace Myra.Graphics2D.UI
 		[Category("Appearance")]
 		public IImage PressedRenderable
 		{
-			get
-			{
-				return _pressedImage;
-			}
-
+			get => _pressedImage;
 			set
 			{
 				if (value == _pressedImage)
@@ -108,6 +104,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_pressedImage = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -122,11 +119,37 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Appearance")]
 		[DefaultValue("#FFFFFFFF")]
-		public Color Color { get; set; } = Color.White;
+		public Color Color
+		{
+			get => _color;
+			set
+			{
+				if (value == _color)
+				{
+					return;
+				}
+
+				_color = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Behavior")]
 		[DefaultValue(ImageResizeMode.Stretch)]
-		public ImageResizeMode ResizeMode { get; set; }
+		public ImageResizeMode ResizeMode
+		{
+			get => _resizeMode;
+			set
+			{
+				if (value == _resizeMode)
+				{
+					return;
+				}
+
+				_resizeMode = value;
+				OnPropertyChanged();
+			}
+		}
 
 		protected override Point InternalMeasure(Point availableSize)
 		{

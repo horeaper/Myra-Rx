@@ -23,16 +23,23 @@ namespace Myra.Graphics2D.UI
 		public bool IsToggled
 		{
 			get => IsPressed;
-			set => IsPressed = value;
+			set
+			{
+				IsPressed = value;
+				OnPropertyChanged();
+			}
 		}
-
 
 		[Browsable(false)]
 		[Content]
 		public override Widget Content
 		{
 			get => _layout.Child;
-			set => _layout.Child = value;
+			set
+			{
+				_layout.Child = value;
+				OnPropertyChanged();
+			}
 		}
 
 		public event EventHandler IsToggledChanged

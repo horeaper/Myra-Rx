@@ -2,22 +2,20 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 
 namespace Myra.MML
 {
-	public class BaseObject: IItemWithId, INotifyAttachedPropertyChanged
+	public class BaseObject: IItemWithId, INotifyAttachedPropertyChanged, INotifyPropertyChanged
 	{
-		private string _id = null;
+		private string _id;
+		private object _tag;
 
 		[DefaultValue(null)]
 		public string Id
 		{
-			get
-			{
-				return _id;
-			}
-
+			get => _id;
 			set
 			{
 				if (value == _id)
@@ -26,7 +24,25 @@ namespace Myra.MML
 				}
 
 				_id = value;
+				OnPropertyChanged();
 				OnIdChanged();
+			}
+		}
+		
+		[Browsable(false)]
+		[XmlIgnore]
+		public object Tag
+		{
+			get => _tag;
+			set
+			{
+				if (value == _tag)
+				{
+					return;
+				}
+
+				_tag = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -57,6 +73,14 @@ namespace Myra.MML
 
 		public virtual void OnAttachedPropertyChanged(BaseAttachedPropertyInfo propertyInfo)
 		{
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }

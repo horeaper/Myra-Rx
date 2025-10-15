@@ -31,14 +31,13 @@ namespace Myra.Graphics2D.UI
 				};
 
 				_text = value;
+				OnPropertyChanged();
 			}
 		}
-
 
 		public override bool IsPressed
 		{
 			get => base.IsPressed;
-
 			set
 			{
 				if (IsPressed && Parent != null)

@@ -25,6 +25,9 @@ namespace Myra.Graphics2D.UI
 		private TreeViewNode _selectedNode;
 		private bool _rowInfosDirty = true;
 
+		private IBrush _selectionBackground;
+		private IBrush _selectionHoverBackground;
+		
 		internal List<TreeViewNode> AllNodes => _allNodes;
 
 		public int ChildNodesCount => Children.Count;
@@ -37,7 +40,6 @@ namespace Myra.Graphics2D.UI
 		public TreeViewNode SelectedRow
 		{
 			get => SelectedNode;
-
 			set => SelectedNode = value;
 		}
 
@@ -45,11 +47,7 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public TreeViewNode SelectedNode
 		{
-			get
-			{
-				return _selectedNode;
-			}
-
+			get => _selectedNode;
 			set
 			{
 				if (value == _selectedNode)
@@ -58,6 +56,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_selectedNode = value;
+				OnPropertyChanged();
 
 				var ev = SelectionChanged;
 				if (ev != null)
@@ -67,11 +66,51 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[Category("Appearance")]
-		public IBrush SelectionBackground { get; set; }
+		[DefaultValue(HorizontalAlignment.Stretch)]
+		public override HorizontalAlignment HorizontalAlignment
+		{
+			get => base.HorizontalAlignment;
+			set => base.HorizontalAlignment = value;
+		}
+
+		[DefaultValue(VerticalAlignment.Stretch)]
+		public override VerticalAlignment VerticalAlignment
+		{
+			get => base.VerticalAlignment;
+			set => base.VerticalAlignment = value;
+		}
 
 		[Category("Appearance")]
-		public IBrush SelectionHoverBackground { get; set; }
+		public IBrush SelectionBackground
+		{
+			get => _selectionBackground;
+			set
+			{
+				if (value == _selectionBackground)
+				{
+					return;
+				}
+				
+				_selectionBackground = value;
+				OnPropertyChanged();
+			}
+		}
+
+		[Category("Appearance")]
+		public IBrush SelectionHoverBackground
+		{
+			get => _selectionHoverBackground;
+			set
+			{
+				if (value == _selectionHoverBackground)
+				{
+					return;
+				}
+				
+				_selectionHoverBackground = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public event EventHandler SelectionChanged;
 
@@ -79,8 +118,8 @@ namespace Myra.Graphics2D.UI
 		{
 			ChildrenLayout = _layout;
 			AcceptsKeyboardFocus = true;
-			HorizontalAlignment = HorizontalAlignment.Stretch;
-			VerticalAlignment = VerticalAlignment.Stretch;
+			base.HorizontalAlignment = HorizontalAlignment.Stretch;
+			base.VerticalAlignment = VerticalAlignment.Stretch;
 			SetStyle(styleName);
 		}
 
@@ -164,7 +203,7 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnTouchDown();
 
-			if (Desktop == null)
+			if (Desktop?.TouchPosition == null)
 			{
 				return;
 			}

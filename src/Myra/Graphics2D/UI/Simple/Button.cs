@@ -21,11 +21,7 @@ namespace Myra.Graphics2D.UI
 
 		public override Desktop Desktop
 		{
-			get
-			{
-				return base.Desktop;
-			}
-
+			get => base.Desktop;
 			internal set
 			{
 				// If we're not releasing the button on touch left,
@@ -49,7 +45,16 @@ namespace Myra.Graphics2D.UI
 		public override Widget Content
 		{
 			get => _layout.Child;
-			set => _layout.Child = value;
+			set
+			{
+				if (value == _layout.Child)
+				{
+					return;
+				}
+
+				_layout.Child = value;
+				OnPropertyChanged();
+			}
 		}
 
 		public Button(string styleName = Stylesheet.DefaultStyleName)

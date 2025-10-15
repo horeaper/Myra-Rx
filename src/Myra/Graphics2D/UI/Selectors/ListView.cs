@@ -326,6 +326,8 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_selectedItem = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(SelectedIndex));
 
 				if (_selectedItem != null)
 				{

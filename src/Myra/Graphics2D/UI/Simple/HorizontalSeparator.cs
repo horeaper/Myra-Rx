@@ -8,35 +8,23 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(HorizontalAlignment.Stretch)]
 		public override HorizontalAlignment HorizontalAlignment
 		{
-			get
-			{
-				return base.HorizontalAlignment;
-			}
-			set
-			{
-				base.HorizontalAlignment = value;
-			}
+			get => base.HorizontalAlignment;
+			set => base.HorizontalAlignment = value;
 		}
 
 		[DefaultValue(VerticalAlignment.Center)]
 		public override VerticalAlignment VerticalAlignment
 		{
-			get
-			{
-				return base.VerticalAlignment;
-			}
-			set
-			{
-				base.VerticalAlignment = value;
-			}
+			get => base.VerticalAlignment;
+			set => base.VerticalAlignment = value;
 		}
 
 		public override Orientation Orientation => Orientation.Horizontal;
 
 		public HorizontalSeparator(string styleName = Stylesheet.DefaultStyleName) : base(styleName)
 		{
-			HorizontalAlignment = HorizontalAlignment.Stretch;
-			VerticalAlignment = VerticalAlignment.Center;
+			base.HorizontalAlignment = HorizontalAlignment.Stretch;
+			base.VerticalAlignment = VerticalAlignment.Center;
 		}
 
 

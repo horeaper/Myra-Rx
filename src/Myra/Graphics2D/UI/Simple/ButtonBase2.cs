@@ -12,18 +12,29 @@ namespace Myra.Graphics2D.UI
 		private bool _isPressed = false;
 		private bool _isClicked = false;
 
+		private IBrush _pressedBackground;
+
 		[Category("Appearance")]
-		public virtual IBrush PressedBackground { get; set; }
+		public virtual IBrush PressedBackground
+		{
+			get => _pressedBackground;
+			set
+			{
+				if (value == _pressedBackground)
+				{
+					return;
+				}
+
+				_pressedBackground = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Browsable(false)]
 		[XmlIgnore]
 		public virtual bool IsPressed
 		{
-			get
-			{
-				return _isPressed;
-			}
-
+			get => _isPressed;
 			set
 			{
 				if (value == _isPressed)
@@ -32,6 +43,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_isPressed = value;
+				OnPropertyChanged();
 				OnPressedChanged();
 			}
 		}

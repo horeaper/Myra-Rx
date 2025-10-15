@@ -62,12 +62,6 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
-		public object Tag
-		{
-			get; set;
-		}
 
 		[Browsable(false)]
 		[XmlIgnore]

@@ -29,6 +29,9 @@ namespace Myra.Graphics2D.UI
 		private Proportion _imageProportion = Proportion.Auto, _shortcutProportion = Proportion.Auto;
 		private bool _dirty = true;
 		private bool _internalSetSelectedIndex = false;
+		private MenuStyle _menuStyle;
+		private MenuItem _openMenuItem;
+		private HorizontalAlignment _labelHorizontalAlignment = HorizontalAlignment.Left;
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -36,20 +39,44 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public MenuStyle MenuStyle { get; private set; }
+		public MenuStyle MenuStyle
+		{
+			get => _menuStyle;
+			private set
+			{
+				if (value == _menuStyle)
+				{
+					return;
+				}
+
+				_menuStyle = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Browsable(false)]
 		[XmlIgnore]
-		internal MenuItem OpenMenuItem { get; private set; }
+		internal MenuItem OpenMenuItem
+		{
+			get => _openMenuItem;
+			private set
+			{
+				if (value == _openMenuItem)
+				{
+					return;
+				}
+
+				_openMenuItem = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(IsOpen));
+			}
+		}
 
 		[Browsable(false)]
 		[XmlIgnore]
 		public bool IsOpen
 		{
-			get
-			{
-				return OpenMenuItem != null;
-			}
+			get { return OpenMenuItem != null; }
 		}
 
 		[Browsable(false)]
@@ -59,14 +86,16 @@ namespace Myra.Graphics2D.UI
 		[Category("Appearance")]
 		public SpriteFontBase LabelFont
 		{
-			get
-			{
-				return MenuStyle.LabelStyle.Font;
-			}
-
+			get => MenuStyle.LabelStyle.Font;
 			set
 			{
+				if (value == MenuStyle.LabelStyle.Font)
+				{
+					return;
+				}
+				
 				MenuStyle.LabelStyle.Font = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -74,71 +103,88 @@ namespace Myra.Graphics2D.UI
 		[StylePropertyPath("/LabelStyle/TextColor")]
 		public Color LabelColor
 		{
-			get
-			{
-				return MenuStyle.LabelStyle.TextColor;
-			}
-
+			get => MenuStyle.LabelStyle.TextColor;
 			set
 			{
+				if (value == MenuStyle.LabelStyle.TextColor)
+				{
+					return;
+				}
+				
 				MenuStyle.LabelStyle.TextColor = value;
+				OnPropertyChanged();
 			}
 		}
 
 		[Category("Appearance")]
 		public IBrush SelectionHoverBackground
 		{
-			get
-			{
-				return InternalChild.SelectionHoverBackground;
-			}
-
+			get => InternalChild.SelectionHoverBackground;
 			set
 			{
+				if (value == InternalChild.SelectionBackground)
+				{
+					return;
+				}
+				
 				InternalChild.SelectionHoverBackground = value;
+				OnPropertyChanged();
 			}
 		}
 
 		[Category("Appearance")]
 		public IBrush SelectionBackground
 		{
-			get
-			{
-				return InternalChild.SelectionBackground;
-			}
-
+			get => InternalChild.SelectionBackground;
 			set
 			{
+				if (value == InternalChild.SelectionBackground)
+				{
+					return;
+				}
+				
 				InternalChild.SelectionBackground = value;
+				OnPropertyChanged();
 			}
 		}
 
 		[Category("Appearance")]
 		[DefaultValue(HorizontalAlignment.Left)]
-		public HorizontalAlignment LabelHorizontalAlignment { get; set; }
+		public HorizontalAlignment LabelHorizontalAlignment
+		{
+			get => _labelHorizontalAlignment;
+			set
+			{
+				if (value == _labelHorizontalAlignment)
+				{
+					return;
+				}
+
+				_labelHorizontalAlignment = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Behavior")]
 		[DefaultValue(true)]
 		public bool HoverIndexCanBeNull
 		{
-			get
-			{
-				return InternalChild.HoverIndexCanBeNull;
-			}
-
+			get => InternalChild.HoverIndexCanBeNull;
 			set
 			{
+				if (value == InternalChild.HoverIndexCanBeNull)
+				{
+					return;
+				}
+				
 				InternalChild.HoverIndexCanBeNull = value;
+				OnPropertyChanged();
 			}
 		}
 
 		public override Desktop Desktop
 		{
-			get
-			{
-				return base.Desktop;
-			}
-
+			get => base.Desktop;
 			internal set
 			{
 				if (Desktop != null)
@@ -159,27 +205,29 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public int? HoverIndex
 		{
-			get
-			{
-				if (Orientation == Orientation.Horizontal)
-				{
-					return InternalChild.HoverColumnIndex;
-				}
-
-				return InternalChild.HoverRowIndex;
-			}
-
+			get => Orientation == Orientation.Horizontal ? InternalChild.HoverColumnIndex : InternalChild.HoverRowIndex;
 			set
 			{
-
 				if (Orientation == Orientation.Horizontal)
 				{
+					if (value == InternalChild.HoverColumnIndex)
+					{
+						return;
+					}
+					
 					InternalChild.HoverColumnIndex = value;
 				}
 				else
 				{
+					if (value == InternalChild.HoverRowIndex)
+					{
+						return;
+					}
+					
 					InternalChild.HoverRowIndex = value;
 				}
+				
+				OnPropertyChanged();
 			}
 		}
 
@@ -187,27 +235,27 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public int? SelectedIndex
 		{
-			get
-			{
-				if (Orientation == Orientation.Horizontal)
-				{
-					return InternalChild.SelectedColumnIndex;
-				}
-
-				return InternalChild.SelectedRowIndex;
-			}
-
+			get => Orientation == Orientation.Horizontal ? InternalChild.SelectedColumnIndex : InternalChild.SelectedRowIndex;
 			set
 			{
-
 				if (Orientation == Orientation.Horizontal)
 				{
+					if (value == InternalChild.SelectedColumnIndex)
+					{
+						return;
+					}
 					InternalChild.SelectedColumnIndex = value;
 				}
 				else
 				{
+					if (value == InternalChild.SelectedRowIndex)
+					{
+						return;
+					}
 					InternalChild.SelectedRowIndex = value;
 				}
+				
+				OnPropertyChanged();
 			}
 		}
 
@@ -331,8 +379,8 @@ namespace Myra.Graphics2D.UI
 
 			OpenMenuItem = null;
 
-			HorizontalAlignment = HorizontalAlignment.Stretch;
-			VerticalAlignment = VerticalAlignment.Stretch;
+			base.HorizontalAlignment = HorizontalAlignment.Stretch;
+			base.VerticalAlignment = VerticalAlignment.Stretch;
 			HoverIndexCanBeNull = true;
 
 			SetStyle(styleName);

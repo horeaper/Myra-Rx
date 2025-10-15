@@ -19,7 +19,7 @@ using Myra.Platform;
 
 namespace Myra.Graphics2D.UI
 {
-	public class ComboView: Widget
+	public class ComboView : Widget
 	{
 		private readonly ToggleButton _button;
 		private readonly ListView _listView = new ListView(null);
@@ -28,14 +28,16 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(300)]
 		public int? DropdownMaximumHeight
 		{
-			get
-			{
-				return _listView.MaxHeight;
-			}
-
+			get => _listView.MaxHeight;
 			set
 			{
+				if (value == _listView.MaxHeight)
+				{
+					return;
+				}
+				
 				_listView.MaxHeight = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -45,11 +47,7 @@ namespace Myra.Graphics2D.UI
 
 		public override Desktop Desktop
 		{
-			get
-			{
-				return base.Desktop;
-			}
-
+			get => base.Desktop;
 			internal set
 			{
 				if (Desktop != null)
@@ -78,8 +76,17 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public Widget SelectedItem
 		{
-			get => _listView.SelectedItem; 
-			set => _listView.SelectedItem = value;
+			get => _listView.SelectedItem;
+			set
+			{
+				if (value == _listView.SelectedItem)
+				{
+					return;
+				}
+				
+				_listView.SelectedItem = value;
+				OnPropertyChanged();
+			}
 		}
 
 		[Category("Behavior")]
@@ -87,7 +94,16 @@ namespace Myra.Graphics2D.UI
 		public SelectionMode SelectionMode
 		{
 			get => _listView.SelectionMode;
-			set => _listView.SelectionMode = value;
+			set
+			{
+				if (value == _listView.SelectionMode)
+				{
+					return;
+				}
+				
+				_listView.SelectionMode = value;
+				OnPropertyChanged();
+			}
 		}
 
 		[Browsable(false)]
@@ -95,7 +111,16 @@ namespace Myra.Graphics2D.UI
 		public int? SelectedIndex
 		{
 			get => _listView.SelectedIndex;
-			set => _listView.SelectedIndex = value;
+			set
+			{
+				if (value == _listView.SelectedIndex)
+				{
+					return;
+				}
+				
+				_listView.SelectedIndex = value;
+				OnPropertyChanged();
+			}
 		}
 
 		public event EventHandler SelectedIndexChanged
@@ -133,8 +158,8 @@ namespace Myra.Graphics2D.UI
 
 			_listView._parentCombo = this;
 
-			HorizontalAlignment = HorizontalAlignment.Left;
-			VerticalAlignment = VerticalAlignment.Top;
+			base.HorizontalAlignment = HorizontalAlignment.Left;
+			base.VerticalAlignment = VerticalAlignment.Top;
 
 			DropdownMaximumHeight = 300;
 

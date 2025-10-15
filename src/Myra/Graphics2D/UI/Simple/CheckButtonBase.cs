@@ -56,9 +56,13 @@ namespace Myra.Graphics2D.UI
 			get => _checkPosition;
 			set
 			{
-				if (_checkPosition == value) return;
+				if (_checkPosition == value)
+				{
+					return;
+				}
 
 				_checkPosition = value;
+				OnPropertyChanged();
 				UpdateChildren();
 			}
 		}
@@ -68,7 +72,16 @@ namespace Myra.Graphics2D.UI
 		public int CheckContentSpacing
 		{
 			get => _layout.Spacing;
-			set => _layout.Spacing = value;
+			set
+			{
+				if (value == _layout.Spacing)
+				{
+					return;
+				}
+
+				_layout.Spacing = value;
+				OnPropertyChanged();
+			}
 		}
 
 		[Category("Appearance")]
@@ -83,6 +96,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_uncheckedImage = value;
+				OnPropertyChanged();
 				UpdateImage();
 			}
 		}
@@ -99,6 +113,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_checkedImage = value;
+				OnPropertyChanged();
 				UpdateImage();
 			}
 		}
@@ -110,10 +125,12 @@ namespace Myra.Graphics2D.UI
 			get => _content;
 			set
 			{
-				if (_content == value) return;
-
+				if (_content == value)
+				{
+					return;
+				}
 				_content = value;
-
+				OnPropertyChanged();
 				UpdateChildren();
 			}
 		}

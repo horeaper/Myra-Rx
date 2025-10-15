@@ -26,6 +26,13 @@ namespace Myra.Graphics2D.UI
 		private int? _startBoundsPos;
 		private int _thumbMaximumX, _thumbMaximumY;
 
+		private IImage _horizontalScrollBackground;
+		private IImage _horizontalScrollKnob;
+		private IImage _verticalScrollBackground;
+		private IImage _verticalScrollKnob;
+		private int _scrollMultiplier = 10;
+		
+		
 		[Browsable(false)]
 		[XmlIgnore]
 		internal int VerticalThumbWidth => (_verticalScrollingOn && ShowVerticalScrollBar) ? _verticalScrollbarThumb.Width : 0;
@@ -86,6 +93,7 @@ namespace Myra.Graphics2D.UI
 
 				Content.Left = -value.X;
 				Content.Top = -value.Y;
+				OnPropertyChanged();
 			}
 		}
 
@@ -114,42 +122,92 @@ namespace Myra.Graphics2D.UI
 		[Category("Appearance")]
 		public IImage HorizontalScrollBackground
 		{
-			get; set;
+			get => _horizontalScrollBackground;
+			set
+			{
+				if (value == _horizontalScrollBackground)
+				{
+					return;
+				}
+
+				_horizontalScrollBackground = value;
+				OnPropertyChanged();
+			}
 		}
 
 		[Category("Appearance")]
 		public IImage HorizontalScrollKnob
 		{
-			get; set;
+			get => _horizontalScrollKnob;
+			set
+			{
+				if (value == _horizontalScrollKnob)
+				{
+					return;
+				}
+				
+				_horizontalScrollKnob = value;
+				OnPropertyChanged();
+			}
 		}
 
 		[Category("Appearance")]
 		public IImage VerticalScrollBackground
 		{
-			get; set;
+			get => _verticalScrollBackground;
+			set
+			{
+				if (value == _verticalScrollBackground)
+				{
+					return;
+				}
+
+				_verticalScrollBackground = value;
+				OnPropertyChanged();
+			}
 		}
 
 		[Category("Appearance")]
 		public IImage VerticalScrollKnob
 		{
-			get; set;
+			get => _verticalScrollKnob;
+			set
+			{
+				if (value == _verticalScrollKnob)
+				{
+					return;
+				}
+
+				_verticalScrollKnob = value;
+				OnPropertyChanged();
+			}
 		}
 
 		[Category("Appearance")]
 		public int ScrollMultiplier
 		{
-			get; set;
-		} = 10;
+			get => _scrollMultiplier;
+			set
+			{
+				if (value == _scrollMultiplier)
+				{
+					return;
+				}
 
-        [Browsable(false)]
+				_scrollMultiplier = value;
+				OnPropertyChanged();
+			}
+		}
+
+		[Browsable(false)]
 		[Content]
 		public override Widget Content
 		{
 			get => _layout.Child;
-
 			set
 			{
 				_layout.Child = value;
+				OnPropertyChanged();
 				ResetScroll();
 			}
 		}
@@ -158,11 +216,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(true)]
 		public bool ShowHorizontalScrollBar
 		{
-			get
-			{
-				return _showHorizontalScrollBar;
-			}
-
+			get => _showHorizontalScrollBar;
 			set
 			{
 				if (value == _showHorizontalScrollBar)
@@ -171,6 +225,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_showHorizontalScrollBar = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -179,11 +234,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(true)]
 		public bool ShowVerticalScrollBar
 		{
-			get
-			{
-				return _showVerticalScrollBar;
-			}
-
+			get => _showVerticalScrollBar;
 			set
 			{
 				if (value == _showVerticalScrollBar)
@@ -192,6 +243,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_showVerticalScrollBar = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -199,51 +251,29 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(HorizontalAlignment.Stretch)]
 		public override HorizontalAlignment HorizontalAlignment
 		{
-			get
-			{
-				return base.HorizontalAlignment;
-			}
-			set
-			{
-				base.HorizontalAlignment = value;
-			}
+			get => base.HorizontalAlignment;
+			set => base.HorizontalAlignment = value;
 		}
 
 		[DefaultValue(VerticalAlignment.Stretch)]
 		public override VerticalAlignment VerticalAlignment
 		{
-			get
-			{
-				return base.VerticalAlignment;
-			}
-			set
-			{
-				base.VerticalAlignment = value;
-			}
+			get => base.VerticalAlignment;
+			set => base.VerticalAlignment = value;
 		}
 
 		[DefaultValue(true)]
 		public override bool ClipToBounds
 		{
-			get
-			{
-				return base.ClipToBounds;
-			}
-			set
-			{
-				base.ClipToBounds = value;
-			}
+			get => base.ClipToBounds;
+			set => base.ClipToBounds = value;
 		}
 
 		protected internal override bool AcceptsMouseWheel => _verticalScrollingOn;
 
 		public override Desktop Desktop
 		{
-			get
-			{
-				return base.Desktop;
-			}
-
+			get => base.Desktop;
 			internal set
 			{
 				if (Desktop != null)
@@ -305,13 +335,13 @@ namespace Myra.Graphics2D.UI
 			_layout = new SingleItemLayout<Widget>(this);
 			ChildrenLayout = _layout;
 
-			ClipToBounds = true;
+			base.ClipToBounds = true;
 			_horizontalScrollingOn = _verticalScrollingOn = false;
 
 			ShowVerticalScrollBar = ShowHorizontalScrollBar = true;
 
-			HorizontalAlignment = HorizontalAlignment.Stretch;
-			VerticalAlignment = VerticalAlignment.Stretch;
+			base.HorizontalAlignment = HorizontalAlignment.Stretch;
+			base.VerticalAlignment = VerticalAlignment.Stretch;
 
 			SetStyle(styleName);
 		}
@@ -367,7 +397,7 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnTouchDown();
 
-			if (Desktop == null)
+			if (Desktop?.TouchPosition == null)
 			{
 				return;
 			}
@@ -619,7 +649,7 @@ namespace Myra.Graphics2D.UI
 
 		private void DesktopTouchMoved(object sender, EventArgs args)
 		{
-			if (!_startBoundsPos.HasValue || Desktop == null)
+			if (!_startBoundsPos.HasValue || Desktop?.TouchPosition == null)
 				return;
 
 			var touchPosition = Desktop.TouchPosition;

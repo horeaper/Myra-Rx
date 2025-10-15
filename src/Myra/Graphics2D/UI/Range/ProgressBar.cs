@@ -18,6 +18,9 @@ namespace Myra.Graphics2D.UI
 	public abstract class ProgressBar : Widget
 	{
 		private float _value;
+		private float _minimum;
+		private float _maximum;
+		private IBrush _filler;
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -25,21 +28,43 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(0.0f)]
-		public float Minimum { get; set; }
+		public float Minimum
+		{
+			get => _minimum;
+			set
+			{
+				if (value == _minimum)
+				{
+					return;
+				}
+				
+				_minimum = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Behavior")]
 		[DefaultValue(100.0f)]
-		public float Maximum { get; set; }
+		public float Maximum
+		{
+			get => _maximum;
+			set
+			{
+				if (value == _maximum)
+				{
+					return;
+				}
+				
+				_maximum = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Behavior")]
 		[DefaultValue(0.0f)]
 		public float Value
 		{
-			get
-			{
-				return _value;
-			}
-
+			get => _value;
 			set
 			{
 				if (_value.EpsilonEquals(value))
@@ -48,13 +73,26 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_value = value;
-
+				OnPropertyChanged();
 				ValueChanged.Invoke(this);
 			}
 		}
 
 		[Category("Appearance")]
-		public IBrush Filler { get; set; }
+		public IBrush Filler
+		{
+			get => _filler;
+			set
+			{
+				if (value == _filler)
+				{
+					return;
+				}
+				
+				_filler = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public event EventHandler ValueChanged;
 

@@ -19,48 +19,54 @@ namespace Myra.Graphics2D.UI
 		private Panel _panelContent;
 		private TabSelectorPosition _selectorPosition;
 
-		[Browsable(false)]
-		[XmlIgnore]
-		public TabControlStyle TabControlStyle { get; set; }
+		private TabControlStyle _tabControlStyle;
+
+		private bool _closableTabs;
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public override SelectionMode SelectionMode { get => base.SelectionMode; set => base.SelectionMode = value; }
+		public TabControlStyle TabControlStyle
+		{
+			get => _tabControlStyle;
+			set
+			{
+				if (value == _tabControlStyle)
+				{
+					return;
+				}
+
+				_tabControlStyle = value;
+				OnPropertyChanged();
+			}
+		}
+
+		[Browsable(false)]
+		[XmlIgnore]
+		public override SelectionMode SelectionMode
+		{
+			get => base.SelectionMode;
+			set => base.SelectionMode = value;
+		}
 
 		[DefaultValue(HorizontalAlignment.Left)]
 		public override HorizontalAlignment HorizontalAlignment
 		{
-			get
-			{
-				return base.HorizontalAlignment;
-			}
-			set
-			{
-				base.HorizontalAlignment = value;
-			}
+			get => base.HorizontalAlignment;
+			set => base.HorizontalAlignment = value;
 		}
 
 		[DefaultValue(VerticalAlignment.Top)]
 		public override VerticalAlignment VerticalAlignment
 		{
-			get
-			{
-				return base.VerticalAlignment;
-			}
-			set
-			{
-				base.VerticalAlignment = value;
-			}
+			get => base.VerticalAlignment;
+			set => base.VerticalAlignment = value;
 		}
 
 		[Category("Behavior")]
 		[DefaultValue(TabSelectorPosition.Top)]
 		public TabSelectorPosition TabSelectorPosition
 		{
-			get
-			{
-				return _selectorPosition;
-			}
+			get => _selectorPosition;
 			set
 			{
 				if (value == _selectorPosition)
@@ -69,21 +75,39 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_selectorPosition = value;
+				OnPropertyChanged();
 				UpdateSelectorPosition();
 			}
 		}
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
-		public bool CloseableTabs { get; set; }
+		public bool CloseableTabs
+		{
+			get => _closableTabs;
+			set
+			{
+				if (value == _closableTabs)
+				{
+					return;
+				}
+
+				_closableTabs = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[DefaultValue(true)]
-		public override bool ClipToBounds { get => base.ClipToBounds; set => base.ClipToBounds = value; }
+		public override bool ClipToBounds
+		{
+			get => base.ClipToBounds;
+			set => base.ClipToBounds = value;
+		}
 
 		public TabControl(string styleName = Stylesheet.DefaultStyleName) : base(new Grid())
 		{
-			HorizontalAlignment = HorizontalAlignment.Left;
-			VerticalAlignment = VerticalAlignment.Top;
+			base.HorizontalAlignment = HorizontalAlignment.Left;
+			base.VerticalAlignment = VerticalAlignment.Top;
 
 			_gridButtons = new Grid();
 			_panelContent = new Panel();

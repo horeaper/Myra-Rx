@@ -65,6 +65,22 @@ namespace Myra.Graphics2D.UI
 		private Matrix _inverseMatrix;
 		private bool _inverseMatrixDirty = true;
 
+		private DragDirection _dragDirection;
+		private string _tooltip;
+		private bool _isModal;
+		private bool _clipToBounds;
+		private Layout2D _layout2D = Layout2D.NullLayout;
+		private Widget _parent;
+		private bool _acceptsKeyboardFocus;
+
+		private IBrush _background;
+		private IBrush _overBackground;
+		private IBrush _disabledBackground;
+		private IBrush _focusedBackground;
+		private IBrush _overBorder;
+		private IBrush _disabledBorder;
+		private IBrush _focusedBorder;
+
 		/// <summary>
 		/// Internal use only. (MyraPad)
 		/// </summary>
@@ -75,7 +91,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(0)]
 		public int Left
 		{
-			get { return _left; }
+			get => _left;
 
 			set
 			{
@@ -85,6 +101,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_left = value;
+				OnPropertyChanged();
 				InvalidateTransform();
 				FireLocationChanged();
 			}
@@ -94,8 +111,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(0)]
 		public int Top
 		{
-			get { return _top; }
-
+			get => _top;
 			set
 			{
 				if (value == _top)
@@ -104,6 +120,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_top = value;
+				OnPropertyChanged();
 				InvalidateTransform();
 				FireLocationChanged();
 			}
@@ -113,7 +130,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(null)]
 		public int? MinWidth
 		{
-			get { return _minWidth; }
+			get => _minWidth;
 			set
 			{
 				if (value == _minWidth)
@@ -122,6 +139,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_minWidth = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 				FireSizeChanged();
 			}
@@ -131,7 +149,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(null)]
 		public int? MaxWidth
 		{
-			get { return _maxWidth; }
+			get => _maxWidth;
 			set
 			{
 				if (value == _maxWidth)
@@ -140,6 +158,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_maxWidth = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 				FireSizeChanged();
 			}
@@ -149,11 +168,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(null)]
 		public int? Width
 		{
-			get
-			{
-				return _width;
-			}
-
+			get => _width;
 			set
 			{
 				if (value == _width)
@@ -162,6 +177,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_width = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 				FireSizeChanged();
 			}
@@ -171,7 +187,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(null)]
 		public int? MinHeight
 		{
-			get { return _minHeight; }
+			get => _minHeight;
 			set
 			{
 				if (value == _minHeight)
@@ -180,6 +196,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_minHeight = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 				FireSizeChanged();
 			}
@@ -189,7 +206,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(null)]
 		public int? MaxHeight
 		{
-			get { return _maxHeight; }
+			get => _maxHeight;
 			set
 			{
 				if (value == _maxHeight)
@@ -198,6 +215,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_maxHeight = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 				FireSizeChanged();
 			}
@@ -207,11 +225,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(null)]
 		public int? Height
 		{
-			get
-			{
-				return _height;
-			}
-
+			get => _height;
 			set
 			{
 				if (value == _height)
@@ -220,6 +234,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_height = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 				FireSizeChanged();
 			}
@@ -229,11 +244,7 @@ namespace Myra.Graphics2D.UI
 		[DesignerFolded]
 		public Thickness Margin
 		{
-			get
-			{
-				return _margin;
-			}
-
+			get => _margin;
 			set
 			{
 				if (_margin == value)
@@ -242,6 +253,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_margin = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -253,11 +265,7 @@ namespace Myra.Graphics2D.UI
 		[DesignerFolded]
 		public Thickness BorderThickness
 		{
-			get
-			{
-				return _borderThickness;
-			}
-
+			get => _borderThickness;
 			set
 			{
 				if (_borderThickness == value)
@@ -266,6 +274,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_borderThickness = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -274,11 +283,7 @@ namespace Myra.Graphics2D.UI
 		[DesignerFolded]
 		public Thickness Padding
 		{
-			get
-			{
-				return _padding;
-			}
-
+			get => _padding;
 			set
 			{
 				if (_padding == value)
@@ -287,6 +292,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_padding = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -295,8 +301,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(HorizontalAlignment.Left)]
 		public virtual HorizontalAlignment HorizontalAlignment
 		{
-			get { return _horizontalAlignment; }
-
+			get => _horizontalAlignment;
 			set
 			{
 				if (value == _horizontalAlignment)
@@ -305,6 +310,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_horizontalAlignment = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -313,8 +319,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(VerticalAlignment.Top)]
 		public virtual VerticalAlignment VerticalAlignment
 		{
-			get { return _verticalAlignment; }
-
+			get => _verticalAlignment;
 			set
 			{
 				if (value == _verticalAlignment)
@@ -323,6 +328,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_verticalAlignment = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -364,11 +370,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(true)]
 		public bool Enabled
 		{
-			get
-			{
-				return _enabled;
-			}
-
+			get => _enabled;
 			set
 			{
 				if (value == _enabled)
@@ -377,6 +379,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_enabled = value;
+				OnPropertyChanged();
 
 				foreach (var item in ChildrenCopy)
 				{
@@ -391,8 +394,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(true)]
 		public bool Visible
 		{
-			get { return _visible; }
-
+			get => _visible;
 			set
 			{
 				if (_visible == value)
@@ -401,6 +403,8 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_visible = value;
+				OnPropertyChanged();
+				
 				LocalMousePosition = null;
 				LocalTouchPosition = null;
 
@@ -410,7 +414,20 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(DragDirection.None)]
-		public virtual DragDirection DragDirection { get; set; } = DragDirection.None;
+		public virtual DragDirection DragDirection
+		{
+			get => _dragDirection;
+			set
+			{
+				if (value == _dragDirection)
+				{
+					return;
+				}
+
+				_dragDirection = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[XmlIgnore]
 		[Browsable(false)]
@@ -429,6 +446,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_zIndex = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -446,6 +464,8 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_mouseCursorType = value;
+				OnPropertyChanged();
+				
 				foreach (var child in Children)
 				{
 					child.MouseCursor = value;
@@ -455,7 +475,20 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(null)]
-		public string Tooltip { get; set; }
+		public string Tooltip
+		{
+			get => _tooltip;
+			set
+			{
+				if (value == _tooltip)
+				{
+					return;
+				}
+
+				_tooltip = value;
+				OnPropertyChanged();
+			}
+		}
 
 
 		[Category("Transform")]
@@ -472,6 +505,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_scale = value;
+				OnPropertyChanged();
 				InvalidateTransform();
 			}
 
@@ -491,6 +525,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_transformOrigin = value;
+				OnPropertyChanged();
 				InvalidateTransform();
 			}
 		}
@@ -501,7 +536,6 @@ namespace Myra.Graphics2D.UI
 		public float Rotation
 		{
 			get => _rotation;
-
 			set
 			{
 				if (value == _rotation)
@@ -510,6 +544,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_rotation = value;
+				OnPropertyChanged();
 				InvalidateTransform();
 			}
 		}
@@ -535,11 +570,7 @@ namespace Myra.Graphics2D.UI
 		[Browsable(false)]
 		public virtual Desktop Desktop
 		{
-			get
-			{
-				return _desktop;
-			}
-
+			get => _desktop;
 			internal set
 			{
 				if (_desktop != null && value == null)
@@ -559,6 +590,8 @@ namespace Myra.Graphics2D.UI
 				LocalTouchPosition = null;
 
 				_desktop = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(IsPlaced));
 
 				if (_desktop != null)
 				{
@@ -578,17 +611,26 @@ namespace Myra.Graphics2D.UI
 
 		[XmlIgnore]
 		[Browsable(false)]
-		public bool IsModal { get; set; }
+		public bool IsModal
+		{
+			get => _isModal;
+			set
+			{
+				if (value == _isModal)
+				{
+					return;
+				}
+
+				_isModal = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Appearance")]
 		[DefaultValue(1.0f)]
 		public float Opacity
 		{
-			get
-			{
-				return _opacity;
-			}
-
+			get => _opacity;
 			set
 			{
 				if (value < 0 || value > 1.0f)
@@ -597,6 +639,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_opacity = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -605,49 +648,166 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[XmlIgnore]
 		[Browsable(false)]
-		public Layout2D Layout2d { get; set; } = Layout2D.NullLayout;
+		public Layout2D Layout2d
+		{
+			get=> _layout2D;
+			set
+			{
+				if (value == _layout2D)
+				{
+					return;
+				}
+				
+				_layout2D = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Appearance")]
-		public IBrush Background { get; set; }
+		public IBrush Background
+		{
+			get => _background;
+			set
+			{
+				if (value == _background)
+				{
+					return;
+				}
+
+				_background = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Appearance")]
-		public IBrush OverBackground { get; set; }
+		public IBrush OverBackground
+		{
+			get => _overBackground;
+			set
+			{
+				if (value == _overBackground)
+				{
+					return;
+				}
+
+				_overBackground = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Appearance")]
-		public IBrush DisabledBackground { get; set; }
+		public IBrush DisabledBackground
+		{
+			get => _disabledBackground;
+			set
+			{
+				if (value == _disabledBackground)
+				{
+					return;
+				}
+
+				_disabledBackground = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Appearance")]
-		public IBrush FocusedBackground { get; set; }
+		public IBrush FocusedBackground
+		{
+			get => _focusedBackground;
+			set
+			{
+				if (value == _focusedBackground)
+				{
+					return;
+				}
+
+				_focusedBackground = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Appearance")]
 		public IBrush OverBorder
 		{
-			get; set;
+			get => _overBorder;
+			set
+			{
+				if (value == _overBorder)
+				{
+					return;
+				}
+
+				_overBorder = value;
+				OnPropertyChanged();
+			}
 		}
 
 		[Category("Appearance")]
 		public IBrush DisabledBorder
 		{
-			get; set;
+			get => _disabledBorder;
+			set
+			{
+				if (value == _disabledBorder)
+				{
+					return;
+				}
+
+				_disabledBorder = value;
+				OnPropertyChanged();
+			}
 		}
 
 		[Category("Appearance")]
 		public IBrush FocusedBorder
 		{
-			get; set;
+			get => _focusedBorder;
+			set
+			{
+				if (value == _focusedBorder)
+				{
+					return;
+				}
+
+				_focusedBorder = value;
+				OnPropertyChanged();
+			}
 		}
 
 		[Category("Appearance")]
 		[DefaultValue(false)]
-		public virtual bool ClipToBounds { get; set; }
+		public virtual bool ClipToBounds
+		{
+			get => _clipToBounds;
+			set
+			{
+				if (value == _clipToBounds)
+				{
+					return;
+				}
+
+				_clipToBounds = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public Widget Parent { get; internal set; }
+		public Widget Parent
+		{
+			get => _parent;
+			internal set
+			{
+				if (value == _parent)
+				{
+					return;
+				}
 
-		[Browsable(false)]
-		[XmlIgnore]
-		public object Tag { get; set; }
+				_parent = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Zero-based bounds
@@ -691,18 +851,27 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		public bool AcceptsKeyboardFocus { get; set; }
+		public bool AcceptsKeyboardFocus
+		{
+			get => _acceptsKeyboardFocus;
+			set
+			{
+				if (value == _acceptsKeyboardFocus)
+				{
+					return;
+				}
+
+				_acceptsKeyboardFocus = value;
+				OnPropertyChanged();
+			}
+		}
 
 
 		[Browsable(false)]
 		[XmlIgnore]
 		public bool IsKeyboardFocused
 		{
-			get
-			{
-				return _isKeyboardFocused;
-			}
-
+			get => _isKeyboardFocused;
 			internal set
 			{
 				if (value == _isKeyboardFocused)
@@ -711,6 +880,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_isKeyboardFocused = value;
+				OnPropertyChanged();
 				KeyboardFocusChanged?.Invoke(this, EventArgs.Empty);
 			}
 		}

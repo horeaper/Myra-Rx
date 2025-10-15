@@ -43,13 +43,47 @@ namespace Myra.Graphics2D.UI
 		private int? _selectedRowIndex = null;
 		private int? _selectedColumnIndex = null;
 
+		private bool _showGridLines;
+		private Color _gridLinesColor = Color.White;
+		private IBrush _selectionBackground;
+		private IBrush _selectionHoverBackground;
+		private GridSelectionMode _gridSelectionMode;
+		private bool _hoverIndexCanBeNull = true;
+		private bool _canSelectNothing = false;
+
 		[Category("Debug")]
 		[DefaultValue(false)]
-		public bool ShowGridLines { get; set; }
+		public bool ShowGridLines
+		{
+			get => _showGridLines;
+			set
+			{
+				if (value == _showGridLines)
+				{
+					return;
+				}
+
+				_showGridLines = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Debug")]
 		[DefaultValue("White")]
-		public Color GridLinesColor { get; set; }
+		public Color GridLinesColor
+		{
+			get => _gridLinesColor;
+			set
+			{
+				if (value == _gridLinesColor)
+				{
+					return;
+				}
+				
+				_gridLinesColor = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Grid")]
 		[DefaultValue(0)]
@@ -64,6 +98,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_layout.ColumnSpacing = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -72,7 +107,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(0)]
 		public int RowSpacing
 		{
-			get { return _layout.RowSpacing; }
+			get => _layout.RowSpacing;
 			set
 			{
 				if (value == _layout.RowSpacing)
@@ -81,6 +116,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_layout.RowSpacing = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -89,16 +125,33 @@ namespace Myra.Graphics2D.UI
 		public Proportion DefaultColumnProportion
 		{
 			get => _layout.DefaultColumnProportion;
-			set => _layout.DefaultColumnProportion = value;
+			set
+			{
+				if (value == _layout.DefaultColumnProportion)
+				{
+					return;
+				}
+				
+				_layout.DefaultColumnProportion = value;
+				OnPropertyChanged();
+			}
 		}
 
 		[Browsable(false)]
 		public Proportion DefaultRowProportion
 		{
 			get => _layout.DefaultRowProportion;
-			set => _layout.DefaultRowProportion = value;
+			set
+			{
+				if (value == _layout.DefaultRowProportion)
+				{
+					return;
+				}
+				
+				_layout.DefaultRowProportion = value;
+				OnPropertyChanged();
+			}
 		}
-
 
 		[Browsable(false)]
 		public ObservableCollection<Proportion> ColumnsProportions => _layout.ColumnsProportions;
@@ -108,22 +161,87 @@ namespace Myra.Graphics2D.UI
 
 
 		[Category("Appearance")]
-		public IBrush SelectionBackground { get; set; }
+		public IBrush SelectionBackground
+		{
+			get => _selectionBackground;
+			set
+			{
+				if (value == _selectionBackground)
+				{
+					return;
+				}
+				
+				_selectionBackground = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Appearance")]
-		public IBrush SelectionHoverBackground { get; set; }
+		public IBrush SelectionHoverBackground
+		{
+			get => _selectionHoverBackground;
+			set
+			{
+				if (value == _selectionHoverBackground)
+				{
+					return;
+				}
+				
+				_selectionHoverBackground = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Behavior")]
 		[DefaultValue(GridSelectionMode.None)]
-		public GridSelectionMode GridSelectionMode { get; set; }
+		public GridSelectionMode GridSelectionMode
+		{
+			get => _gridSelectionMode;
+			set
+			{
+				if (value == _gridSelectionMode)
+				{
+					return;
+				}
+				
+				_gridSelectionMode = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Behavior")]
 		[DefaultValue(true)]
-		public bool HoverIndexCanBeNull { get; set; }
+		public bool HoverIndexCanBeNull
+		{
+			get => _hoverIndexCanBeNull;
+			set
+			{
+				if (value == _hoverIndexCanBeNull)
+				{
+					return;
+				}
+				
+				_hoverIndexCanBeNull = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
-		public bool CanSelectNothing { get; set; }
+		public bool CanSelectNothing
+		{
+			get => _canSelectNothing;
+			set
+			{
+				if (value == _canSelectNothing)
+				{
+					return;
+				}
+				
+				_canSelectNothing = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -153,11 +271,7 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public int? HoverRowIndex
 		{
-			get
-			{
-				return _hoverRowIndex;
-			}
-
+			get => _hoverRowIndex;
 			set
 			{
 				if (value == _hoverRowIndex)
@@ -166,6 +280,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_hoverRowIndex = value;
+				OnPropertyChanged();
 
 				var ev = HoverIndexChanged;
 				if (ev != null)
@@ -179,11 +294,7 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public int? HoverColumnIndex
 		{
-			get
-			{
-				return _hoverColumnIndex;
-			}
-
+			get => _hoverColumnIndex;
 			set
 			{
 				if (value == _hoverColumnIndex)
@@ -192,6 +303,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_hoverColumnIndex = value;
+				OnPropertyChanged();
 
 				var ev = HoverIndexChanged;
 				if (ev != null)
@@ -205,8 +317,7 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public int? SelectedRowIndex
 		{
-			get { return _selectedRowIndex; }
-
+			get => _selectedRowIndex;
 			set
 			{
 				if (value == _selectedRowIndex)
@@ -215,6 +326,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_selectedRowIndex = value;
+				OnPropertyChanged();
 
 				var ev = SelectedIndexChanged;
 				if (ev != null)
@@ -228,8 +340,7 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public int? SelectedColumnIndex
 		{
-			get { return _selectedColumnIndex; }
-
+			get => _selectedColumnIndex;
 			set
 			{
 				if (value == _selectedColumnIndex)
@@ -238,6 +349,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_selectedColumnIndex = value;
+				OnPropertyChanged();
 
 				var ev = SelectedIndexChanged;
 				if (ev != null)
@@ -255,11 +367,6 @@ namespace Myra.Graphics2D.UI
 			ChildrenLayout = _layout;
 			_layout.ColumnsProportions.CollectionChanged += OnProportionsChanged;
 			_layout.RowsProportions.CollectionChanged += OnProportionsChanged;
-
-			ShowGridLines = false;
-			GridLinesColor = Color.White;
-			HoverIndexCanBeNull = true;
-			CanSelectNothing = false;
 		}
 
 		public int GetColumnWidth(int index) => _layout.GetColumnWidth(index);

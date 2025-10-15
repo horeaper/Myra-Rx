@@ -33,15 +33,8 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(SelectionMode.Single)]
 		public override SelectionMode SelectionMode
 		{
-			get
-			{
-				return base.SelectionMode;
-			}
-
-			set
-			{
-				base.SelectionMode = value;
-			}
+			get => base.SelectionMode;
+			set => base.SelectionMode = value;
 		}
 
 		[Browsable(false)]

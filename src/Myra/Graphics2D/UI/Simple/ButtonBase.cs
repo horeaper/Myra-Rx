@@ -15,6 +15,7 @@ using Myra.Platform;
 
 namespace Myra.Graphics2D.UI
 {
+	[Obsolete("Use ButtonBase2")]
 	public class ButtonBase<T> : Widget where T : Widget
 	{
 		private readonly SingleItemLayout<T> _layout;

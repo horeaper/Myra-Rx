@@ -21,9 +21,8 @@ namespace Myra.Graphics2D.UI
 
 		public bool IsExpanded
 		{
-			get { return _mark.IsPressed; }
-
-			set { _mark.IsPressed = value; }
+			get => _mark.IsPressed;
+			set => _mark.IsPressed = value;
 		}
 
 		public ToggleButton Mark => _mark;
@@ -41,7 +40,6 @@ namespace Myra.Graphics2D.UI
 		public override Widget Content
 		{
 			get => _content;
-
 			set
 			{
 				if (_content == value)
@@ -55,6 +53,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_content = value;
+				OnPropertyChanged();
 
 				if (_content != null)
 				{
@@ -92,8 +91,8 @@ namespace Myra.Graphics2D.UI
 
 			Children.Add(_mark);
 
-			HorizontalAlignment = HorizontalAlignment.Stretch;
-			VerticalAlignment = VerticalAlignment.Stretch;
+			base.HorizontalAlignment = HorizontalAlignment.Stretch;
+			base.VerticalAlignment = VerticalAlignment.Stretch;
 
 			_layout.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
 			_layout.ColumnsProportions.Add(new Proportion(ProportionType.Fill));

@@ -44,6 +44,7 @@ namespace Myra.Graphics2D.UI
 
 				var oldValue = _localMousePosition;
 				_localMousePosition = value;
+				OnPropertyChanged();
 
 				if (Desktop == null)
 				{
@@ -83,6 +84,8 @@ namespace Myra.Graphics2D.UI
 
 				var oldValue = _localTouchPosition;
 				_localTouchPosition = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(IsTouchInside));
 
 				if (Desktop == null)
 				{

@@ -50,8 +50,22 @@ namespace Myra.Graphics2D.UI
 		where ItemType : class, ISelectorItem
 	{
 		private ItemType _selectedItem;
+		private SelectionMode _selectionMode;
 
-		public override SelectionMode SelectionMode { get; set; }
+		public override SelectionMode SelectionMode
+		{
+			get => _selectionMode;
+			set
+			{
+				if (value == _selectionMode)
+				{
+					return;
+				}
+
+				_selectionMode = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public override ObservableCollection<ItemType> Items { get; } = new ObservableCollection<ItemType>();
 
@@ -81,11 +95,7 @@ namespace Myra.Graphics2D.UI
 
 		public override ItemType SelectedItem
 		{
-			get
-			{
-				return _selectedItem;
-			}
-
+			get => _selectedItem;
 			set
 			{
 				if (value == _selectedItem)
@@ -99,6 +109,8 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_selectedItem = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(SelectedIndex));
 
 				if (_selectedItem != null)
 				{
@@ -118,8 +130,8 @@ namespace Myra.Graphics2D.UI
 			widget.HorizontalAlignment = HorizontalAlignment.Stretch;
 			widget.VerticalAlignment = VerticalAlignment.Stretch;
 
-			HorizontalAlignment = HorizontalAlignment.Left;
-			VerticalAlignment = VerticalAlignment.Top;
+			base.HorizontalAlignment = HorizontalAlignment.Left;
+			base.VerticalAlignment = VerticalAlignment.Top;
 
 			Items.CollectionChanged += ItemsOnCollectionChanged;
 		}

@@ -99,7 +99,11 @@ namespace Myra.Graphics2D.UI.ColorPicker
 		public float A
 		{
 			get => _colorDisplay.Opacity;
-			set => _colorDisplay.Opacity = value;
+			set
+			{
+				_colorDisplay.Opacity = value;
+				OnPropertyChanged();
+			}
 		}
 
 		private int DisplayAlpha => (int)(A * 255f);
@@ -519,6 +523,11 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_colorDisplay.Color = rgb;
 
 			colorHSV = hsv;
+			
+			OnPropertyChanged(nameof(Color));
+			OnPropertyChanged(nameof(R));
+			OnPropertyChanged(nameof(G));
+			OnPropertyChanged(nameof(B));
 		}
 
 		public void ApplyColorPickerDialogStyle(ColorPickerDialogStyle style)

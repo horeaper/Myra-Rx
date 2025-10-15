@@ -25,42 +25,74 @@ namespace Myra.Graphics2D.UI
 		private int _decimalPlaces = 0;
 		private float _increment = 1f;
 
+		private bool _nullable;
+		private float? _minimum;
+		private float? _maximum;
+		private float _mul_increment = 1f; 
+		
 		[Category("Behavior")]
 		[DefaultValue(false)]
-		public bool Nullable { get; set; }
+		public bool Nullable
+		{
+			get => _nullable;
+			set
+			{
+				if (value == _nullable)
+				{
+					return;
+				}
+				
+				_nullable = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Behavior")]
 		[DefaultValue(null)]
-		public float? Maximum { get; set; }
+		public float? Maximum
+		{
+			get => _minimum;
+			set
+			{
+				if (value == _minimum)
+				{
+					return;
+				}
+
+				_minimum = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Behavior")]
 		[DefaultValue(null)]
-		public float? Minimum { get; set; }
+		public float? Minimum
+		{
+			get => _maximum;
+			set
+			{
+				if (value == _maximum)
+				{
+					return;
+				}
+
+				_maximum = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[DefaultValue(HorizontalAlignment.Left)]
 		public override HorizontalAlignment HorizontalAlignment
 		{
-			get
-			{
-				return base.HorizontalAlignment;
-			}
-			set
-			{
-				base.HorizontalAlignment = value;
-			}
+			get => base.HorizontalAlignment;
+			set => base.HorizontalAlignment = value;
 		}
 
 		[DefaultValue(VerticalAlignment.Top)]
 		public override VerticalAlignment VerticalAlignment
 		{
-			get
-			{
-				return base.VerticalAlignment;
-			}
-			set
-			{
-				base.VerticalAlignment = value;
-			}
+			get => base.VerticalAlignment;
+			set => base.VerticalAlignment = value;
 		}
 
 		[Category("Behavior")]
@@ -127,6 +159,7 @@ namespace Myra.Graphics2D.UI
 					{
 						MinorString += "0";
 					}
+					
 					_textField.Text = value.HasValue ? value.Value.ToString(MajorString + MinorString) : string.Empty;
 				}
 				else
@@ -138,6 +171,8 @@ namespace Myra.Graphics2D.UI
 				{
 					_textField.CursorPosition = 0;
 				}
+				
+				OnPropertyChanged();
 			}
 		}
 
@@ -145,21 +180,29 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(1f)]
 		public float Increment
 		{
-			get
-			{
-				return _increment;
-			}
-
+			get => _increment;
 			set
 			{
 				if (Integer)
 				{
+					if ((int)value == _increment)
+					{
+						return;
+					}
+					
 					_increment = (int)value;
 				}
 				else
 				{
+					if (value == _increment)
+					{
+						return;
+					}
+					
 					_increment = value;
 				}
+				
+				OnPropertyChanged();
 			}
 		}
 
@@ -167,21 +210,30 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(0)]
 		public int DecimalPlaces
 		{
-			get
-			{
-				return _decimalPlaces;
-			}
+			get => _decimalPlaces;
 
 			set
 			{
 				if (Integer)
 				{
+					if (_decimalPlaces == 0)
+					{
+						return;
+					}
+					
 					_decimalPlaces = 0;
 				}
 				else
 				{
+					if (value == _decimalPlaces)
+					{
+						return;
+					}
+					
 					_decimalPlaces = value;
 				}
+			
+				OnPropertyChanged();
 			}
 		}
 
@@ -193,25 +245,44 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(false)]
 		public bool Integer
 		{
-			get
-			{
-				return _integer;
-			}
-
+			get => _integer;
 			set
 			{
+				if (value == _integer)
+				{
+					return;
+				}
+				
 				_integer = value;
+				OnPropertyChanged();
+				
 				if (Integer)
 				{
 					_increment = (int)_increment;
-					Value = (int)Value;
+					if (Value != null)
+					{
+						Value = (int)Value;
+					}
 				}
 			}
 		}
 
 		[Category("Behavior")]
 		[DefaultValue(1f)]
-		public float Mul_Increment { get; set; } = 1f;
+		public float Mul_Increment
+		{
+			get => _mul_increment;
+			set
+			{
+				if (value == _mul_increment)
+				{
+					return;
+				}
+				
+				_mul_increment = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[XmlIgnore]
 		[Browsable(false)]
@@ -240,8 +311,8 @@ namespace Myra.Graphics2D.UI
 			ChildrenLayout = _layout;
 			AcceptsKeyboardFocus = true;
 
-			HorizontalAlignment = HorizontalAlignment.Left;
-			VerticalAlignment = VerticalAlignment.Top;
+			base.HorizontalAlignment = HorizontalAlignment.Left;
+			base.VerticalAlignment = VerticalAlignment.Top;
 
 			_layout.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
 			_layout.ColumnsProportions.Add(new Proportion());

@@ -47,6 +47,21 @@ namespace Myra.Graphics2D.UI
 		private bool _passwordField;
 		private bool _isTouchDown;
 
+		private bool _hintTextEnabled;
+		private bool _multiline;
+
+		private Color _textColor = Color.White;
+		private Color? _disabledTextColor;
+		private Color? _focusedTextColor;
+		private IImage _cursor;
+		private IBrush _selection;
+		private int _blinkIntervalInMs = 450;
+		private bool _readonly;
+		private VerticalAlignment _textVerticalAlignment;
+
+		private int _selectStart;
+		private int _selectEnd;
+
 		private readonly UndoRedoStack UndoStack = new UndoRedoStack();
 		private readonly UndoRedoStack RedoStack = new UndoRedoStack();
 
@@ -54,13 +69,16 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(0)]
 		public int VerticalSpacing
 		{
-			get
-			{
-				return _richTextLayout.VerticalSpacing;
-			}
+			get => _richTextLayout.VerticalSpacing;
 			set
 			{
+				if (value == _richTextLayout.VerticalSpacing)
+				{
+					return;
+				}
+
 				_richTextLayout.VerticalSpacing = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -69,10 +87,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(null)]
 		public string Text
 		{
-			get
-			{
-				return _text;
-			}
+			get => _text;
 			set
 			{
 				SetText(value, false);
@@ -84,13 +99,11 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(null)]
 		public string HintText
 		{
-			get
-			{
-				return _hintText;
-			}
+			get => _hintText;
 			set
 			{
 				_hintText = value;
+				OnPropertyChanged();
 
 				if (_text == null)
 				{
@@ -101,19 +114,41 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public bool HintTextEnabled { get; set; }
+		public bool HintTextEnabled
+		{
+			get => _hintTextEnabled;
+			private set
+			{
+				if (value == _hintTextEnabled)
+				{
+					return;
+				}
+
+				_hintTextEnabled = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
-		public bool Multiline { get; set; }
+		public bool Multiline
+		{
+			get => _multiline;
+			set
+			{
+				if (value == _multiline)
+				{
+					return;
+				}
+
+				_multiline = value;
+				OnPropertyChanged();
+			}
+		}
 
 		private string UserText
 		{
-			get
-			{
-				return _text;
-			}
-
+			get => _text;
 			set
 			{
 				SetText(value, true);
@@ -127,13 +162,16 @@ namespace Myra.Graphics2D.UI
 		[Category("Appearance")]
 		public SpriteFontBase Font
 		{
-			get
-			{
-				return _richTextLayout.Font;
-			}
+			get => _richTextLayout.Font;
 			set
 			{
+				if (value != _richTextLayout.Font)
+				{
+					return;
+				}
+
 				_richTextLayout.Font = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -142,11 +180,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(false)]
 		public bool Wrap
 		{
-			get
-			{
-				return _wrap;
-			}
-
+			get => _wrap;
 			set
 			{
 				if (value == _wrap)
@@ -155,51 +189,159 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_wrap = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
 
 		[Category("Appearance")]
-		public Color TextColor { get; set; }
+		public Color TextColor
+		{
+			get => _textColor;
+			set
+			{
+				if (value == _textColor)
+				{
+					return;
+				}
+
+				_textColor = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Appearance")]
-		public Color? DisabledTextColor { get; set; }
+		public Color? DisabledTextColor
+		{
+			get => _disabledTextColor;
+			set
+			{
+				if (value == _disabledTextColor)
+				{
+					return;
+				}
+
+				_disabledTextColor = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Appearance")]
-		public Color? FocusedTextColor { get; set; }
+		public Color? FocusedTextColor
+		{
+			get => _focusedTextColor;
+			set
+			{
+				if (value == _focusedTextColor)
+				{
+					return;
+				}
+
+				_focusedTextColor = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Appearance")]
-		public IImage Cursor { get; set; }
+		public IImage Cursor
+		{
+			get => _cursor;
+			set
+			{
+				if (value == _cursor)
+				{
+					return;
+				}
+
+				_cursor = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Appearance")]
-		public IBrush Selection { get; set; }
+		public IBrush Selection
+		{
+			get => _selection;
+			set
+			{
+				if (value == _selection)
+				{
+					return;
+				}
+
+				_selection = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Behavior")]
 		[DefaultValue(450)]
-		public int BlinkIntervalInMs { get; set; }
+		public int BlinkIntervalInMs
+		{
+			get => _blinkIntervalInMs;
+			set
+			{
+				if (value == _blinkIntervalInMs)
+				{
+					return;
+				}
+
+				_blinkIntervalInMs = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
-		public bool Readonly { get; set; }
+		public bool Readonly
+		{
+			get => _readonly;
+			set
+			{
+				if (value == _readonly)
+				{
+					return;
+				}
+
+				_readonly = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
 		public bool PasswordField
 		{
-			get
-			{
-				return _passwordField;
-			}
+			get => _passwordField;
 			set
 			{
+				if (value != _passwordField)
+				{
+					return;
+				}
+
 				_passwordField = value;
+				OnPropertyChanged();
 				UpdateRichTextLayout();
 			}
 		}
 
 		[Category("Behavior")]
 		[DefaultValue(VerticalAlignment.Top)]
-		public VerticalAlignment TextVerticalAlignment { get; set; }
+		public VerticalAlignment TextVerticalAlignment
+		{
+			get => _textVerticalAlignment;
+			set
+			{
+				if (value == _textVerticalAlignment)
+				{
+					return;
+				}
+
+				_textVerticalAlignment = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Behavior")]
 		[DefaultValue(MouseCursorType.IBeam)]
@@ -212,38 +354,22 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(true)]
 		public override bool ClipToBounds
 		{
-			get
-			{
-				return base.ClipToBounds;
-			}
-			set
-			{
-				base.ClipToBounds = value;
-			}
+			get => base.ClipToBounds;
+			set => base.ClipToBounds = value;
 		}
 
 		[DefaultValue(HorizontalAlignment.Stretch)]
 		public override HorizontalAlignment HorizontalAlignment
 		{
-			get
-			{
-				return base.HorizontalAlignment;
-			}
-			set
-			{
-				base.HorizontalAlignment = value;
-			}
+			get => base.HorizontalAlignment;
+			set => base.HorizontalAlignment = value;
 		}
 
 		[Browsable(false)]
 		[XmlIgnore]
 		public int CursorPosition
 		{
-			get
-			{
-				return _cursorIndex;
-			}
-
+			get => _cursorIndex;
 			set
 			{
 				if (_cursorIndex == value)
@@ -252,6 +378,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_cursorIndex = value;
+				OnPropertyChanged();
 
 				OnCursorIndexChanged();
 			}
@@ -266,21 +393,43 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public int SelectStart { get; private set; }
+		public int SelectStart
+		{
+			get => _selectStart;
+			private set
+			{
+				if (value == _selectStart)
+				{
+					return;
+				}
+
+				_selectStart = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public int SelectEnd { get; private set; }
+		public int SelectEnd
+		{
+			get => _selectEnd;
+			private set
+			{
+				if (value == _selectEnd)
+				{
+					return;
+				}
+
+				_selectEnd = value;
+				OnPropertyChanged();
+			}
+		}
 
 		private int CursorWidth => 1 + (Cursor != null ? Cursor.Size.X : 0);
 
 		public override Desktop Desktop
 		{
-			get
-			{
-				return base.Desktop;
-			}
-
+			get => base.Desktop;
 			internal set
 			{
 				if (Desktop != null)
@@ -326,16 +475,14 @@ namespace Myra.Graphics2D.UI
 		{
 			AcceptsKeyboardFocus = true;
 
-			HorizontalAlignment = HorizontalAlignment.Stretch;
-			VerticalAlignment = VerticalAlignment.Top;
+			base.HorizontalAlignment = HorizontalAlignment.Stretch;
+			base.VerticalAlignment = VerticalAlignment.Top;
 
-			ClipToBounds = true;
+			base.ClipToBounds = true;
 
 			SetStyle(styleName);
 
-			BlinkIntervalInMs = 450;
-
-			MouseCursor = MouseCursorType.IBeam;
+			base.MouseCursor = MouseCursorType.IBeam;
 		}
 		
 		private void DeleteChars(int pos, int l)
@@ -484,7 +631,7 @@ namespace Myra.Graphics2D.UI
 			if (!Multiline && ch == '\n')
 				return;
 
-			if (InsertMode && !(SelectStart != SelectEnd) && CursorPosition < Length)
+			if (InsertMode && SelectStart == SelectEnd && CursorPosition < Length)
 			{
 				UndoStack.MakeReplace(Text, CursorPosition, 1, 1);
 				DeleteChars(CursorPosition, 1);
@@ -907,6 +1054,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			_text = value;
+			OnPropertyChanged(nameof(Text));
 
 			UpdateRichTextLayout();
 

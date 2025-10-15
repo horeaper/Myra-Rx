@@ -27,33 +27,79 @@ namespace Myra.Graphics2D.UI
 		private readonly ObservableCollection<Proportion> _proportions = new ObservableCollection<Proportion>();
 		private bool _childrenDirty = true;
 
+		private bool _showGridLines;
+		private Color _gridLinesColor = Color.White;
+
 		[Browsable(false)]
 		[XmlIgnore]
 		public abstract Orientation Orientation { get; }
 
 		[Category("Debug")]
 		[DefaultValue(false)]
-		public bool ShowGridLines { get; set; }
+		public bool ShowGridLines
+		{
+			get => _showGridLines;
+			set
+			{
+				if (value == _showGridLines)
+				{
+					return;
+				}
+
+				_showGridLines = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Debug")]
 		[DefaultValue("White")]
-		public Color GridLinesColor { get; set; }
+		public Color GridLinesColor
+		{
+			get => _gridLinesColor;
+			set
+			{
+				if (value == _gridLinesColor)
+				{
+					return;
+				}
+
+				_gridLinesColor = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Layout")]
 		[DefaultValue(0)]
 		public int Spacing
 		{
 			get => _layout.Spacing;
-			set => _layout.Spacing = value;
+			set
+			{
+				if (value == _layout.Spacing)
+				{
+					return;
+				}
+				
+				_layout.Spacing = value;
+				OnPropertyChanged();
+			}
 		}
 
 		[Browsable(false)]
 		public Proportion DefaultProportion
 		{
 			get => _layout.DefaultProportion;
-			set => _layout.DefaultProportion = value;
+			set
+			{
+				if (value == _layout.DefaultProportion)
+				{
+					return;
+				}
+				
+				_layout.DefaultProportion = value;
+				OnPropertyChanged();
+			}
 		}
-
 
 		[Browsable(false)]
 		[Obsolete("Use StackPanel.GetProportion/StackPanel.SetProportion")]
@@ -64,7 +110,6 @@ namespace Myra.Graphics2D.UI
 		{
 			_layout = new StackPanelLayout(Orientation);
 			ChildrenLayout = _layout;
-			GridLinesColor = Color.White;
 
 			_proportions.CollectionChanged += (s, e) => InvalidateChildren();
 		}

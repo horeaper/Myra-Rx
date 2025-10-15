@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using Myra.Events;
@@ -21,7 +23,7 @@ using Matrix = System.Numerics.Matrix3x2;
 
 namespace Myra.Graphics2D.UI
 {
-	public partial class Desktop : ITransformable, IDisposable
+	public partial class Desktop : ITransformable, IDisposable, INotifyPropertyChanged
 	{
 		private Rectangle _bounds;
 		private Vector2 _scale = Vector2.One;
@@ -45,21 +47,17 @@ namespace Myra.Graphics2D.UI
 
 		private bool _isDisposed = false;
 
+		private float _opacity = 1.0f;
+		private Widget _contextMenu;
+		private Widget _tooltip;
+		private IBrush _background;
+
 		/// <summary>
 		/// Root Widget
 		/// </summary>
 		public Widget Root
 		{
-			get
-			{
-				if (Widgets.Count == 0)
-				{
-					return null;
-				}
-
-				return Widgets[0];
-			}
-
+			get => Widgets.Count == 0 ? null : Widgets[0];
 			set
 			{
 				if (Root == value)
@@ -75,6 +73,7 @@ namespace Myra.Graphics2D.UI
 				{
 					Widgets.Add(value);
 				}
+				OnPropertyChanged();
 			}
 		}
 
@@ -96,7 +95,6 @@ namespace Myra.Graphics2D.UI
 		internal Rectangle InternalBounds
 		{
 			get => _bounds;
-
 			set
 			{
 				if (_bounds == value)
@@ -105,24 +103,48 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_bounds = value;
-
-
+				
 				InvalidateTransform();
 			}
 		}
 
 		internal Rectangle LayoutBounds => new Rectangle(0, 0, InternalBounds.Width, InternalBounds.Height);
 
-		public Widget ContextMenu { get; private set; }
-		public Widget Tooltip { get; private set; }
+		public Widget ContextMenu
+		{
+			get => _contextMenu;
+			private set
+			{
+				if (value == _contextMenu) {
+					return;
+				}
+
+				_contextMenu = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public Widget Tooltip
+		{
+			get => _tooltip;
+			private set
+			{
+				if (value == _tooltip)
+				{
+					return;
+				}
+
+				_tooltip = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Widget having keyboard focus
 		/// </summary>
 		public Widget FocusedKeyboardWidget
 		{
-			get { return _focusedKeyboardWidget; }
-
+			get => _focusedKeyboardWidget;
 			set
 			{
 				if (value == _focusedKeyboardWidget)
@@ -145,6 +167,8 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_focusedKeyboardWidget = value;
+				OnPropertyChanged();
+
 				if (oldValue != null)
 				{
 					oldValue.OnLostKeyboardFocus();
@@ -158,7 +182,21 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public float Opacity { get; set; }
+		[DefaultValue(1.0f)]
+		public float Opacity
+		{
+			get => _opacity;
+			set
+			{
+				if (value == _opacity)
+				{
+					return;
+				}
+
+				_opacity = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public Vector2 Scale
 		{
@@ -171,6 +209,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_scale = value;
+				OnPropertyChanged();
 				InvalidateTransform();
 			}
 
@@ -187,6 +226,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_transformOrigin = value;
+				OnPropertyChanged();
 				InvalidateTransform();
 			}
 		}
@@ -194,7 +234,6 @@ namespace Myra.Graphics2D.UI
 		public float Rotation
 		{
 			get => _rotation;
-
 			set
 			{
 				if (value == _rotation)
@@ -203,6 +242,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_rotation = value;
+				OnPropertyChanged();
 				InvalidateTransform();
 			}
 		}
@@ -297,7 +337,20 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public IBrush Background { get; set; }
+		public IBrush Background
+		{
+			get => _background;
+			set
+			{
+				if (value == _background)
+				{
+					return;
+				}
+
+				_background = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public event EventHandler<CancellableEventArgs<Widget>> ContextMenuClosing;
 		public event EventHandler<GenericEventArgs<Widget>> ContextMenuClosed;
@@ -309,7 +362,6 @@ namespace Myra.Graphics2D.UI
 
 		public Desktop()
 		{
-			Opacity = 1.0f;
 			Widgets.CollectionChanged += WidgetsOnCollectionChanged;
 			KeyDownHandler = OnKeyDown;
 
@@ -894,6 +946,13 @@ namespace Myra.Graphics2D.UI
 		~Desktop()
 		{
 			ReleaseUnmanagedResources();
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }

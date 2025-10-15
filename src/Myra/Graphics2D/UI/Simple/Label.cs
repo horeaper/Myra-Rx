@@ -24,26 +24,33 @@ namespace Myra.Graphics2D.UI
 			SupportsCommands = true
 		};
 
-		private bool _wrap = false;
-
 		private readonly RichTextLayout _errorText = new RichTextLayout
 		{
 			SupportsCommands = false
 		};
 
-        private bool _singleLine = false;
+		private bool _wrap;
+		private bool _singleLine;
 
-        [Category("Appearance")]
+		private TextHorizontalAlignment _textAlign;
+		private Color _textColor;
+		private Color? _disabledTextColor;
+		private Color? _overTextColor;
+
+		[Category("Appearance")]
 		[DefaultValue(0)]
 		public int VerticalSpacing
 		{
-			get
-			{
-				return _richText.VerticalSpacing;
-			}
+			get => _richText.VerticalSpacing;
 			set
 			{
+				if (value == _richText.VerticalSpacing)
+				{
+					return;
+				}
+
 				_richText.VerticalSpacing = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -52,18 +59,16 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(null)]
 		public string Text
 		{
-			get
-			{
-				return _richText.Text;
-			}
+			get => _richText.Text;
 			set
 			{
-				if (_richText.Text == value)
+				if (value == _richText.Text)
 				{
 					return;
 				}
 
 				_richText.Text = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -71,13 +76,16 @@ namespace Myra.Graphics2D.UI
 		[Category("Appearance")]
 		public SpriteFontBase Font
 		{
-			get
-			{
-				return _richText.Font;
-			}
+			get => _richText.Font;
 			set
 			{
+				if (value == _richText.Font)
+				{
+					return;
+				}
+
 				_richText.Font = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -86,11 +94,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(false)]
 		public bool Wrap
 		{
-			get
-			{
-				return _wrap;
-			}
-
+			get => _wrap;
 			set
 			{
 				if (value == _wrap)
@@ -99,40 +103,47 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_wrap = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
 
-        [Category("Appearance")]
-        [DefaultValue(false)]
-        public bool SingleLine
-        {
-            get
-            {
-                return _singleLine;
-            }
+		[Category("Appearance")]
+		[DefaultValue(false)]
+		public bool SingleLine
+		{
+			get => _singleLine;
+			set
+			{
+				if (value == _singleLine)
+				{
+					return;
+				}
 
-            set
-            {
-                if (value == _singleLine)
-                {
-                    return;
-                }
+				_singleLine = value;
+				OnPropertyChanged();
+				InvalidateMeasure();
+			}
+		}
 
-                _singleLine = value;
-                InvalidateMeasure();
-            }
-        }
-
-        /// <summary>
-        /// The method used to abbreviate overflowing text.
-        /// </summary>
-        [Category("Appearance")]
+		/// <summary>
+		/// The method used to abbreviate overflowing text.
+		/// </summary>
+		[Category("Appearance")]
 		[DefaultValue(AutoEllipsisMethod.None)]
 		public AutoEllipsisMethod AutoEllipsisMethod
 		{
 			get => _richText.AutoEllipsisMethod;
-			set => _richText.AutoEllipsisMethod = value;
+			set
+			{
+				if (value == _richText.AutoEllipsisMethod)
+				{
+					return;
+				}
+
+				_richText.AutoEllipsisMethod = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
@@ -143,32 +154,81 @@ namespace Myra.Graphics2D.UI
 		public string AutoEllipsisString
 		{
 			get => _richText.AutoEllipsisString;
-			set => _richText.AutoEllipsisString = value;
+			set
+			{
+				if (value == _richText.AutoEllipsisString)
+				{
+					return;
+				}
+
+				_richText.AutoEllipsisString = value;
+				OnPropertyChanged();
+			}
 		}
 
 		[Category("Appearance")]
 		[DefaultValue(TextHorizontalAlignment.Left)]
 		public TextHorizontalAlignment TextAlign
 		{
-			get; set;
+			get => _textAlign;
+			set
+			{
+				if (value == _textAlign)
+				{
+					return;
+				}
+				
+				_textAlign = value;
+				OnPropertyChanged();
+			}
 		}
 
 		[Category("Appearance")]
 		public Color TextColor
 		{
-			get; set;
+			get => _textColor;
+			set
+			{
+				if (value == _textColor)
+				{
+					return;
+				}
+				
+				_textColor = value;
+				OnPropertyChanged();
+			}
 		}
 
 		[Category("Appearance")]
 		public Color? DisabledTextColor
 		{
-			get; set;
+			get => _disabledTextColor;
+			set
+			{
+				if (value == _disabledTextColor)
+				{
+					return;
+				}
+				
+				_disabledTextColor = value;
+				OnPropertyChanged();
+			}
 		}
 
 		[Category("Appearance")]
 		public Color? OverTextColor
 		{
-			get; set;
+			get => _overTextColor;
+			set
+			{
+				if (value == _overTextColor)
+				{
+					return;
+				}
+				
+				_overTextColor = value;
+				OnPropertyChanged();
+			}
 		}
 
 		internal Color? PressedTextColor
@@ -278,24 +338,24 @@ namespace Myra.Graphics2D.UI
 		{
 			base.InternalArrange();
 
-            if (_singleLine)
-            {
-                _richText.Width = ActualBounds.Width;
-                _richText.Height = Font.LineHeight;
-            }
-            else if (_wrap)
-            {
-                _richText.Width = ActualBounds.Width;
-                _richText.Height = ActualBounds.Height;
-            }
-            else
-            {
-                _richText.Width = default(int?);
-                _richText.Height = default(int?);
-            }
-        }
+			if (_singleLine)
+			{
+				_richText.Width = ActualBounds.Width;
+				_richText.Height = Font.LineHeight;
+			}
+			else if (_wrap)
+			{
+				_richText.Width = ActualBounds.Width;
+				_richText.Height = ActualBounds.Height;
+			}
+			else
+			{
+				_richText.Width = default(int?);
+				_richText.Height = default(int?);
+			}
+		}
 
-        public void ApplyLabelStyle(LabelStyle style)
+		public void ApplyLabelStyle(LabelStyle style)
 		{
 			ApplyWidgetStyle(style);
 

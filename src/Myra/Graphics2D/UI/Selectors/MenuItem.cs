@@ -26,6 +26,9 @@ namespace Myra.Graphics2D.UI
 		private bool _displayTextDirty = true;
 		private string _displayText, _disabledDisplayText;
 
+		private Menu _menu;
+		private int _index;
+
 		internal readonly Image ImageWidget = new Image
 		{
 			VerticalAlignment = VerticalAlignment.Center
@@ -40,14 +43,13 @@ namespace Myra.Graphics2D.UI
 		{
 			VerticalAlignment = VerticalAlignment.Center
 		};
-
-
+		
 		internal readonly Menu SubMenu = new VerticalMenu();
 
 		[DefaultValue(null)]
 		public string Text
 		{
-			get { return _text; }
+			get => _text;
 			set
 			{
 				if (value == _text)
@@ -56,6 +58,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_text = value;
+				OnPropertyChanged();
 				_displayTextDirty = true;
 
 				UnderscoreChar = null;
@@ -93,11 +96,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(null)]
 		public Color? Color
 		{
-			get
-			{
-				return _color;
-			}
-
+			get => _color;
 			set
 			{
 				if (value == _color)
@@ -106,24 +105,14 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_color = value;
+				OnPropertyChanged();
 				FireChanged();
 			}
 		}
 
-		[Browsable(false)]
-		[XmlIgnore]
-		public object Tag
-		{
-			get; set;
-		}
-
 		public IImage Image
 		{
-			get
-			{
-				return _image;
-			}
-
+			get => _image;
 			set
 			{
 				if (value == _image)
@@ -132,6 +121,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_image = value;
+				OnPropertyChanged();
 				FireChanged();
 			}
 		}
@@ -139,11 +129,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(null)]
 		public string ShortcutText
 		{
-			get
-			{
-				return _shortcutText;
-			}
-
+			get => _shortcutText;
 			set
 			{
 				if (value == _shortcutText)
@@ -152,6 +138,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_shortcutText = value;
+				OnPropertyChanged();
 				FireChanged();
 			}
 		}
@@ -159,11 +146,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(null)]
 		public Color? ShortcutColor
 		{
-			get
-			{
-				return _shortcutColor;
-			}
-
+			get => _shortcutColor;
 			set
 			{
 				if (value == _shortcutColor)
@@ -172,13 +155,27 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_shortcutColor = value;
+				OnPropertyChanged();
 				FireChanged();
 			}
 		}
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public Menu Menu { get; set; }
+		public Menu Menu
+		{
+			get => _menu;
+			set
+			{
+				if (value == _menu)
+				{
+					return;
+				}
+
+				_menu = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Browsable(false)]
 		[Content]
@@ -191,11 +188,11 @@ namespace Myra.Graphics2D.UI
 		[XmlIgnore]
 		public bool Enabled
 		{
-			get { return ImageWidget.Enabled; }
-
+			get => ImageWidget.Enabled;
 			set
 			{
 				ImageWidget.Enabled = Label.Enabled = Shortcut.Enabled = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -215,7 +212,20 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public int Index { get; set; }
+		public int Index
+		{
+			get => _index;
+			set
+			{
+				if (value == _index)
+				{
+					return;
+				}
+
+				_index = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public event EventHandler Selected;
 		public event EventHandler Changed;

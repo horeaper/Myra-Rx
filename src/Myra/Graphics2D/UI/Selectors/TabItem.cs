@@ -23,13 +23,13 @@ namespace Myra.Graphics2D.UI
 		private Color? _color;
 		private ListViewButton _button;
 
+		private IImage _image;
+		private int _imageTextSpacing;
+		private int? _height;
+
 		public string Text
 		{
-			get
-			{
-				return _text;
-			}
-
+			get => _text;
 			set
 			{
 				if (value == _text)
@@ -38,6 +38,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_text = value;
+				OnPropertyChanged();
 				FireChanged();
 			}
 		}
@@ -45,11 +46,7 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(null)]
 		public Color? Color
 		{
-			get
-			{
-				return _color;
-			}
-
+			get => _color;
 			set
 			{
 				if (value == _color)
@@ -58,6 +55,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_color = value;
+				OnPropertyChanged();
 				FireChanged();
 			}
 		}
@@ -75,24 +73,60 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_content = value;
+				OnPropertyChanged();
 				FireChanged();
 			}
 		}
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public object Tag { get; set; }
+		public IImage Image
+		{
+			get => _image;
+			set
+			{
+				if (value == _image)
+				{
+					return;
+				}
+
+				_image = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public IImage Image { get; set; }
+		public int ImageTextSpacing
+		{
+			get => _imageTextSpacing;
+			set
+			{
+				if (value == _imageTextSpacing)
+				{
+					return;
+				}
 
-		[Browsable(false)]
-		[XmlIgnore]
-		public int ImageTextSpacing { get; set; }
+				_imageTextSpacing = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[DefaultValue(null)]
-		public int? Height { get; set; }
+		public int? Height
+		{
+			get => _height;
+			set
+			{
+				if (value == _height)
+				{
+					return;
+				}
+
+				_height = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -112,6 +146,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_button = value;
+				OnPropertyChanged();
 
 				if (_button != null)
 				{
@@ -137,7 +172,11 @@ namespace Myra.Graphics2D.UI
 		public bool IsSelected
 		{
 			get => _button.IsPressed;
-			set => _button.IsPressed = value;
+			set
+			{
+				_button.IsPressed = value;
+				OnPropertyChanged();
+			}
 		}
 
 		public event EventHandler Changed;

@@ -54,22 +54,14 @@ namespace Myra.Graphics2D.UI.Properties
 
 			public Rectangle HeaderBounds
 			{
-				get
-				{
-					var headerBounds = new Rectangle(0, 0, ActualBounds.Width, _layout.GetRowHeight(0));
-
-					return headerBounds;
-				}
+				get { return new Rectangle(0, 0, ActualBounds.Width, _layout.GetRowHeight(0)); }
 			}
 
 			[Browsable(false)]
 			[XmlIgnore]
 			public bool IsEmpty
 			{
-				get
-				{
-					return _propertyGrid.IsEmpty;
-				}
+				get { return _propertyGrid.IsEmpty; }
 			}
 
 			public SubGrid(PropertyGrid parent, object value, string header, string category, string filter, Record parentProperty)
@@ -144,8 +136,8 @@ namespace Myra.Graphics2D.UI.Properties
 
 				Children.Add(label);
 
-				HorizontalAlignment = HorizontalAlignment.Stretch;
-				VerticalAlignment = VerticalAlignment.Stretch;
+				base.HorizontalAlignment = HorizontalAlignment.Stretch;
+				base.VerticalAlignment = VerticalAlignment.Stretch;
 			}
 
 			public override void OnTouchDoubleClick()
@@ -186,17 +178,32 @@ namespace Myra.Graphics2D.UI.Properties
 		private readonly PropertyGridSettings _settings = new PropertyGridSettings();
 		private string _filter;
 		private Type _parentType;
+		
+		private TreeStyle _treeStyle;
+		private string _category;
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public TreeStyle PropertyGridStyle { get; private set; }
+		public TreeStyle PropertyGridStyle
+		{
+			get => _treeStyle;
+			private set
+			{
+				if (value == _treeStyle)
+				{
+					return;
+				}
+				
+				_treeStyle = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Browsable(false)]
 		[XmlIgnore]
 		public object Object
 		{
-			get { return _object; }
-
+			get => _object;
 			set
 			{
 				if (value == _object)
@@ -205,6 +212,7 @@ namespace Myra.Graphics2D.UI.Properties
 				}
 
 				_object = value;
+				OnPropertyChanged();
 				Rebuild();
 
 				ObjectChanged?.Invoke(this, EventArgs.Empty);
@@ -218,43 +226,50 @@ namespace Myra.Graphics2D.UI.Properties
 		[XmlIgnore]
 		public Type ParentType
 		{
-			get
-			{
-				if (_parentGrid != null)
-				{
-					return _parentGrid.ParentType;
-				}
-
-				return _parentType;
-			}
-
+			get => _parentGrid != null ? _parentGrid.ParentType : _parentType;
 			set
 			{
+				if (value == _parentType)
+				{
+					return;
+				}
+				
 				_parentType = value;
+				OnPropertyChanged();
 			}
 		}
 
 		[Browsable(false)]
 		[XmlIgnore]
-		public string Category { get; private set; }
+		public string Category
+		{
+			get => _category;
+			private set
+			{
+				if (value == _category)
+				{
+					return;
+				}
+				
+				_category = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
 		public bool IgnoreCollections
 		{
-			get
-			{
-				if (_parentGrid != null)
-				{
-					return _parentGrid.IgnoreCollections;
-				}
-
-				return _ignoreCollections;
-			}
-
+			get => _parentGrid?.IgnoreCollections ?? _ignoreCollections;
 			set
 			{
+				if (value == _ignoreCollections)
+				{
+					return;
+				}
+				
 				_ignoreCollections = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -262,36 +277,21 @@ namespace Myra.Graphics2D.UI.Properties
 		[XmlIgnore]
 		public bool IsEmpty
 		{
-			get
-			{
-				return Children.Count == 0;
-			}
+			get { return Children.Count == 0; }
 		}
 
 		[Browsable(false)]
 		[XmlIgnore]
 		public PropertyGridSettings Settings
 		{
-			get
-			{
-				if (_parentGrid != null)
-				{
-					return _parentGrid.Settings;
-				}
-
-				return _settings;
-			}
+			get { return _parentGrid != null ? _parentGrid.Settings : _settings; }
 		}
 
 		[Browsable(false)]
 		[XmlIgnore]
 		public int FirstColumnWidth
 		{
-			get
-			{
-				return (int)_layout.ColumnsProportions[0].Value;
-			}
-
+			get => (int)_layout.ColumnsProportions[0].Value;
 			set
 			{
 				_layout.ColumnsProportions[0].Value = value;
@@ -325,6 +325,7 @@ namespace Myra.Graphics2D.UI.Properties
 				}
 
 				_filter = value;
+				OnPropertyChanged();
 				Rebuild();
 			}
 		}
@@ -341,7 +342,7 @@ namespace Myra.Graphics2D.UI.Properties
 		[XmlIgnore]
 		public Func<Record, object, Widget> CustomWidgetProvider;
 
-		public event EventHandler<GenericEventArgs<string>> PropertyChanged;
+		public event EventHandler<GenericEventArgs<string>> ObjectPropertyChanged;
 		public event EventHandler ObjectChanged;
 
 		private PropertyGrid(TreeStyle style, string category, Record parentProperty, PropertyGrid parentGrid = null)
@@ -363,8 +364,8 @@ namespace Myra.Graphics2D.UI.Properties
 				ApplyPropertyGridStyle(style);
 			}
 
-			HorizontalAlignment = HorizontalAlignment.Stretch;
-			VerticalAlignment = VerticalAlignment.Stretch;
+			base.HorizontalAlignment = HorizontalAlignment.Stretch;
+			base.VerticalAlignment = VerticalAlignment.Stretch;
 			Filter = string.Empty;
 
 			this.CustomWidgetProvider = parentGrid?.CustomWidgetProvider;
@@ -386,12 +387,12 @@ namespace Myra.Graphics2D.UI.Properties
 
 		private void FireChanged(string name)
 		{
-			var ev = PropertyChanged;
+			var ev = ObjectPropertyChanged;
 
 			var p = _parentGrid;
 			while (p != null)
 			{
-				ev = p.PropertyChanged;
+				ev = p.ObjectPropertyChanged;
 				p = p._parentGrid;
 			}
 

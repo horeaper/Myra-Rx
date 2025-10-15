@@ -22,21 +22,21 @@ namespace Myra.Graphics2D.UI
 		[DefaultValue(HorizontalAlignment.Stretch)]
 		public override HorizontalAlignment HorizontalAlignment
 		{
-			get { return base.HorizontalAlignment; }
-			set { base.HorizontalAlignment = value; }
+			get => base.HorizontalAlignment;
+			set => base.HorizontalAlignment = value;
 		}
 
 		[DefaultValue(VerticalAlignment.Stretch)]
 		public override VerticalAlignment VerticalAlignment
 		{
-			get { return base.VerticalAlignment; }
-			set { base.VerticalAlignment = value; }
+			get => base.VerticalAlignment;
+			set => base.VerticalAlignment = value;
 		}
 
-		public Container()
+		protected Container()
 		{
-			HorizontalAlignment = HorizontalAlignment.Stretch;
-			VerticalAlignment = VerticalAlignment.Stretch;
+			base.HorizontalAlignment = HorizontalAlignment.Stretch;
+			base.VerticalAlignment = VerticalAlignment.Stretch;
 		}
 
 		[Obsolete("Use Widgets.Add")]

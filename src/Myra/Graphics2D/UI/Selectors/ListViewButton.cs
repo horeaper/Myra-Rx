@@ -13,7 +13,6 @@
 		public override bool IsPressed
 		{
 			get => base.IsPressed;
-
 			set
 			{
 				if (IsPressed && Parent != null)

@@ -54,6 +54,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_mousePosition = value;
+				OnPropertyChanged();
 				InputEventsManager.Queue(this, InputEventType.MouseMoved);
 			}
 		}
@@ -71,6 +72,8 @@ namespace Myra.Graphics2D.UI
 
 				var oldValue = _touchPosition;
 				_touchPosition = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(IsTouchDown));
 
 				if (value != null && oldValue == null)
 				{
@@ -97,6 +100,7 @@ namespace Myra.Graphics2D.UI
 			set
 			{
 				_mouseWheelDelta = value;
+				OnPropertyChanged();
 
 				if (!value.IsZero())
 				{
@@ -106,6 +110,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		public bool[] DownKeys => _downKeys;
+
 		public int RepeatKeyDownStartInMs { get; set; } = 500;
 
 		public int RepeatKeyDownInternalInMs { get; set; } = 50;
