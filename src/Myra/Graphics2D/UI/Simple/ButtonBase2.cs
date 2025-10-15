@@ -3,6 +3,7 @@ using Myra.Utility;
 using System.ComponentModel;
 using System.Xml.Serialization;
 using System;
+using System.Windows.Input;
 using Myra.Events;
 
 namespace Myra.Graphics2D.UI
@@ -13,6 +14,8 @@ namespace Myra.Graphics2D.UI
 		private bool _isClicked = false;
 
 		private IBrush _pressedBackground;
+		private ICommand _command; 
+		private object _commandParameter;
 
 		[Category("Appearance")]
 		public virtual IBrush PressedBackground
@@ -47,6 +50,38 @@ namespace Myra.Graphics2D.UI
 				OnPressedChanged();
 			}
 		}
+		
+		public ICommand Command
+		{
+			get => _command;
+			set
+			{
+				if (value == _command)
+				{
+					return;
+				}
+
+				var oldCommand = _command;
+				_command = value;
+				OnPropertyChanged();
+				OnCommandChanged(oldCommand);
+			}
+		}
+		
+		public object CommandParameter
+		{
+			get => _commandParameter;
+			set
+			{
+				if (value == _commandParameter)
+				{
+					return;
+				}
+				
+				_commandParameter = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public event EventHandler Click;
 		public event EventHandler PressedChanged;
@@ -67,6 +102,7 @@ namespace Myra.Graphics2D.UI
 		public virtual void OnPressedChanged()
 		{
 			PressedChanged.Invoke(this);
+			ExecuteCommand();
 
 			var asPressable = Content as IPressable;
 			if (asPressable != null)
@@ -108,6 +144,7 @@ namespace Myra.Graphics2D.UI
 			if (_isClicked)
 			{
 				Click.Invoke(this);
+				ExecuteCommand();
 				_isClicked = false;
 			}
 		}
@@ -182,6 +219,44 @@ namespace Myra.Graphics2D.UI
 			var buttonBase = (ButtonBase2)w;
 			PressedBackground = buttonBase.PressedBackground;
 			IsPressed = buttonBase.IsPressed;
+		}
+		
+		private void ExecuteCommand()
+		{
+			if (Command?.CanExecute(CommandParameter) == true)
+			{
+				Command.Execute(CommandParameter);
+			}
+		}
+		
+		private void OnCommandChanged(ICommand oldCommand)
+		{
+			if (oldCommand != null)
+			{
+				oldCommand.CanExecuteChanged -= Command_CanExecuteChanged;
+			}
+			if (Command != null)
+			{
+				Command.CanExecuteChanged += Command_CanExecuteChanged;
+			}
+			UpdateCanExecute();
+		}
+
+		private void Command_CanExecuteChanged(object sender, EventArgs e)
+		{
+			UpdateCanExecute();
+		}
+
+		private void UpdateCanExecute()
+		{
+			if (Command != null)
+			{
+				Enabled = Command.CanExecute(CommandParameter);
+			}
+			else
+			{
+				Enabled = true;
+			}
 		}
 	}
 }

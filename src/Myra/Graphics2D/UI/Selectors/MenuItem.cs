@@ -2,8 +2,10 @@
 using System.ComponentModel;
 using System.Xml.Serialization;
 using System;
+using System.Windows.Input;
 using Myra.Attributes;
 using Myra.MML;
+using Myra.Utility;
 using FontStashSharp.RichText;
 
 #if MONOGAME || FNA
@@ -28,6 +30,9 @@ namespace Myra.Graphics2D.UI
 
 		private Menu _menu;
 		private int _index;
+
+		private ICommand _command;
+		private object _commandParameter;
 
 		internal readonly Image ImageWidget = new Image
 		{
@@ -227,6 +232,38 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public ICommand Command
+		{
+			get => _command;
+			set
+			{
+				if (value == _command)
+				{
+					return;
+				}
+
+				var oldCommand = _command;
+				_command = value;
+				OnPropertyChanged();
+				OnCommandChanged(oldCommand);
+			}
+		}
+
+		public object CommandParameter
+		{
+			get => _commandParameter;
+			set
+			{
+				if (value == _commandParameter)
+				{
+					return;
+				}
+
+				_commandParameter = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public event EventHandler Selected;
 		public event EventHandler Changed;
 
@@ -324,12 +361,8 @@ namespace Myra.Graphics2D.UI
 
 		public void FireSelected()
 		{
-			var ev = Selected;
-
-			if (ev != null)
-			{
-				ev(this, EventArgs.Empty);
-			}
+			Selected.Invoke();
+			ExecuteCommand();
 		}
 
 		protected internal override void OnIdChanged()
@@ -341,10 +374,44 @@ namespace Myra.Graphics2D.UI
 
 		protected void FireChanged()
 		{
-			var ev = Changed;
-			if (ev != null)
+			Changed.Invoke();
+		}
+
+		private void ExecuteCommand()
+		{
+			if (Command?.CanExecute(CommandParameter) == true)
 			{
-				ev(this, EventArgs.Empty);
+				Command.Execute(CommandParameter);
+			}
+		}
+
+		private void OnCommandChanged(ICommand oldCommand)
+		{
+			if (oldCommand != null)
+			{
+				oldCommand.CanExecuteChanged -= Command_CanExecuteChanged;
+			}
+			if (Command != null)
+			{
+				Command.CanExecuteChanged += Command_CanExecuteChanged;
+			}
+			UpdateCanExecute();
+		}
+
+		private void Command_CanExecuteChanged(object sender, EventArgs e)
+		{
+			UpdateCanExecute();
+		}
+
+		private void UpdateCanExecute()
+		{
+			if (Command != null)
+			{
+				Enabled = Command.CanExecute(CommandParameter);
+			}
+			else
+			{
+				Enabled = true;
 			}
 		}
 	}
