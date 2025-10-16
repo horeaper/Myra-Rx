@@ -36,6 +36,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Debug")]
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool ShowGridLines
 		{
 			get => _showGridLines;
@@ -53,6 +54,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Debug")]
 		[DefaultValue("White")]
+		[Bindable(true)]
 		public Color GridLinesColor
 		{
 			get => _gridLinesColor;
@@ -70,6 +72,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Layout")]
 		[DefaultValue(0)]
+		[Bindable(true)]
 		public int Spacing
 		{
 			get => _layout.Spacing;
@@ -86,6 +89,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Browsable(false)]
+		[Bindable(true)]
 		public Proportion DefaultProportion
 		{
 			get => _layout.DefaultProportion;

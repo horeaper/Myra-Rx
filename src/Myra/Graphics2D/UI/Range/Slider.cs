@@ -28,6 +28,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(0.0f)]
+		[Bindable(true)]
 		public float Minimum
 		{
 			get => _minimum;
@@ -45,6 +46,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(100.0f)]
+		[Bindable(true)]
 		public float Maximum
 		{
 			get => _maximum;
@@ -62,6 +64,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(0.0f)]
+		[Bindable(true)]
 		public float Value
 		{
 			get => _value;

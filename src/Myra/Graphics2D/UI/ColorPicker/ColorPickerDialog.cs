@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 
 
@@ -15,6 +16,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 	{
 		public ColorPickerPanel ColorPickerPanel { get; }
 
+		[Bindable(true)]
 		public Color Color
 		{
 			get => ColorPickerPanel.Color;

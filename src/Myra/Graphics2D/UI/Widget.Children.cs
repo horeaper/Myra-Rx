@@ -17,6 +17,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public ILayout ChildrenLayout
 		{
 			get => _childrenLayout;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using FontStashSharp.RichText;
 using Myra.Events;
 using Myra.Graphics2D.UI.Styles;
@@ -56,6 +57,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			new Color(207, 86, 191)
 		};
 
+		[Bindable(true)]
 		public Color Color
 		{
 			get
@@ -66,7 +68,6 @@ namespace Myra.Graphics2D.UI.ColorPicker
 					(byte)c.B,
 					(byte)DisplayAlpha);
 			}
-
 			set
 			{
 				if (value == Color)
@@ -78,24 +79,28 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			}
 		}
 
+		[Bindable(true)]
 		public byte R
 		{
 			get => Color.R;
 			set => Color = new Color(value, Color.G, Color.B, Color.A);
 		}
 
+		[Bindable(true)]
 		public byte G
 		{
 			get => Color.G;
 			set => Color = new Color(Color.R, value, Color.B, Color.A);
 		}
 
+		[Bindable(true)]
 		public byte B
 		{
 			get => Color.B;
 			set => Color = new Color(Color.R, Color.G, value, Color.A);
 		}
 
+		[Bindable(true)]
 		public float A
 		{
 			get => _colorDisplay.Opacity;

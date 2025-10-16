@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
 
 #if MONOGAME || FNA
@@ -37,6 +38,7 @@ namespace Myra.Graphics2D.UI
 
 		public TreeViewNode ParentNode { get; internal set; }
 
+		[Bindable(true)]
 		public override Widget Content
 		{
 			get => _content;

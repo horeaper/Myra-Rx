@@ -15,6 +15,7 @@ namespace Myra.Graphics2D.UI
 		[Browsable(false)]
 		[XmlIgnore]
 		[Category("Appearance")]
+		[Bindable(true)]
 		public string Text
 		{
 			get => _text;

@@ -51,6 +51,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(CheckPosition.Left)]
+		[Bindable(true)]
 		public CheckPosition CheckPosition
 		{
 			get => _checkPosition;
@@ -69,6 +70,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(0)]
+		[Bindable(true)]
 		public int CheckContentSpacing
 		{
 			get => _layout.Spacing;
@@ -85,6 +87,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public IImage UncheckedImage
 		{
 			get => _uncheckedImage;
@@ -102,6 +105,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public IImage CheckedImage
 		{
 			get => _checkedImage;
@@ -120,6 +124,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[Content]
+		[Bindable(true)]
 		public override Widget Content
 		{
 			get => _content;

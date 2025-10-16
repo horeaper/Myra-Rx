@@ -32,6 +32,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public Point? LocalMousePosition
 		{
 			get => _localMousePosition;
@@ -68,10 +69,12 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true, BindingDirection.OneWay)]
 		public bool IsTouchInside => _localTouchPosition != null;
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public Point? LocalTouchPosition
 		{
 			get => _localTouchPosition;
@@ -291,25 +294,25 @@ namespace Myra.Graphics2D.UI
 
 					_lastMouseMovement = null;
 
-                    if (MyraEnvironment.SetMouseCursorFromWidget && MouseCursor != null)
-                    {
-                        Widget ancestor = Parent;
-                        while (ancestor != null && !ancestor.IsMouseInside)
-                        {
-                            ancestor = ancestor.Parent;
-                        }
+					if (MyraEnvironment.SetMouseCursorFromWidget && MouseCursor != null)
+					{
+						Widget ancestor = Parent;
+						while (ancestor != null && !ancestor.IsMouseInside)
+						{
+							ancestor = ancestor.Parent;
+						}
 
-                        if (ancestor != null && ancestor.MouseCursor != null)
-                        {
-                            MyraEnvironment.MouseCursorType = ancestor.MouseCursor.Value;
-                        }
-                        else
-                        {
-                            MyraEnvironment.MouseCursorType = MyraEnvironment.DefaultMouseCursorType;
-                        }
-                    }
+						if (ancestor != null && ancestor.MouseCursor != null)
+						{
+							MyraEnvironment.MouseCursorType = ancestor.MouseCursor.Value;
+						}
+						else
+						{
+							MyraEnvironment.MouseCursorType = MyraEnvironment.DefaultMouseCursorType;
+						}
+					}
 
-                    OnMouseLeft();
+					OnMouseLeft();
 					MouseLeft.Invoke(this);
 					break;
 				case InputEventType.MouseEntered:

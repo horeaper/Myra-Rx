@@ -67,6 +67,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Appearance")]
 		[DefaultValue(0)]
+		[Bindable(true)]
 		public int VerticalSpacing
 		{
 			get => _richTextLayout.VerticalSpacing;
@@ -85,6 +86,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Appearance")]
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public string Text
 		{
 			get => _text;
@@ -97,6 +99,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Appearance")]
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public string HintText
 		{
 			get => _hintText;
@@ -114,6 +117,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public bool HintTextEnabled
 		{
 			get => _hintTextEnabled;
@@ -131,6 +135,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool Multiline
 		{
 			get => _multiline;
@@ -160,6 +165,7 @@ namespace Myra.Graphics2D.UI
 		private bool InsertMode { get; set; }
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public SpriteFontBase Font
 		{
 			get => _richTextLayout.Font;
@@ -178,6 +184,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Appearance")]
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool Wrap
 		{
 			get => _wrap;
@@ -195,6 +202,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public Color TextColor
 		{
 			get => _textColor;
@@ -211,6 +219,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public Color? DisabledTextColor
 		{
 			get => _disabledTextColor;
@@ -227,6 +236,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public Color? FocusedTextColor
 		{
 			get => _focusedTextColor;
@@ -243,6 +253,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public IImage Cursor
 		{
 			get => _cursor;
@@ -259,6 +270,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public IBrush Selection
 		{
 			get => _selection;
@@ -276,6 +288,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(450)]
+		[Bindable(true)]
 		public int BlinkIntervalInMs
 		{
 			get => _blinkIntervalInMs;
@@ -293,6 +306,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool Readonly
 		{
 			get => _readonly;
@@ -310,6 +324,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool PasswordField
 		{
 			get => _passwordField;
@@ -328,6 +343,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(VerticalAlignment.Top)]
+		[Bindable(true)]
 		public VerticalAlignment TextVerticalAlignment
 		{
 			get => _textVerticalAlignment;
@@ -367,6 +383,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int CursorPosition
 		{
 			get => _cursorIndex;
@@ -379,6 +396,7 @@ namespace Myra.Graphics2D.UI
 
 				_cursorIndex = value;
 				OnPropertyChanged();
+				OnPropertyChanged(nameof(CursorCoords));
 
 				OnCursorIndexChanged();
 			}
@@ -389,10 +407,12 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public Point CursorCoords => GetRenderPositionByIndex(CursorPosition);
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int SelectStart
 		{
 			get => _selectStart;
@@ -410,6 +430,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int SelectEnd
 		{
 			get => _selectEnd;

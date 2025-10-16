@@ -52,6 +52,7 @@ namespace Myra.Graphics2D.UI
 		internal readonly Menu SubMenu = new VerticalMenu();
 
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public string Text
 		{
 			get => _text;
@@ -99,6 +100,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public Color? Color
 		{
 			get => _color;
@@ -115,6 +117,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[Bindable(true)]
 		public IImage Image
 		{
 			get => _image;
@@ -132,6 +135,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public string ShortcutText
 		{
 			get => _shortcutText;
@@ -149,6 +153,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public Color? ShortcutColor
 		{
 			get => _shortcutColor;
@@ -167,6 +172,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public Menu Menu
 		{
 			get => _menu;
@@ -191,6 +197,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public bool Enabled
 		{
 			get => ImageWidget.Enabled;
@@ -217,6 +224,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int Index
 		{
 			get => _index;
@@ -232,6 +240,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[Bindable(true)]
 		public ICommand Command
 		{
 			get => _command;
@@ -249,6 +258,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[Bindable(true)]
 		public object CommandParameter
 		{
 			get => _commandParameter;

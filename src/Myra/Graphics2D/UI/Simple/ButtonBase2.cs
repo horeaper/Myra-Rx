@@ -18,6 +18,7 @@ namespace Myra.Graphics2D.UI
 		private object _commandParameter;
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public virtual IBrush PressedBackground
 		{
 			get => _pressedBackground;
@@ -35,6 +36,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public virtual bool IsPressed
 		{
 			get => _isPressed;
@@ -50,7 +52,8 @@ namespace Myra.Graphics2D.UI
 				OnPressedChanged();
 			}
 		}
-		
+
+		[Bindable(true)]
 		public ICommand Command
 		{
 			get => _command;
@@ -68,6 +71,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 		
+		[Bindable(true)]
 		public object CommandParameter
 		{
 			get => _commandParameter;

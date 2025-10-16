@@ -41,13 +41,14 @@ namespace Myra.Graphics2D.UI
 #if MONOGAME
 		private bool _isAnisotropicFiltering = false;
 
+		[Bindable(true)]
 		public bool IsAnisotropicFiltering
 		{
 			get => _isAnisotropicFiltering;
 			set
 			{
 				if (value == _isAnisotropicFiltering)
- 				{
+				{
 					return;
 				}
 
@@ -59,6 +60,7 @@ namespace Myra.Graphics2D.UI
 #endif
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public IImage Renderable
 		{
 			get => _image;
@@ -76,6 +78,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public IImage OverRenderable
 		{
 			get => _overImage;
@@ -93,6 +96,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public IImage PressedRenderable
 		{
 			get => _pressedImage;
@@ -119,6 +123,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Appearance")]
 		[DefaultValue("#FFFFFFFF")]
+		[Bindable(true)]
 		public Color Color
 		{
 			get => _color;
@@ -136,6 +141,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(ImageResizeMode.Stretch)]
+		[Bindable(true)]
 		public ImageResizeMode ResizeMode
 		{
 			get => _resizeMode;

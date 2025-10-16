@@ -26,6 +26,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(300)]
+		[Bindable(true)]
 		public int? DropdownMaximumHeight
 		{
 			get => _listBox.MaxHeight;
@@ -73,6 +74,7 @@ namespace Myra.Graphics2D.UI
 
 		public override ObservableCollection<ListItem> Items => _listBox.Items;
 
+		[Bindable(true)]
 		public override ListItem SelectedItem
 		{
 			get => _listBox.SelectedItem;
@@ -88,6 +90,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[Bindable(true)]
 		public override SelectionMode SelectionMode
 		{
 			get => _listBox.SelectionMode;
@@ -103,6 +106,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[Bindable(true)]
 		public override int? SelectedIndex
 		{
 			get => _listBox.SelectedIndex;

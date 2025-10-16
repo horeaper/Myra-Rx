@@ -279,6 +279,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int? SelectedIndex
 		{
 			get
@@ -311,6 +312,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public Widget SelectedItem
 		{
 			get

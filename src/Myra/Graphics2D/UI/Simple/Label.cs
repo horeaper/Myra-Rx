@@ -39,6 +39,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Appearance")]
 		[DefaultValue(0)]
+		[Bindable(true)]
 		public int VerticalSpacing
 		{
 			get => _richText.VerticalSpacing;
@@ -57,6 +58,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Appearance")]
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public string Text
 		{
 			get => _richText.Text;
@@ -92,6 +94,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Appearance")]
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool Wrap
 		{
 			get => _wrap;
@@ -110,6 +113,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Appearance")]
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool SingleLine
 		{
 			get => _singleLine;
@@ -131,6 +135,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance")]
 		[DefaultValue(AutoEllipsisMethod.None)]
+		[Bindable(true)]
 		public AutoEllipsisMethod AutoEllipsisMethod
 		{
 			get => _richText.AutoEllipsisMethod;
@@ -151,6 +156,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance")]
 		[DefaultValue("...")]
+		[Bindable(true)]
 		public string AutoEllipsisString
 		{
 			get => _richText.AutoEllipsisString;
@@ -168,6 +174,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Appearance")]
 		[DefaultValue(TextHorizontalAlignment.Left)]
+		[Bindable(true)]
 		public TextHorizontalAlignment TextAlign
 		{
 			get => _textAlign;
@@ -184,6 +191,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public Color TextColor
 		{
 			get => _textColor;
@@ -200,6 +208,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public Color? DisabledTextColor
 		{
 			get => _disabledTextColor;
@@ -216,6 +225,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public Color? OverTextColor
 		{
 			get => _overTextColor;

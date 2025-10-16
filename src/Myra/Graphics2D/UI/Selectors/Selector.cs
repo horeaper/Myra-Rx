@@ -52,6 +52,7 @@ namespace Myra.Graphics2D.UI
 		private ItemType _selectedItem;
 		private SelectionMode _selectionMode;
 
+		[Bindable(true)]
 		public override SelectionMode SelectionMode
 		{
 			get => _selectionMode;
@@ -69,6 +70,7 @@ namespace Myra.Graphics2D.UI
 
 		public override ObservableCollection<ItemType> Items { get; } = new ObservableCollection<ItemType>();
 
+		[Bindable(true)]
 		public override int? SelectedIndex
 		{
 			get
@@ -93,6 +95,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[Bindable(true)]
 		public override ItemType SelectedItem
 		{
 			get => _selectedItem;

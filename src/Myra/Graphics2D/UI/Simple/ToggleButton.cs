@@ -20,11 +20,17 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool IsToggled
 		{
 			get => IsPressed;
 			set
 			{
+				if (value == IsPressed)
+				{
+					return;
+				}
+
 				IsPressed = value;
 				OnPropertyChanged();
 			}
@@ -32,11 +38,17 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[Content]
+		[Bindable(true)]
 		public override Widget Content
 		{
 			get => _layout.Child;
 			set
 			{
+				if (value == _layout.Child)
+				{
+					return;
+				}
+
 				_layout.Child = value;
 				OnPropertyChanged();
 			}

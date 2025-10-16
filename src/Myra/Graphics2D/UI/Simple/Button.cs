@@ -42,6 +42,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[Content]
+		[Bindable(true)]
 		public override Widget Content
 		{
 			get => _layout.Child;

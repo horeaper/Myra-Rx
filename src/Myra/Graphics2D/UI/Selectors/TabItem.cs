@@ -27,6 +27,7 @@ namespace Myra.Graphics2D.UI
 		private int _imageTextSpacing;
 		private int? _height;
 
+		[Bindable(true)]
 		public string Text
 		{
 			get => _text;
@@ -44,6 +45,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public Color? Color
 		{
 			get => _color;
@@ -62,6 +64,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[Content]
+		[Bindable(true)]
 		public Widget Content
 		{
 			get => _content;
@@ -80,6 +83,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public IImage Image
 		{
 			get => _image;
@@ -97,6 +101,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int ImageTextSpacing
 		{
 			get => _imageTextSpacing;
@@ -113,6 +118,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public int? Height
 		{
 			get => _height;
@@ -146,7 +152,6 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_button = value;
-				OnPropertyChanged();
 
 				if (_button != null)
 				{
@@ -169,6 +174,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public bool IsSelected
 		{
 			get => _button.IsPressed;

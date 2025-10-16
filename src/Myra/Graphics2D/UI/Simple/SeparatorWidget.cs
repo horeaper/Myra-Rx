@@ -17,6 +17,7 @@ namespace Myra.Graphics2D.UI
 	{
 		private int _thickness;
 
+		[Bindable(true)]
 		public int Thickness
 		{
 			get => _thickness;

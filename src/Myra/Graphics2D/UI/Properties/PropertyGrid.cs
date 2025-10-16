@@ -184,6 +184,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public TreeStyle PropertyGridStyle
 		{
 			get => _treeStyle;
@@ -201,6 +202,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public object Object
 		{
 			get => _object;
@@ -224,6 +226,7 @@ namespace Myra.Graphics2D.UI.Properties
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public Type ParentType
 		{
 			get => _parentGrid != null ? _parentGrid.ParentType : _parentType;
@@ -258,6 +261,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool IgnoreCollections
 		{
 			get => _parentGrid?.IgnoreCollections ?? _ignoreCollections;
@@ -289,31 +293,39 @@ namespace Myra.Graphics2D.UI.Properties
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int FirstColumnWidth
 		{
 			get => (int)_layout.ColumnsProportions[0].Value;
 			set
 			{
+				if (value == _layout.ColumnsProportions[0].Value)
+				{
+					return;
+				}
+
 				_layout.ColumnsProportions[0].Value = value;
+				OnPropertyChanged();
 			}
 		}
 
 		[DefaultValue(HorizontalAlignment.Stretch)]
 		public override HorizontalAlignment HorizontalAlignment
 		{
-			get { return base.HorizontalAlignment; }
-			set { base.HorizontalAlignment = value; }
+			get => base.HorizontalAlignment;
+			set => base.HorizontalAlignment = value;
 		}
 
 		[DefaultValue(VerticalAlignment.Stretch)]
 		public override VerticalAlignment VerticalAlignment
 		{
-			get { return base.VerticalAlignment; }
-			set { base.VerticalAlignment = value; }
+			get => base.VerticalAlignment;
+			set => base.VerticalAlignment = value;
 		}
 
 		[XmlIgnore]
 		[Browsable(false)]
+		[Bindable(true)]
 		public string Filter
 		{
 			get => _filter;

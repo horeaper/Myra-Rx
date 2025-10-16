@@ -13,6 +13,7 @@ namespace Myra.MML
 		private object _tag;
 
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public string Id
 		{
 			get => _id;
@@ -31,6 +32,7 @@ namespace Myra.MML
 		
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public object Tag
 		{
 			get => _tag;

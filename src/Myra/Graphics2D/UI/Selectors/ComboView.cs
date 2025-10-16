@@ -26,6 +26,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(300)]
+		[Bindable(true)]
 		public int? DropdownMaximumHeight
 		{
 			get => _listView.MaxHeight;
@@ -74,6 +75,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public Widget SelectedItem
 		{
 			get => _listView.SelectedItem;
@@ -91,6 +93,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(SelectionMode.Single)]
+		[Bindable(true)]
 		public SelectionMode SelectionMode
 		{
 			get => _listView.SelectionMode;
@@ -108,6 +111,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int? SelectedIndex
 		{
 			get => _listView.SelectedIndex;

@@ -39,6 +39,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public MenuStyle MenuStyle
 		{
 			get => _menuStyle;
@@ -67,13 +68,13 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_openMenuItem = value;
-				OnPropertyChanged();
 				OnPropertyChanged(nameof(IsOpen));
 			}
 		}
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true, BindingDirection.OneWay)]
 		public bool IsOpen
 		{
 			get { return OpenMenuItem != null; }
@@ -84,6 +85,7 @@ namespace Myra.Graphics2D.UI
 		public ObservableCollection<IMenuItem> Items { get; } = new ObservableCollection<IMenuItem>();
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public SpriteFontBase LabelFont
 		{
 			get => MenuStyle.LabelStyle.Font;
@@ -101,6 +103,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Appearance")]
 		[StylePropertyPath("/LabelStyle/TextColor")]
+		[Bindable(true)]
 		public Color LabelColor
 		{
 			get => MenuStyle.LabelStyle.TextColor;
@@ -117,6 +120,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public IBrush SelectionHoverBackground
 		{
 			get => InternalChild.SelectionHoverBackground;
@@ -133,6 +137,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public IBrush SelectionBackground
 		{
 			get => InternalChild.SelectionBackground;
@@ -150,6 +155,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Appearance")]
 		[DefaultValue(HorizontalAlignment.Left)]
+		[Bindable(true)]
 		public HorizontalAlignment LabelHorizontalAlignment
 		{
 			get => _labelHorizontalAlignment;
@@ -167,6 +173,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(true)]
+		[Bindable(true)]
 		public bool HoverIndexCanBeNull
 		{
 			get => InternalChild.HoverIndexCanBeNull;
@@ -203,6 +210,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int? HoverIndex
 		{
 			get => Orientation == Orientation.Horizontal ? InternalChild.HoverColumnIndex : InternalChild.HoverRowIndex;
@@ -233,6 +241,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int? SelectedIndex
 		{
 			get => Orientation == Orientation.Horizontal ? InternalChild.SelectedColumnIndex : InternalChild.SelectedRowIndex;

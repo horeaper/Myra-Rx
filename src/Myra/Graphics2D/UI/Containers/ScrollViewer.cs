@@ -43,6 +43,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public Point ScrollMaximum
 		{
 			get
@@ -60,19 +61,18 @@ namespace Myra.Graphics2D.UI
 				{
 					result.X = 0;
 				}
-
 				if (result.Y < 0)
 				{
 					result.Y = 0;
 				}
 
 				return result;
-
 			}
 		}
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public Point ScrollPosition
 		{
 			get
@@ -120,6 +120,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public IImage HorizontalScrollBackground
 		{
 			get => _horizontalScrollBackground;
@@ -136,6 +137,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public IImage HorizontalScrollKnob
 		{
 			get => _horizontalScrollKnob;
@@ -152,6 +154,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public IImage VerticalScrollBackground
 		{
 			get => _verticalScrollBackground;
@@ -168,6 +171,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public IImage VerticalScrollKnob
 		{
 			get => _verticalScrollKnob;
@@ -184,6 +188,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public int ScrollMultiplier
 		{
 			get => _scrollMultiplier;
@@ -201,11 +206,17 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[Content]
+		[Bindable(true)]
 		public override Widget Content
 		{
 			get => _layout.Child;
 			set
 			{
+				if (value == _layout.Child)
+				{
+					return;
+				}
+
 				_layout.Child = value;
 				OnPropertyChanged();
 				ResetScroll();
@@ -214,6 +225,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(true)]
+		[Bindable(true)]
 		public bool ShowHorizontalScrollBar
 		{
 			get => _showHorizontalScrollBar;
@@ -232,6 +244,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(true)]
+		[Bindable(true)]
 		public bool ShowVerticalScrollBar
 		{
 			get => _showVerticalScrollBar;

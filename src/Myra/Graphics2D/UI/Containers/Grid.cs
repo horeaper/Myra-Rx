@@ -53,6 +53,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Debug")]
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool ShowGridLines
 		{
 			get => _showGridLines;
@@ -70,6 +71,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Debug")]
 		[DefaultValue("White")]
+		[Bindable(true)]
 		public Color GridLinesColor
 		{
 			get => _gridLinesColor;
@@ -87,6 +89,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Grid")]
 		[DefaultValue(0)]
+		[Bindable(true)]
 		public int ColumnSpacing
 		{
 			get => _layout.ColumnSpacing;
@@ -105,6 +108,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Grid")]
 		[DefaultValue(0)]
+		[Bindable(true)]
 		public int RowSpacing
 		{
 			get => _layout.RowSpacing;
@@ -122,6 +126,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Browsable(false)]
+		[Bindable(true)]
 		public Proportion DefaultColumnProportion
 		{
 			get => _layout.DefaultColumnProportion;
@@ -138,6 +143,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Browsable(false)]
+		[Bindable(true)]
 		public Proportion DefaultRowProportion
 		{
 			get => _layout.DefaultRowProportion;
@@ -159,8 +165,8 @@ namespace Myra.Graphics2D.UI
 		[Browsable(false)]
 		public ObservableCollection<Proportion> RowsProportions => _layout.RowsProportions;
 
-
 		[Category("Appearance")]
+		[Bindable(true)]
 		public IBrush SelectionBackground
 		{
 			get => _selectionBackground;
@@ -177,6 +183,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public IBrush SelectionHoverBackground
 		{
 			get => _selectionHoverBackground;
@@ -194,6 +201,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(GridSelectionMode.None)]
+		[Bindable(true)]
 		public GridSelectionMode GridSelectionMode
 		{
 			get => _gridSelectionMode;
@@ -211,6 +219,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(true)]
+		[Bindable(true)]
 		public bool HoverIndexCanBeNull
 		{
 			get => _hoverIndexCanBeNull;
@@ -228,6 +237,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool CanSelectNothing
 		{
 			get => _canSelectNothing;
@@ -269,6 +279,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int? HoverRowIndex
 		{
 			get => _hoverRowIndex;
@@ -292,6 +303,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int? HoverColumnIndex
 		{
 			get => _hoverColumnIndex;
@@ -315,6 +327,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int? SelectedRowIndex
 		{
 			get => _selectedRowIndex;
@@ -338,6 +351,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int? SelectedColumnIndex
 		{
 			get => _selectedColumnIndex;

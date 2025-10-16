@@ -28,10 +28,12 @@ namespace Myra.Graphics2D.UI
 		private bool _nullable;
 		private float? _minimum;
 		private float? _maximum;
-		private float _mul_increment = 1f; 
+		private float _mul_increment = 1f;
+		private bool _fixedNumberSize = false;
 		
 		[Category("Behavior")]
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool Nullable
 		{
 			get => _nullable;
@@ -49,6 +51,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public float? Maximum
 		{
 			get => _minimum;
@@ -66,6 +69,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public float? Minimum
 		{
 			get => _maximum;
@@ -97,6 +101,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(0.0f)]
+		[Bindable(true)]
 		public float? Value
 		{
 			get
@@ -178,6 +183,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(1f)]
+		[Bindable(true)]
 		public float Increment
 		{
 			get => _increment;
@@ -208,6 +214,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(0)]
+		[Bindable(true)]
 		public int DecimalPlaces
 		{
 			get => _decimalPlaces;
@@ -239,10 +246,25 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
-		public bool FixedNumberSize { get; set; }
+		[Bindable(true)]
+		public bool FixedNumberSize
+		{
+			get => _fixedNumberSize;
+			set
+			{
+				if (value == _fixedNumberSize)
+				{
+					return;
+				}
+
+				_fixedNumberSize = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool Integer
 		{
 			get => _integer;
@@ -269,6 +291,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(1f)]
+		[Bindable(true)]
 		public float Mul_Increment
 		{
 			get => _mul_increment;

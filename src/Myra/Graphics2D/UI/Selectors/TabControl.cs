@@ -25,6 +25,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public TabControlStyle TabControlStyle
 		{
 			get => _tabControlStyle;
@@ -64,6 +65,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(TabSelectorPosition.Top)]
+		[Bindable(true)]
 		public TabSelectorPosition TabSelectorPosition
 		{
 			get => _selectorPosition;
@@ -82,6 +84,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Behavior")]
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool CloseableTabs
 		{
 			get => _closableTabs;

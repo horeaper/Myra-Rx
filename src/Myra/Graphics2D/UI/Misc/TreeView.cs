@@ -45,6 +45,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public TreeViewNode SelectedNode
 		{
 			get => _selectedNode;
@@ -81,6 +82,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public IBrush SelectionBackground
 		{
 			get => _selectionBackground;
@@ -97,6 +99,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public IBrush SelectionHoverBackground
 		{
 			get => _selectionHoverBackground;

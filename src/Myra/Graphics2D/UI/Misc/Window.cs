@@ -29,6 +29,7 @@ namespace Myra.Graphics2D.UI
 		private Widget _previousKeyboardFocus;
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public string Title
 		{
 			get => _titleLabel.Text;
@@ -46,6 +47,7 @@ namespace Myra.Graphics2D.UI
 
 		[Category("Appearance")]
 		[StylePropertyPath("TitleStyle/TextColor")]
+		[Bindable(true)]
 		public Color TitleTextColor
 		{
 			get => _titleLabel.TextColor;
@@ -62,6 +64,7 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[Category("Appearance")]
+		[Bindable(true)]
 		public SpriteFontBase TitleFont
 		{
 			get => _titleLabel.Font;
@@ -87,6 +90,7 @@ namespace Myra.Graphics2D.UI
 
 		[Browsable(false)]
 		[Content]
+		[Bindable(true)]
 		public override Widget Content
 		{
 			get => _content;
