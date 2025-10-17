@@ -46,11 +46,11 @@ namespace Myra.ReactiveUI
 				var completed = false;
 				var handler = new PropertyChangedEventHandler((o, e) =>
 				{
-					if (e.PropertyName != propertyName)
+					if (completed)
 					{
 						return;
 					}
-					if (completed)
+					if (e.PropertyName != propertyName)
 					{
 						return;
 					}

@@ -252,6 +252,7 @@ namespace Myra.Graphics2D.UI
 				{
 					_value = newValue;
 					valueChanged = true;
+					OnPropertyChanged(nameof(Value));
 				}
 			}
 

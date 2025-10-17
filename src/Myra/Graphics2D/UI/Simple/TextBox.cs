@@ -171,7 +171,7 @@ namespace Myra.Graphics2D.UI
 			get => _richTextLayout.Font;
 			set
 			{
-				if (value != _richTextLayout.Font)
+				if (value == _richTextLayout.Font)
 				{
 					return;
 				}
@@ -330,7 +330,7 @@ namespace Myra.Graphics2D.UI
 			get => _passwordField;
 			set
 			{
-				if (value != _passwordField)
+				if (value == _passwordField)
 				{
 					return;
 				}

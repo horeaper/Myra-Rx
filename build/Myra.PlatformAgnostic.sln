@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myra.Samples.Silk.NET.Tripp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.ReactiveUI", "..\src\Myra.ReactiveUI\Myra.ReactiveUI.csproj", "{D4EF6D82-C9C7-4FF6-95BE-7482B54F942B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myra.Samples.ReactiveUI", "..\samples\Myra.Samples.ReactiveUI\Myra.Samples.ReactiveUI.csproj", "{48B8D797-8305-4A9F-912A-843F953BB0BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{D4EF6D82-C9C7-4FF6-95BE-7482B54F942B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4EF6D82-C9C7-4FF6-95BE-7482B54F942B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4EF6D82-C9C7-4FF6-95BE-7482B54F942B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48B8D797-8305-4A9F-912A-843F953BB0BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48B8D797-8305-4A9F-912A-843F953BB0BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48B8D797-8305-4A9F-912A-843F953BB0BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48B8D797-8305-4A9F-912A-843F953BB0BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
