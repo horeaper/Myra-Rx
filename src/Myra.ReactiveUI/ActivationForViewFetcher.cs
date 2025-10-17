@@ -2,9 +2,8 @@
 using System.Reactive.Linq;
 using Myra.Graphics2D.UI;
 using Myra.MML;
-using ReactiveUI;
 
-namespace Myra.ReactiveUI
+namespace ReactiveUI.Myra
 {
 	public class ActivationForViewFetcher : IActivationForViewFetcher
 	{

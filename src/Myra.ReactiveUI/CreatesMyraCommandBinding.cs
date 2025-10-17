@@ -4,9 +4,8 @@ using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using Myra.Graphics2D.UI;
-using ReactiveUI;
 
-namespace Myra.ReactiveUI
+namespace ReactiveUI.Myra
 {
 	public sealed class CreatesMyraCommandBinding : ICreatesCommandBinding
 	{

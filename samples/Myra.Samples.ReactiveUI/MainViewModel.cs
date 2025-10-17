@@ -1,23 +1,27 @@
 ﻿using ReactiveUI;
+using ReactiveUI.SourceGenerators;
 
-namespace Myra.Samples.ReactiveUI
+namespace Myra.Samples.RxUI
 {
-	public class MainViewModel : ReactiveObject
+	public partial class MainViewModel : ReactiveObject
 	{
-		public float FloatValue
+		[Reactive]
+		float _floatValue;
+
+		[Reactive]
+		string _textValue = string.Empty;
+
+		IObservable<bool> _canExecute;
+
+		public MainViewModel()
 		{
-			get => _FloatValue;
-			set => this.RaiseAndSetIfChanged(ref _FloatValue, value);
+			_canExecute = this.WhenAnyValue(static x => x.TextValue, static text => !string.IsNullOrEmpty(text));
 		}
 
-		float _FloatValue;
-
-		public string TextValue
+		[ReactiveCommand]
+		void SetSliderValue()
 		{
-			get => _TextValue;
-			set => this.RaiseAndSetIfChanged(ref _TextValue, value);
+			FloatValue = 50;
 		}
-
-		string _TextValue = string.Empty;
 	}
 }

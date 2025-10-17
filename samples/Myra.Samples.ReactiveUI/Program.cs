@@ -1,8 +1,8 @@
-﻿using Myra.ReactiveUI;
+﻿using ReactiveUI.Myra;
 using ReactiveUI.Builder;
 using Splat;
 
-namespace Myra.Samples.ReactiveUI
+namespace Myra.Samples.RxUI
 {
 	class Program
 	{

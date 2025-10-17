@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel;
 using Myra.Graphics2D.UI;
-using ReactiveUI;
 
-namespace Myra.ReactiveUI
+namespace ReactiveUI.Myra
 {
 	public class ReactivePanel<TViewModel> : Panel, IViewFor<TViewModel>
 		where TViewModel : class

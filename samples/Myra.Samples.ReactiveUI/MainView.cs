@@ -1,8 +1,8 @@
 ﻿using System.Reactive.Disposables.Fluent;
-using Myra.ReactiveUI;
+using ReactiveUI.Myra;
 using ReactiveUI;
 
-namespace Myra.Samples.ReactiveUI
+namespace Myra.Samples.RxUI
 {
 	public partial class MainView : ReactivePanel<MainViewModel>
 	{
@@ -17,6 +17,8 @@ namespace Myra.Samples.ReactiveUI
 
 				this.Bind(ViewModel, static vm => vm.TextValue, static view => view._textBox.Text).DisposeWith(d);
 				this.OneWayBind(ViewModel, static vm => vm.TextValue, static view => view._label.Text).DisposeWith(d);
+
+				this.BindCommand(ViewModel, static vm => vm.SetSliderValueCommand, static view => view._button).DisposeWith(d);
 			});
 
 			ViewModel = new MainViewModel();

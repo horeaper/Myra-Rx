@@ -1,8 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Myra.Graphics2D.UI;
-using Myra.Samples.AllWidgets;
 
-namespace Myra.Samples.ReactiveUI
+namespace Myra.Samples.RxUI
 {
 	public class RxUIGame : Game
 	{

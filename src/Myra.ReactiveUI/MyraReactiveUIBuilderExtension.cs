@@ -1,8 +1,7 @@
 ﻿using System.Reactive.Concurrency;
-using ReactiveUI;
 using ReactiveUI.Builder;
 
-namespace Myra.ReactiveUI
+namespace ReactiveUI.Myra
 {
 	public static class MyraReactiveUIBuilderExtension
 	{
@@ -18,17 +17,6 @@ namespace Myra.ReactiveUI
 			return builder
 				.WithMainThreadScheduler(MyraMainThreadScheduler)
 				.WithPlatformModule<Registrations>();
-		}
-
-		public static IReactiveUIBuilder WithMyraScheduler(this IReactiveUIBuilder builder)
-		{
-			if (builder == null)
-			{
-				throw new ArgumentNullException(nameof(builder));
-			}
-
-			return builder
-				.WithMainThreadScheduler(MyraMainThreadScheduler);
 		}
 	}
 }

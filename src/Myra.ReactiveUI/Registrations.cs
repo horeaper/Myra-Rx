@@ -1,9 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Concurrency;
-using ReactiveUI;
 using Splat;
 
-namespace Myra.ReactiveUI
+namespace ReactiveUI.Myra
 {
 	public sealed class Registrations : IWantsToRegisterStuff
 	{

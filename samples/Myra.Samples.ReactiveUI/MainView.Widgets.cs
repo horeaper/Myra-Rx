@@ -1,7 +1,7 @@
 ﻿using Myra.Graphics2D;
 using Myra.Graphics2D.UI;
 
-namespace Myra.Samples.ReactiveUI
+namespace Myra.Samples.RxUI
 {
 	partial class MainView
 	{
@@ -33,7 +33,7 @@ namespace Myra.Samples.ReactiveUI
 				Padding = new Thickness(15, 3),
 				Margin = new Thickness(5, 0),
 				Content = new Label {
-					Text = "Command",
+					Text = "Reset",
 				}
 			};
 

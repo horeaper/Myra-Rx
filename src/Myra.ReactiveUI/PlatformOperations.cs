@@ -1,6 +1,4 @@
-﻿using ReactiveUI;
-
-namespace Myra.ReactiveUI
+﻿namespace ReactiveUI.Myra
 {
 	public class PlatformOperations : IPlatformOperations
 	{

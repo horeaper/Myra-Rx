@@ -4,7 +4,7 @@
     <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>Myra.ReactiveUI</RootNamespace>
+    <RootNamespace>ReactiveUI.Myra</RootNamespace>
     <LangVersion>12.0</LangVersion>
   </PropertyGroup>
 

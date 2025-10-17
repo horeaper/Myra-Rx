@@ -1,7 +1,7 @@
 ﻿using FontStashSharp;
 using Microsoft.Xna.Framework;
 
-namespace Myra.Samples.AllWidgets
+namespace Myra.Samples.RxUI
 {
 	static class Utility
 	{

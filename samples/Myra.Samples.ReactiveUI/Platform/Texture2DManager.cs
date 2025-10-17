@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Drawing;
 
-namespace Myra.Samples.AllWidgets
+namespace Myra.Samples.RxUI
 {
 	internal class Texture2DManager : ITexture2DManager
 	{

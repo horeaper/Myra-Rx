@@ -5,9 +5,8 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reflection;
 using Myra.MML;
-using ReactiveUI;
 
-namespace Myra.ReactiveUI
+namespace ReactiveUI.Myra
 {
 	public sealed class MyraCreatesObservableForProperty : ICreatesObservableForProperty
 	{

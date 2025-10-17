@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D;
 using Myra.Platform;
 
-namespace Myra.Samples.AllWidgets
+namespace Myra.Samples.RxUI
 {
 	internal class MGRenderer: IMyraRenderer
 	{
