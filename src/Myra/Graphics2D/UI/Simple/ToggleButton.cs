@@ -32,7 +32,6 @@ namespace Myra.Graphics2D.UI
 				}
 
 				IsPressed = value;
-				OnPropertyChanged();
 			}
 		}
 
@@ -72,6 +71,12 @@ namespace Myra.Graphics2D.UI
 			_layout = new SingleItemLayout<Widget>(this);
 			ChildrenLayout = _layout;
 			SetStyle(styleName);
+			PressedChanged += ToggleButton_PressedChanged;
+		}
+
+		private void ToggleButton_PressedChanged(object sender, EventArgs e)
+		{
+			OnPropertyChanged(nameof(IsToggled));
 		}
 
 		protected override void InternalOnTouchUp()

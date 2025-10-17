@@ -10,29 +10,28 @@ namespace Myra.Graphics2D.UI
 	{
 		[Category("Behavior")]
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool IsChecked
 		{
 			get => IsPressed;
 			set => IsPressed = value;
 		}
 
-
 		public event EventHandler IsCheckedChanged
 		{
-			add
-			{
-				PressedChanged += value;
-			}
-
-			remove
-			{
-				PressedChanged -= value;
-			}
+			add => PressedChanged += value;
+			remove => PressedChanged -= value;
 		}
 
 		public CheckButton(string styleName = Stylesheet.DefaultStyleName)
 		{
 			SetStyle(styleName);
+			PressedChanged += CheckButton_PressedChanged;
+		}
+
+		private void CheckButton_PressedChanged(object sender, EventArgs e)
+		{
+			OnPropertyChanged(nameof(IsChecked));
 		}
 
 		protected override void InternalSetStyle(Stylesheet stylesheet, string name)

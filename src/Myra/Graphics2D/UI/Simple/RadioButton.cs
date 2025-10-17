@@ -34,6 +34,20 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		[Category("Behavior")]
+		[DefaultValue(false)]
+		[Bindable(true)]
+		public bool IsChecked
+		{
+			get => IsPressed;
+			set => IsPressed = value;
+		}
+
+		public event EventHandler IsCheckedChanged
+		{
+			add => PressedChanged += value;
+			remove => PressedChanged -= value;
+		}
 
 		public override bool IsPressed
 		{
@@ -74,6 +88,12 @@ namespace Myra.Graphics2D.UI
 		public RadioButton(string styleName = Stylesheet.DefaultStyleName)
 		{
 			SetStyle(styleName);
+			PressedChanged += RadioButton_PressedChanged;
+		}
+
+		private void RadioButton_PressedChanged(object sender, EventArgs e)
+		{
+			OnPropertyChanged(nameof(IsChecked));
 		}
 
 		public override void OnPressedChanged()
