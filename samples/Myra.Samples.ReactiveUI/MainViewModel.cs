@@ -14,6 +14,9 @@ namespace Myra.Samples.RxUI
 		[Reactive]
 		bool _boolValue = true;
 
+		[Reactive]
+		int _comboValue;
+
 		IObservable<bool> _canExecute;
 
 		public MainViewModel()

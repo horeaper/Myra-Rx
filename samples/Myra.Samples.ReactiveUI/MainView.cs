@@ -21,6 +21,9 @@ namespace Myra.Samples.RxUI
 
 				this.Bind(ViewModel, static vm => vm.BoolValue, static view => view.checkBox.IsPressed).DisposeWith(d);
 				this.OneWayBind(ViewModel, static vm => vm.BoolValue, static view => view.labelChecked.Text).DisposeWith(d);
+
+				this.Bind(ViewModel, static vm => vm.ComboValue, static view => view.comboBox.SelectedIndex).DisposeWith(d);
+				this.OneWayBind(ViewModel, static vm => vm.ComboValue, static view => view.labelCombo.Text).DisposeWith(d);
 			});
 
 			ViewModel = new MainViewModel();

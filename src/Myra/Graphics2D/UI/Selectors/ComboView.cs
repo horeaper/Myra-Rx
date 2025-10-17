@@ -87,7 +87,6 @@ namespace Myra.Graphics2D.UI
 				}
 				
 				_listView.SelectedItem = value;
-				OnPropertyChanged();
 			}
 		}
 
@@ -123,7 +122,6 @@ namespace Myra.Graphics2D.UI
 				}
 				
 				_listView.SelectedIndex = value;
-				OnPropertyChanged();
 			}
 		}
 
@@ -161,6 +159,7 @@ namespace Myra.Graphics2D.UI
 			_button.PressedChanged += InternalChild_PressedChanged;
 
 			_listView._parentCombo = this;
+			_listView.SelectedIndexChanged += listView_SelectedIndexChanged;
 
 			base.HorizontalAlignment = HorizontalAlignment.Left;
 			base.VerticalAlignment = VerticalAlignment.Top;
@@ -168,6 +167,12 @@ namespace Myra.Graphics2D.UI
 			DropdownMaximumHeight = 300;
 
 			SetStyle(styleName);
+		}
+
+		private void listView_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			OnPropertyChanged(nameof(SelectedItem));
+			OnPropertyChanged(nameof(SelectedIndex));
 		}
 
 		private void DesktopOnContextMenuClosed(object sender, GenericEventArgs<Widget> genericEventArgs)
