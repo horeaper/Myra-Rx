@@ -371,7 +371,7 @@ namespace Myra.Graphics2D.UI
 
 		public void FireSelected()
 		{
-			Selected.Invoke();
+			Selected.Invoke(this);
 			ExecuteCommand();
 		}
 
@@ -384,7 +384,7 @@ namespace Myra.Graphics2D.UI
 
 		protected void FireChanged()
 		{
-			Changed.Invoke();
+			Changed.Invoke(this);
 		}
 
 		private void ExecuteCommand()
