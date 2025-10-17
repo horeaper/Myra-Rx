@@ -19,6 +19,10 @@ namespace ReactiveUI.Myra
 			{
 				return 6;
 			}
+			if (typeof(Widget).IsAssignableFrom(type))
+			{
+				return 4;
+			}
 
 			return 0;
 		}
@@ -38,6 +42,10 @@ namespace ReactiveUI.Myra
 			if (hasEventTarget)
 			{
 				return 6;
+			}
+			if (typeof(Widget).IsAssignableFrom(type))
+			{
+				return 4;
 			}
 
 			return 0;
@@ -59,10 +67,6 @@ namespace ReactiveUI.Myra
 			}
 
 			var type = target.GetType();
-			if (typeof(CheckButtonBase).IsAssignableFrom(type))
-			{
-				return BindCommandToObject<EventArgs>(command, target, commandParameter, "PressedChanged");
-			}
 			if (typeof(ButtonBase2).IsAssignableFrom(type))
 			{
 				return BindCommandToObject<EventArgs>(command, target, commandParameter, "Click");
@@ -70,6 +74,10 @@ namespace ReactiveUI.Myra
 			if (typeof(MenuItem).IsAssignableFrom(type))
 			{
 				return BindCommandToObject<EventArgs>(command, target, commandParameter, "Selected");
+			}
+			if (typeof(Widget).IsAssignableFrom(type))
+			{
+				return BindCommandToObject<EventArgs>(command, target, commandParameter, "TouchUp");
 			}
 
 			return null;
