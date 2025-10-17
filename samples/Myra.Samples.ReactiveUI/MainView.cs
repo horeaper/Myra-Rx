@@ -14,6 +14,7 @@ namespace Myra.Samples.RxUI
 			{
 				this.Bind(ViewModel, static vm => vm.SliderValue, static view => view.slider.Value).DisposeWith(d);
 				this.OneWayBind(ViewModel, static vm => vm.SliderValue, static view => view.labelSlider.Text).DisposeWith(d);
+				this.OneWayBind(ViewModel, static vm => vm.SliderValue, static view => view.progressBar.Value).DisposeWith(d);
 
 				this.Bind(ViewModel, static vm => vm.TextValue, static view => view.textBox.Text).DisposeWith(d);
 				this.OneWayBind(ViewModel, static vm => vm.TextValue, static view => view.labelText.Text).DisposeWith(d);

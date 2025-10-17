@@ -35,7 +35,7 @@ namespace Myra.Samples.RxUI
 		{
 			base.Draw(gameTime);
 
-			GraphicsDevice.Clear(Color.CornflowerBlue);
+			GraphicsDevice.Clear(Color.DarkSlateGray);
 			_desktop.Render();
 		}
 	}

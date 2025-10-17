@@ -8,11 +8,14 @@ namespace Myra.Samples.RxUI
 	{
 		Label labelSlider;
 		HorizontalSlider slider;
+		HorizontalProgressBar progressBar;
+
 		Label labelText;
 		TextBox textBox;
 		Button buttonReset;
 		Label labelChecked;
 		CheckButton checkBox;
+
 		Label labelCombo;
 		ComboView comboBox;
 
@@ -22,6 +25,9 @@ namespace Myra.Samples.RxUI
 				Margin = new Thickness(5, 0),
 			};
 			slider = new HorizontalSlider {
+				Margin = new Thickness(5, 0),
+			};
+			progressBar = new HorizontalProgressBar {
 				Margin = new Thickness(5, 0),
 			};
 
@@ -79,6 +85,7 @@ namespace Myra.Samples.RxUI
 			};
 			layoutRoot.Widgets.Add(labelSlider);
 			layoutRoot.Widgets.Add(slider);
+			layoutRoot.Widgets.Add(progressBar);
 			layoutRoot.Widgets.Add(labelText);
 			layoutRoot.Widgets.Add(textBox);
 			layoutRoot.Widgets.Add(buttonReset);
