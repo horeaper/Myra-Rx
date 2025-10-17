@@ -11,8 +11,10 @@ namespace Myra.ReactiveUI
 {
 	public sealed class MyraCreatesObservableForProperty : ICreatesObservableForProperty
 	{
+#if NET6_0_OR_GREATER
 		[RequiresDynamicCode("GetAffinityForObject uses methods that require dynamic code generation")]
 		[RequiresUnreferencedCode("GetAffinityForObject uses methods that may require unreferenced code")]
+#endif
 		public int GetAffinityForObject(Type type, string propertyName, bool beforeChanged = false)
 		{
 			if (!typeof(BaseObject).IsAssignableFrom(type))

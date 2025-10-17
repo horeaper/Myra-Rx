@@ -10,8 +10,6 @@ namespace Myra.ReactiveUI
 {
 	public sealed class CreatesMyraCommandBinding : ICreatesCommandBinding
 	{
-		[RequiresDynamicCode("GetAffinityForObject uses methods that require dynamic code generation")]
-		[RequiresUnreferencedCode("GetAffinityForObject uses methods that may require unreferenced code")]
 		public int GetAffinityForObject(Type type, bool hasEventTarget)
 		{
 			if (typeof(ButtonBase2).IsAssignableFrom(type) || typeof(MenuItem).IsAssignableFrom(type))
@@ -26,7 +24,11 @@ namespace Myra.ReactiveUI
 			return 0;
 		}
 
+#if NET6_0_OR_GREATER
 		public int GetAffinityForObject<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicEvents | DynamicallyAccessedMemberTypes.PublicProperties)] T>(bool hasEventTarget)
+#else
+		public int GetAffinityForObject<T>(bool hasEventTarget)
+#endif
 		{
 			var type = typeof(T);
 
@@ -42,12 +44,20 @@ namespace Myra.ReactiveUI
 			return 0;
 		}
 
+#if NET6_0_OR_GREATER
 		[RequiresDynamicCode("BindCommandToObject uses methods that require dynamic code generation")]
 		[RequiresUnreferencedCode("BindCommandToObject uses methods that may require unreferenced code")]
+#endif
 		public IDisposable? BindCommandToObject(ICommand? command, object? target, IObservable<object?> commandParameter)
 		{
-			ArgumentNullException.ThrowIfNull(command);
-			ArgumentNullException.ThrowIfNull(target);
+			if (command == null)
+			{
+				throw new ArgumentNullException(nameof(command));
+			}
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
 
 			var type = target.GetType();
 			if (typeof(CheckButtonBase).IsAssignableFrom(type))
@@ -66,12 +76,20 @@ namespace Myra.ReactiveUI
 			return null;
 		}
 
+#if NET6_0_OR_GREATER
 		[RequiresDynamicCode("BindCommandToObject uses methods that require dynamic code generation")]
 		[RequiresUnreferencedCode("BindCommandToObject uses methods that may require unreferenced code")]
+#endif
 		public IDisposable BindCommandToObject<TEventArgs>(ICommand? command, object? target, IObservable<object?> commandParameter, string eventName)
 		{
-			ArgumentNullException.ThrowIfNull(command);
-			ArgumentNullException.ThrowIfNull(target);
+			if (command == null)
+			{
+				throw new ArgumentNullException(nameof(command));
+			}
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
 
 			var ret = new CompositeDisposable();
 			object? latestParameter = null;

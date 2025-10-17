@@ -1,4 +1,5 @@
-﻿using System.Reactive.Concurrency;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reactive.Concurrency;
 using ReactiveUI;
 using Splat;
 
@@ -6,6 +7,10 @@ namespace Myra.ReactiveUI
 {
 	public sealed class Registrations : IWantsToRegisterStuff
 	{
+#if NET6_0_OR_GREATER
+		[RequiresDynamicCode("Register uses methods that require dynamic code generation")]
+		[RequiresUnreferencedCode("Register uses methods that may require unreferenced code")]
+#endif
 		public void Register(Action<Func<object>, Type> registerFunction)
 		{
 			registerFunction(static () => new PlatformOperations(), typeof(IPlatformOperations));
@@ -20,7 +25,9 @@ namespace Myra.ReactiveUI
 			registerFunction(static () => new SingleToStringTypeConverter(), typeof(IBindingTypeConverter));
 			registerFunction(static () => new DoubleToStringTypeConverter(), typeof(IBindingTypeConverter));
 			registerFunction(static () => new DecimalToStringTypeConverter(), typeof(IBindingTypeConverter));
+#if NET6_0_OR_GREATER
 			registerFunction(static () => new ComponentModelTypeConverter(), typeof(IBindingTypeConverter));
+#endif
 
 			if (!ModeDetector.InUnitTestRunner())
 			{
