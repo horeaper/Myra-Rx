@@ -6,22 +6,25 @@ namespace Myra.Samples.RxUI
 	public partial class MainViewModel : ReactiveObject
 	{
 		[Reactive]
-		float _floatValue;
+		int _sliderValue;
 
 		[Reactive]
 		string _textValue = string.Empty;
+
+		[Reactive]
+		bool _boolValue = true;
 
 		IObservable<bool> _canExecute;
 
 		public MainViewModel()
 		{
-			_canExecute = this.WhenAnyValue(static x => x.TextValue, static text => !string.IsNullOrEmpty(text));
+			_canExecute = this.WhenAnyValue(static x => x.BoolValue);
 		}
 
-		[ReactiveCommand]
-		void SetSliderValue()
+		[ReactiveCommand(CanExecute = nameof(_canExecute))]
+		void ResetSliderValue()
 		{
-			FloatValue = 50;
+			SliderValue = 50;
 		}
 	}
 }

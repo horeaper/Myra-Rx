@@ -5,31 +5,33 @@ namespace Myra.Samples.RxUI
 {
 	partial class MainView
 	{
-		private Label _sliderText;
-		private HorizontalSlider _slider;
-		private Label _label;
-		private TextBox _textBox;
-		private Button _button;
+		Label labelSlider;
+		HorizontalSlider slider;
+		Label labelText;
+		TextBox textBox;
+		Button buttonReset;
+		Label labelChecked;
+		CheckButton checkBox;
 
 		void InitializeComponent()
 		{
-			_sliderText = new Label {
+			labelSlider = new Label {
 				Margin = new Thickness(5, 0)
 			};
 
-			_slider = new HorizontalSlider {
+			slider = new HorizontalSlider {
 				Margin = new Thickness(5, 0)
 			};
 
-			_label = new Label {
+			labelText = new Label {
 				Margin = new Thickness(5, 0)
 			};
 
-			_textBox = new TextBox {
+			textBox = new TextBox {
 				Margin = new Thickness(5, 0)
 			};
 
-			_button = new Button {
+			buttonReset = new Button {
 				Padding = new Thickness(15, 3),
 				Margin = new Thickness(5, 0),
 				Content = new Label {
@@ -37,15 +39,29 @@ namespace Myra.Samples.RxUI
 				}
 			};
 
+			labelChecked = new Label {
+				Margin = new Thickness(5, 0),
+			};
+
+			checkBox = new CheckButton {
+				Margin = new Thickness(5, 0),
+				Content = new Label {
+					Text = "Enable Button",
+					Margin = new Thickness(5, 0),
+				},
+			};
+
 			var layoutRoot = new VerticalStackPanel {
 				Width = 300,
 				Spacing = 5,
 			};
-			layoutRoot.Widgets.Add(_sliderText);
-			layoutRoot.Widgets.Add(_slider);
-			layoutRoot.Widgets.Add(_label);
-			layoutRoot.Widgets.Add(_textBox);
-			layoutRoot.Widgets.Add(_button);
+			layoutRoot.Widgets.Add(labelSlider);
+			layoutRoot.Widgets.Add(slider);
+			layoutRoot.Widgets.Add(labelText);
+			layoutRoot.Widgets.Add(textBox);
+			layoutRoot.Widgets.Add(buttonReset);
+			layoutRoot.Widgets.Add(labelChecked);
+			layoutRoot.Widgets.Add(checkBox);
 
 			Widgets.Add(layoutRoot);
 		}

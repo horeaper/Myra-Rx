@@ -12,13 +12,15 @@ namespace Myra.Samples.RxUI
 
 			this.WhenActivated(d =>
 			{
-				this.Bind(ViewModel, static vm => vm.FloatValue, static view => view._slider.Value).DisposeWith(d);
-				this.OneWayBind(ViewModel, static vm => vm.FloatValue, static view => view._sliderText.Text).DisposeWith(d);
+				this.Bind(ViewModel, static vm => vm.SliderValue, static view => view.slider.Value).DisposeWith(d);
+				this.OneWayBind(ViewModel, static vm => vm.SliderValue, static view => view.labelSlider.Text).DisposeWith(d);
 
-				this.Bind(ViewModel, static vm => vm.TextValue, static view => view._textBox.Text).DisposeWith(d);
-				this.OneWayBind(ViewModel, static vm => vm.TextValue, static view => view._label.Text).DisposeWith(d);
+				this.Bind(ViewModel, static vm => vm.TextValue, static view => view.textBox.Text).DisposeWith(d);
+				this.OneWayBind(ViewModel, static vm => vm.TextValue, static view => view.labelText.Text).DisposeWith(d);
+				this.BindCommand(ViewModel, static vm => vm.ResetSliderValueCommand, static view => view.buttonReset).DisposeWith(d);
 
-				this.BindCommand(ViewModel, static vm => vm.SetSliderValueCommand, static view => view._button).DisposeWith(d);
+				this.Bind(ViewModel, static vm => vm.BoolValue, static view => view.checkBox.IsPressed).DisposeWith(d);
+				this.OneWayBind(ViewModel, static vm => vm.BoolValue, static view => view.labelChecked.Text).DisposeWith(d);
 			});
 
 			ViewModel = new MainViewModel();

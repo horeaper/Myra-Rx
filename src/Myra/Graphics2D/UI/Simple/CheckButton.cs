@@ -10,21 +10,12 @@ namespace Myra.Graphics2D.UI
 	{
 		[Category("Behavior")]
 		[DefaultValue(false)]
-		[Bindable(true)]
 		public bool IsChecked
 		{
 			get => IsPressed;
-			set
-			{
-				if (value == IsPressed)
-				{
-					return;
-				}
-
-				IsPressed = value;
-				OnPropertyChanged();
-			}
+			set => IsPressed = value;
 		}
+
 
 		public event EventHandler IsCheckedChanged
 		{
