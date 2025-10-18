@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
+using Myra.Events;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 
@@ -75,9 +76,10 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
+				var oldValue = _value;
 				_value = value;
 				OnPropertyChanged();
-				ValueChanged.Invoke(this);
+				ValueChanged?.Invoke(this, new ValueChangedEventArgs<float>(oldValue, value));
 			}
 		}
 
@@ -98,7 +100,7 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
-		public event EventHandler ValueChanged;
+		public event EventHandler<ValueChangedEventArgs<float>> ValueChanged;
 
 		protected ProgressBar(string styleName)
 		{

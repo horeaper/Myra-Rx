@@ -4,6 +4,7 @@ using System.ComponentModel;
 using FontStashSharp.RichText;
 using Myra.Events;
 using Myra.Graphics2D.UI.Styles;
+using Myra.Utility;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -130,6 +131,8 @@ namespace Myra.Graphics2D.UI.ColorPicker
 		private int WheelHeight => _colorWheel.Bounds.Height - 11;
 
 		private ColorHSV colorHSV;
+
+		public event EventHandler ColorChanged;
 
 		public ColorPickerPanel()
 		{
@@ -533,6 +536,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			OnPropertyChanged(nameof(R));
 			OnPropertyChanged(nameof(G));
 			OnPropertyChanged(nameof(B));
+			ColorChanged.Invoke(this);
 		}
 
 		public void ApplyColorPickerDialogStyle(ColorPickerDialogStyle style)
