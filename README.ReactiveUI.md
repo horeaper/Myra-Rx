@@ -4,6 +4,8 @@ ReactiveUI gives you the power to build reactive, testable, and composable UI co
 
 Handbook: [https://www.reactiveui.net/docs/handbook/](https://www.reactiveui.net/docs/handbook/)
 
+(Basically it is a way to do cross platform MVVM)
+
 ## How to use this fork?
 
 Right now adding ReactiveUI support to Myra requires modification to the original source code, so in order to use it, you need to clone the entire repo, switch to "reactive" branch, and build from source.
@@ -17,6 +19,8 @@ Steps:
 4. Add a reference to `Myra.PlatformAgnostic` and `Myra.ReactiveUI` project in your own project, and start coding.
 
 Right now I only tested the PlatformAgnostic version, other version (like MonoGame version) should also work, but no promises!
+
+To fit with Myra's event style, this integration comes with its own "Observable Events" implementation. So you don't need to use `ReactiveMarbles.ObservableEvents.SourceGenerator`.
 
 ## I try to run my code but my program breaks on this.WhenActivated/this.Bind
 
