@@ -366,6 +366,7 @@ namespace Myra.Graphics2D.UI
 			KeyDownHandler = OnKeyDown;
 
 #if FNA
+			TextInputEXT.StartTextInput();
 			TextInputEXT.TextInput += OnChar;
 #endif
 
