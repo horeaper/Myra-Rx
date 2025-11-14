@@ -24,15 +24,13 @@ To fit with Myra's event style, this integration comes with its own "Observable 
 
 ## I try to run my code but my program breaks on this.WhenActivated/this.Bind
 
-For some reason ReactiveUI cannot pick my integration automatically. You need to add these lines of code when program starts:
+ReactiveUI cannot pick the integration automatically. You need to add these lines of code when program starts:
 
 ```csharp
 using ReactiveUI.Myra;
 using ReactiveUI.Builder;
-using Splat;
 
-var builder = new ReactiveUIBuilder(Locator.CurrentMutable, Locator.Current).WithMyra();
-builder.BuildApp();
+RxAppBuilder.CreateReactiveUIBuilder().WithMyra().Build();
 ```
 
 The best place to put all these are in the `Main(string[] args)` entry function, before creating Myra's `Desktop` object.
