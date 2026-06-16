@@ -38,6 +38,9 @@ namespace Myra.Graphics2D.UI
 	{
 		private IImage[] _renderables = new IImage[WidgetVisualStateTotal];
 
+		private Color _color = Color.White;
+		private ImageResizeMode _resizeMode;
+
 #if MONOGAME
 		private bool _isAnisotropicFiltering = false;
 
@@ -45,6 +48,7 @@ namespace Myra.Graphics2D.UI
 		/// Gets or sets a value indicating whether anisotropic filtering is applied to the image.
 		/// </summary>
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool IsAnisotropicFiltering
 		{
 			get
@@ -54,6 +58,7 @@ namespace Myra.Graphics2D.UI
 			set
 			{
 				_isAnisotropicFiltering = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -64,6 +69,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance/Renderable")]
 		[StylePropertyPath("Image")]
+		[Bindable(true)]
 		public IImage Renderable
 		{
 			get
@@ -73,12 +79,13 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (value == _renderables[WidgetVisualStateNormal])
+				if (Equals(value, _renderables[WidgetVisualStateNormal]))
 				{
 					return;
 				}
 
 				_renderables[WidgetVisualStateNormal] = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -88,6 +95,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance/Renderable")]
 		[StylePropertyPath("DisabledImage")]
+		[Bindable(true)]
 		public IImage DisabledRenderable
 		{
 			get
@@ -97,12 +105,13 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (value == _renderables[WidgetVisualStateDisabled])
+				if (Equals(value, _renderables[WidgetVisualStateDisabled]))
 				{
 					return;
 				}
 
 				_renderables[WidgetVisualStateDisabled] = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -112,6 +121,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance/Renderable")]
 		[StylePropertyPath("OverImage")]
+		[Bindable(true)]
 		public IImage OverRenderable
 		{
 			get
@@ -121,12 +131,13 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (value == _renderables[WidgetVisualStateOver])
+				if (Equals(value, _renderables[WidgetVisualStateOver]))
 				{
 					return;
 				}
 
 				_renderables[WidgetVisualStateOver] = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -136,6 +147,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance/Renderable")]
 		[StylePropertyPath("FocusedImage")]
+		[Bindable(true)]
 		public IImage FocusedRenderable
 		{
 			get
@@ -145,12 +157,13 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (value == _renderables[WidgetVisualStateFocused])
+				if (Equals(value, _renderables[WidgetVisualStateFocused]))
 				{
 					return;
 				}
 
 				_renderables[WidgetVisualStateFocused] = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -160,6 +173,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance/Renderable")]
 		[StylePropertyPath("PressedImage")]
+		[Bindable(true)]
 		public IImage PressedRenderable
 		{
 			get
@@ -169,12 +183,13 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (value == _renderables[WidgetVisualStatePressed])
+				if (Equals(value, _renderables[WidgetVisualStatePressed]))
 				{
 					return;
 				}
 
 				_renderables[WidgetVisualStatePressed] = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -184,14 +199,50 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance")]
 		[DefaultValue("#FFFFFFFF")]
-		public Color Color { get; set; } = Color.White;
+		[Bindable(true)]
+		public Color Color
+		{
+			get
+			{
+				return _color;
+			}
+
+			set
+			{
+				if (value.Equals(_color))
+				{
+					return;
+				}
+				
+				_color = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets how the image is resized to fit available space.
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(ImageResizeMode.Stretch)]
-		public ImageResizeMode ResizeMode { get; set; }
+		[Bindable(true)]
+		public ImageResizeMode ResizeMode
+		{
+			get
+			{
+				return _resizeMode;
+			}
+
+			set
+			{
+				if (value == _resizeMode)
+				{
+					return;
+				}
+				
+				_resizeMode = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Measures the size required for the image, considering all image states (normal, over, pressed).

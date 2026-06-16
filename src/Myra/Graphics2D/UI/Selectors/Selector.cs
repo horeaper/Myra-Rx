@@ -82,11 +82,30 @@ namespace Myra.Graphics2D.UI
 		where ItemType : class, ISelectorItem
 	{
 		private ItemType _selectedItem;
+		private SelectionMode _selectionMode;
 
 		/// <summary>
 		/// Gets or sets the selection mode (single or multiple items).
 		/// </summary>
-		public override SelectionMode SelectionMode { get; set; }
+		[Bindable(true)]
+		public override SelectionMode SelectionMode
+		{
+			get
+			{
+				return _selectionMode;
+			}
+
+			set
+			{
+				if (value == _selectionMode)
+				{
+					return;
+				}
+				
+				_selectionMode = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets the collection of selectable items.
@@ -96,6 +115,7 @@ namespace Myra.Graphics2D.UI
 		/// <summary>
 		/// Gets or sets the zero-based index of the currently selected item, or null if no item is selected.
 		/// </summary>
+		[Bindable(true)]
 		public override int? SelectedIndex
 		{
 			get
@@ -123,6 +143,7 @@ namespace Myra.Graphics2D.UI
 		/// <summary>
 		/// Gets or sets the currently selected item, or null if no item is selected.
 		/// </summary>
+		[Bindable(true)]
 		public override ItemType SelectedItem
 		{
 			get
@@ -143,6 +164,8 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_selectedItem = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(SelectedIndex));
 
 				if (_selectedItem != null)
 				{

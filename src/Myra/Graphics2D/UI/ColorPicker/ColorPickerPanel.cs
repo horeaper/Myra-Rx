@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using FontStashSharp.RichText;
 using Myra.Events;
 using Myra.Graphics2D.UI.Styles;
@@ -65,6 +66,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 		/// <summary>
 		/// Gets or sets the currently selected color.
 		/// </summary>
+		[Bindable(true)]
 		public Color Color
 		{
 			get
@@ -90,37 +92,74 @@ namespace Myra.Graphics2D.UI.ColorPicker
 		/// <summary>
 		/// Gets or sets the red component of the color (0-255).
 		/// </summary>
+		[Bindable(true)]
 		public byte R
 		{
 			get => Color.R;
-			set => Color = new Color(value, Color.G, Color.B, Color.A);
+			set
+			{
+				if (value == Color.R)
+				{
+					return;
+				}
+
+				Color = new Color(value, Color.G, Color.B, Color.A);
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the green component of the color (0-255).
 		/// </summary>
+		[Bindable(true)]
 		public byte G
 		{
 			get => Color.G;
-			set => Color = new Color(Color.R, value, Color.B, Color.A);
+			set
+			{
+				if (value == Color.G)
+				{
+					return;
+				}
+
+				Color = new Color(Color.R, value, Color.B, Color.A);
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the blue component of the color (0-255).
 		/// </summary>
+		[Bindable(true)]
 		public byte B
 		{
 			get => Color.B;
-			set => Color = new Color(Color.R, Color.G, value, Color.A);
+			set
+			{
+				if (value == Color.B)
+				{
+					return;
+				}
+
+				Color = new Color(Color.R, Color.G, value, Color.A);
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the alpha (opacity) value of the color (0.0-1.0).
 		/// </summary>
+		[Bindable(true)]
 		public float A
 		{
 			get => _colorDisplay.Opacity;
-			set => _colorDisplay.Opacity = value;
+			set
+			{
+				if (value == _colorDisplay.Opacity)
+				{
+					return;
+				}
+
+				_colorDisplay.Opacity = value;
+				OnPropertyChanged();
+			}
 		}
 
 		private int DisplayAlpha => (int)(A * 255f);
@@ -555,6 +594,12 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			_colorDisplay.Color = rgb;
 
 			colorHSV = hsv;
+
+			OnPropertyChanged(nameof(Color));
+			OnPropertyChanged(nameof(R));
+			OnPropertyChanged(nameof(G));
+			OnPropertyChanged(nameof(B));
+			OnPropertyChanged(nameof(A));
 		}
 
 		/// <summary>

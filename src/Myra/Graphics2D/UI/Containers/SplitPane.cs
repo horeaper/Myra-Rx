@@ -20,6 +20,7 @@ namespace Myra.Graphics2D.UI
 		private Button _handleDown;
 		private int? _mouseCoord;
 		private int _handlesSize;
+		private SplitPanelButtonStyle _handleStyle;
 
 		/// <summary>
 		/// Gets the collection of child widgets in the split pane.
@@ -40,7 +41,25 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[XmlIgnore]
 		[Browsable(false)]
-		public SplitPanelButtonStyle HandleStyle { get; private set; }
+		[Bindable(true)]
+		public SplitPanelButtonStyle HandleStyle
+		{
+			get
+			{
+				return _handleStyle;
+			}
+
+			private set
+			{
+				if (value == _handleStyle)
+				{
+					return;
+				}
+				
+				_handleStyle = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Occurs when the splitter positions change.

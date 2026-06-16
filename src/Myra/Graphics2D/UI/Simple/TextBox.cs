@@ -67,11 +67,22 @@ namespace Myra.Graphics2D.UI
 		private readonly UndoRedoStack UndoStack = new UndoRedoStack();
 		private readonly UndoRedoStack RedoStack = new UndoRedoStack();
 
+		private bool _hintTextEnabled;
+		private bool _multiline;
+		private IImage _cursor;
+		private IBrush _selection;
+		private int _blinkIntervalInMs;
+		private bool _readonly;
+		private VerticalAlignment _textVerticalAlignment;
+		private int _selectStart;
+		private int _selectEnd;
+
 		/// <summary>
 		/// Gets or sets the vertical spacing in pixels between lines of text.
 		/// </summary>
 		[Category("Appearance")]
 		[DefaultValue(0)]
+		[Bindable(true)]
 		public int VerticalSpacing
 		{
 			get
@@ -80,7 +91,13 @@ namespace Myra.Graphics2D.UI
 			}
 			set
 			{
+				if (value == _richTextLayout.VerticalSpacing)
+				{
+					return;
+				}
+
 				_richTextLayout.VerticalSpacing = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -90,6 +107,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance")]
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public string Text
 		{
 			get
@@ -108,6 +126,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance")]
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public string HintText
 		{
 			get
@@ -116,7 +135,13 @@ namespace Myra.Graphics2D.UI
 			}
 			set
 			{
+				if (value != _hintText)
+				{
+					return;
+				}
+
 				_hintText = value;
+				OnPropertyChanged();
 
 				if (_text == null)
 				{
@@ -130,14 +155,50 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		public bool HintTextEnabled { get; set; }
+		[Bindable(true)]
+		public bool HintTextEnabled
+		{
+			get
+			{
+				return _hintTextEnabled;
+			}
+
+			set
+			{
+				if (value == _hintTextEnabled)
+				{
+					return;
+				}
+				
+				_hintTextEnabled = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the text box supports multiple lines of text.
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(false)]
-		public bool Multiline { get; set; }
+		[Bindable(true)]
+		public bool Multiline
+		{
+			get
+			{
+				return _multiline;
+			}
+
+			set
+			{
+				if (value == _multiline)
+				{
+					return;
+				}
+				
+				_multiline = value;
+				OnPropertyChanged();
+			}
+		}
 
 		private string UserText
 		{
@@ -160,6 +221,7 @@ namespace Myra.Graphics2D.UI
 		/// Gets or sets the font used to render the text.
 		/// </summary>
 		[Category("Appearance")]
+		[Bindable(true)]
 		public SpriteFontBase Font
 		{
 			get
@@ -168,7 +230,13 @@ namespace Myra.Graphics2D.UI
 			}
 			set
 			{
+				if (value == _richTextLayout.Font)
+				{
+					return;
+				}
+
 				_richTextLayout.Font = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -178,6 +246,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance")]
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool Wrap
 		{
 			get
@@ -193,6 +262,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_wrap = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -201,83 +271,211 @@ namespace Myra.Graphics2D.UI
 		/// Gets or sets the color of the text in the text box's normal state.
 		/// </summary>
 		[Category("Appearance/TextColor")]
+		[Bindable(true)]
 		public Color TextColor
 		{
 			get => _textColors[WidgetVisualStateNormal].Value;
-			set => _textColors[WidgetVisualStateNormal] = value;
+
+			set
+			{
+				if (value == _textColors[WidgetVisualStateNormal])
+				{
+					return;
+				}
+
+				_textColors[WidgetVisualStateNormal] = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the color of the text when the text box is disabled.
 		/// </summary>
 		[Category("Appearance/TextColor")]
+		[Bindable(true)]
 		public Color? DisabledTextColor
 		{
 			get => _textColors[WidgetVisualStateDisabled];
-			set => _textColors[WidgetVisualStateDisabled] = value;
+
+			set
+			{
+				if (value == _textColors[WidgetVisualStateDisabled])
+				{
+					return;
+				}
+
+				_textColors[WidgetVisualStateDisabled] = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the color of the text when the text box has focus.
 		/// </summary>
 		[Category("Appearance/TextColor")]
+		[Bindable(true)]
 		public Color? FocusedTextColor
 		{
 			get => _textColors[WidgetVisualStateFocused];
-			set => _textColors[WidgetVisualStateFocused] = value;
+
+			set
+			{
+				if (value == _textColors[WidgetVisualStateFocused])
+				{
+					return;
+				}
+
+				_textColors[WidgetVisualStateFocused] = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the color of the text when the mouse is over the text box, or null to use the default.
 		/// </summary>
 		[Category("Appearance/TextColor")]
+		[Bindable(true)]
 		public Color? OverTextColor
 		{
 			get => _textColors[WidgetVisualStateOver];
-			set => _textColors[WidgetVisualStateOver] = value;
+
+			set
+			{
+				if (value == _textColors[WidgetVisualStateOver])
+				{
+					return;
+				}
+
+				_textColors[WidgetVisualStateOver] = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the color of the text when the text box is pressed, or null to use the default.
 		/// </summary>
 		[Category("Appearance/TextColor")]
+		[Bindable(true)]
 		public Color? PressedTextColor
 		{
 			get => _textColors[WidgetVisualStatePressed];
-			set => _textColors[WidgetVisualStatePressed] = value;
+
+			set
+			{
+				if (value == _textColors[WidgetVisualStatePressed])
+				{
+					return;
+				}
+
+				_textColors[WidgetVisualStatePressed] = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the image displayed as the text cursor.
 		/// </summary>
 		[Category("Appearance")]
-		public IImage Cursor { get; set; }
+		[Bindable(true)]
+		public IImage Cursor
+		{
+			get
+			{
+				return _cursor;
+			}
+
+			set
+			{
+				if (Equals(value, _cursor))
+				{
+					return;
+				}
+				
+				_cursor = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the brush used to draw the selection highlight.
 		/// </summary>
 		[Category("Appearance")]
-		public IBrush Selection { get; set; }
+		[Bindable(true)]
+		public IBrush Selection
+		{
+			get
+			{
+				return _selection;
+			}
+
+			set
+			{
+				if (Equals(value, _selection))
+				{
+					return;
+				}
+				
+				_selection = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the cursor blink interval in milliseconds.
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(450)]
-		public int BlinkIntervalInMs { get; set; }
+		[Bindable(true)]
+		public int BlinkIntervalInMs
+		{
+			get
+			{
+				return _blinkIntervalInMs;
+			}
+
+			set
+			{
+				if (value == _blinkIntervalInMs)
+				{
+					return;
+				}
+				
+				_blinkIntervalInMs = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the text box is read-only.
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(false)]
-		public bool Readonly { get; set; }
+		[Bindable(true)]
+		public bool Readonly
+		{
+			get
+			{
+				return _readonly;
+			}
+
+			set
+			{
+				if (value == _readonly)
+				{
+					return;
+				}
+				
+				_readonly = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the text box masks input as a password field.
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool PasswordField
 		{
 			get
@@ -286,7 +484,13 @@ namespace Myra.Graphics2D.UI
 			}
 			set
 			{
+				if (value == _passwordField)
+				{
+					return;
+				}
+
 				_passwordField = value;
+				OnPropertyChanged();
 				UpdateRichTextLayout();
 			}
 		}
@@ -296,7 +500,25 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(VerticalAlignment.Top)]
-		public VerticalAlignment TextVerticalAlignment { get; set; }
+		[Bindable(true)]
+		public VerticalAlignment TextVerticalAlignment
+		{
+			get
+			{
+				return _textVerticalAlignment;
+			}
+
+			set
+			{
+				if (value == _textVerticalAlignment)
+				{
+					return;
+				}
+				
+				_textVerticalAlignment = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the mouse cursor type to display when hovering over the text box.
@@ -346,6 +568,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int CursorPosition
 		{
 			get
@@ -361,7 +584,8 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_cursorIndex = value;
-
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(CursorCoords));
 				OnCursorIndexChanged();
 			}
 		}
@@ -371,6 +595,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public Point CursorCoords => GetRenderPositionByIndex(CursorPosition);
 
 		/// <summary>
@@ -378,14 +603,50 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		public int SelectStart { get; private set; }
+		[Bindable(true)]
+		public int SelectStart
+		{
+			get
+			{
+				return _selectStart;
+			}
+
+			private set
+			{
+				if (value == _selectStart)
+				{
+					return;
+				}
+				
+				_selectStart = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets the zero-based index where text selection ends.
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		public int SelectEnd { get; private set; }
+		[Bindable(true)]
+		public int SelectEnd
+		{
+			get
+			{
+				return _selectEnd;
+			}
+
+			private set
+			{
+				if (value == _selectEnd)
+				{
+					return;
+				}
+				
+				_selectEnd = value;
+				OnPropertyChanged();
+			}
+		}
 
 		private int CursorWidth => 1 + (Cursor != null ? Cursor.Size.X : 0);
 
@@ -1102,6 +1363,7 @@ namespace Myra.Graphics2D.UI
 			}
 
 			_text = value;
+			OnPropertyChanged(nameof(Text));
 
 			// Update layout to reflect new text (handles password masking, etc.)
 			UpdateRichTextLayout();

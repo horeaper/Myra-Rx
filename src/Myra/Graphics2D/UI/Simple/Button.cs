@@ -56,10 +56,21 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[Content]
+		[Bindable(true)]
 		public override Widget Content
 		{
 			get => _layout.Child;
-			set => _layout.Child = value;
+
+			set
+			{
+				if (value == _layout.Child)
+				{
+					return;
+				}
+
+				_layout.Child = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>

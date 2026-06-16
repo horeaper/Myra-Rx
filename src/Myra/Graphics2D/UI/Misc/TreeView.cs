@@ -30,6 +30,9 @@ namespace Myra.Graphics2D.UI
 		private TreeViewNode _selectedNode;
 		private bool _rowInfosDirty = true;
 
+		private IBrush _selectionBackground;
+		private IBrush _selectionHoverBackground;
+
 		internal List<TreeViewNode> AllNodes => _allNodes;
 
 		internal TreeStyle TreeStyle { get; set; }
@@ -57,6 +60,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public TreeViewNode SelectedNode
 		{
 			get
@@ -72,6 +76,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_selectedNode = value;
+				OnPropertyChanged();
 
 				var ev = SelectionChanged;
 				if (ev != null)
@@ -81,17 +86,69 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		/// <inheritdoc />
+		[DefaultValue(HorizontalAlignment.Stretch)]
+		public override HorizontalAlignment HorizontalAlignment
+		{
+			get { return base.HorizontalAlignment; }
+			set { base.HorizontalAlignment = value; }
+		}
+
+		/// <inheritdoc />
+		[DefaultValue(VerticalAlignment.Stretch)]
+		public override VerticalAlignment VerticalAlignment
+		{
+			get { return base.VerticalAlignment; }
+			set { base.VerticalAlignment = value; }
+		}
+
 		/// <summary>
 		/// Gets or sets the brush used to draw the background of selected nodes.
 		/// </summary>
 		[Category("Appearance")]
-		public IBrush SelectionBackground { get; set; }
+		[Bindable(true)]
+		public IBrush SelectionBackground
+		{
+			get
+			{
+				return _selectionBackground;
+			}
+
+			set
+			{
+				if (Equals(value, _selectionBackground))
+				{
+					return;
+				}
+				
+				_selectionBackground = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the brush used to draw the background of hovered nodes.
 		/// </summary>
 		[Category("Appearance")]
-		public IBrush SelectionHoverBackground { get; set; }
+		[Bindable(true)]
+		public IBrush SelectionHoverBackground
+		{
+			get
+			{
+				return _selectionHoverBackground;
+			}
+
+			set
+			{
+				if (Equals(value, _selectionHoverBackground))
+				{
+					return;
+				}
+				
+				_selectionHoverBackground = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Occurs when the selected node changes.

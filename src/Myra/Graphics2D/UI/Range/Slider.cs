@@ -2,6 +2,7 @@
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
 using Myra.Events;
+using Myra.Utility;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -23,6 +24,9 @@ namespace Myra.Graphics2D.UI
 		private float _value, _wheelStep = 1.0f;
 		private bool _wheelAdjustment;
 
+		private float _minimum;
+		private float _maximum = 100.0f;
+
 		/// <summary>
 		/// Gets the orientation of the slider (horizontal or vertical).
 		/// </summary>
@@ -35,20 +39,56 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(0.0f)]
-		public float Minimum { get; set; }
+		[Bindable(true)]
+		public float Minimum
+		{
+			get
+			{
+				return _minimum;
+			}
+
+			set
+			{
+				if (_minimum.EpsilonEquals(value))
+				{
+					return;
+				}
+				
+				_minimum = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the maximum value of the slider. Default is 100.0.
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(100.0f)]
-		public float Maximum { get; set; }
+		public float Maximum
+		{
+			get
+			{
+				return _maximum;
+			}
+
+			set
+			{
+				if (_maximum.EpsilonEquals(value))
+				{
+					return;
+				}
+				
+				_maximum = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the current value of the slider between Minimum and Maximum. Default is 0.0.
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(0.0f)]
+		[Bindable(true)]
 		public float Value
 		{
 			get
@@ -69,13 +109,14 @@ namespace Myra.Graphics2D.UI
 					value = Minimum;
 				}
 
-				if (_value == value)
+				if (_value.EpsilonEquals(value))
 				{
 					return;
 				}
 
 				var oldValue = _value;
 				_value = value;
+				OnPropertyChanged();
 
 				SyncHintWithValue();
 
@@ -88,6 +129,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool WheelAdjustment
 		{
 			get
@@ -96,7 +138,13 @@ namespace Myra.Graphics2D.UI
 			}
 			set
 			{
+				if (value == _wheelAdjustment)
+				{
+					return;
+				}
+				
 				_wheelAdjustment = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -105,6 +153,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(1.0f)]
+		[Bindable(true)]
 		public float WheelStep
 		{
 			get
@@ -113,7 +162,13 @@ namespace Myra.Graphics2D.UI
 			}
 			set
 			{
+				if (_wheelStep.EpsilonEquals(value))
+				{
+					return;
+				}
+				
 				_wheelStep = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -354,6 +409,7 @@ namespace Myra.Graphics2D.UI
 				{
 					_value = newValue;
 					valueChanged = true;
+					OnPropertyChanged(nameof(Value));
 				}
 			}
 

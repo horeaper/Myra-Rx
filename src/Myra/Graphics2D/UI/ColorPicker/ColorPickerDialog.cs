@@ -1,6 +1,6 @@
 using Myra.Graphics2D.UI.Styles;
 using System.Collections;
-
+using System.ComponentModel;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -25,6 +25,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 		/// <summary>
 		/// Gets or sets the selected color.
 		/// </summary>
+		[Bindable(true)]
 		public Color Color
 		{
 			get
@@ -34,7 +35,13 @@ namespace Myra.Graphics2D.UI.ColorPicker
 
 			set
 			{
+				if (value == ColorPickerPanel.Color)
+				{
+					return;	
+				}
+
 				ColorPickerPanel.Color = value;
+				OnPropertyChanged();
 			}
 		}
 

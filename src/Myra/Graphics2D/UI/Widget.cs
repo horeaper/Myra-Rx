@@ -80,11 +80,11 @@ namespace Myra.Graphics2D.UI
 
 		private Rectangle _containerBounds;
 		private Rectangle _layoutBounds;
-		private bool _visible;
+		private bool _visible = true;
 
 		private float _opacity = 1.0f;
 
-		private bool _enabled;
+		private bool _enabled = true;
 		private bool _isKeyboardFocused = false;
 		private Vector2 _scale = Vector2.One;
 		private Vector2 _transformOrigin = new Vector2(0.5f, 0.5f);
@@ -92,6 +92,15 @@ namespace Myra.Graphics2D.UI
 		private bool _transformDirty = true;
 		private Transform _transform;
 		private bool _isPressed = false;
+
+		private DragDirection _dragDirection = DragDirection.None;
+		private string _tooltip;
+		private Widget _dragHandle;
+		private bool _isModal;
+		private Layout2D _layout2d = Layout2D.NullLayout;
+		private bool _clipToBounds;
+		private Widget _parent;
+		private bool _acceptsKeyboardFocus;
 
 		/// <summary>
 		/// Internal use only. (MyraPad)
@@ -104,6 +113,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Layout")]
 		[DefaultValue(0)]
+		[Bindable(true)]
 		public int Left
 		{
 			get { return _left; }
@@ -116,6 +126,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_left = value;
+				OnPropertyChanged();
 				InvalidateTransform();
 				FireLocationChanged();
 			}
@@ -126,6 +137,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Layout")]
 		[DefaultValue(0)]
+		[Bindable(true)]
 		public int Top
 		{
 			get { return _top; }
@@ -138,6 +150,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_top = value;
+				OnPropertyChanged();
 				InvalidateTransform();
 				FireLocationChanged();
 			}
@@ -148,6 +161,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Layout")]
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public int? MinWidth
 		{
 			get { return _minWidth; }
@@ -159,6 +173,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_minWidth = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 				FireSizeChanged();
 			}
@@ -169,6 +184,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Layout")]
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public int? MaxWidth
 		{
 			get { return _maxWidth; }
@@ -180,6 +196,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_maxWidth = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 				FireSizeChanged();
 			}
@@ -190,6 +207,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Layout")]
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public int? Width
 		{
 			get
@@ -205,6 +223,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_width = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 				FireSizeChanged();
 			}
@@ -215,6 +234,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Layout")]
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public int? MinHeight
 		{
 			get { return _minHeight; }
@@ -226,6 +246,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_minHeight = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 				FireSizeChanged();
 			}
@@ -236,6 +257,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Layout")]
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public int? MaxHeight
 		{
 			get { return _maxHeight; }
@@ -247,6 +269,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_maxHeight = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 				FireSizeChanged();
 			}
@@ -257,6 +280,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Layout")]
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public int? Height
 		{
 			get
@@ -272,6 +296,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_height = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 				FireSizeChanged();
 			}
@@ -281,6 +306,7 @@ namespace Myra.Graphics2D.UI
 		/// Gets or sets the outer margin around the widget.
 		/// </summary>
 		[Category("Layout")]
+		[Bindable(true)]
 		public Thickness Margin
 		{
 			get
@@ -296,6 +322,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_margin = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -304,6 +331,7 @@ namespace Myra.Graphics2D.UI
 		/// Gets or sets the thickness of the border around the widget.
 		/// </summary>
 		[Category("Layout")]
+		[Bindable(true)]
 		public Thickness BorderThickness
 		{
 			get
@@ -319,6 +347,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_borderThickness = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -327,6 +356,7 @@ namespace Myra.Graphics2D.UI
 		/// Gets or sets the inner padding inside the widget's borders.
 		/// </summary>
 		[Category("Layout")]
+		[Bindable(true)]
 		public Thickness Padding
 		{
 			get
@@ -342,6 +372,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_padding = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -351,6 +382,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Layout")]
 		[DefaultValue(HorizontalAlignment.Left)]
+		[Bindable(true)]
 		public virtual HorizontalAlignment HorizontalAlignment
 		{
 			get { return _horizontalAlignment; }
@@ -363,6 +395,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_horizontalAlignment = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -372,6 +405,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Layout")]
 		[DefaultValue(VerticalAlignment.Top)]
+		[Bindable(true)]
 		public virtual VerticalAlignment VerticalAlignment
 		{
 			get { return _verticalAlignment; }
@@ -384,6 +418,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_verticalAlignment = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -393,6 +428,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(true)]
+		[Bindable(true)]
 		public bool Enabled
 		{
 			get
@@ -408,6 +444,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_enabled = value;
+				OnPropertyChanged();
 
 				foreach (var item in ChildrenCopy)
 				{
@@ -423,6 +460,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(true)]
+		[Bindable(true)]
 		public bool Visible
 		{
 			get { return _visible; }
@@ -435,6 +473,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_visible = value;
+				OnPropertyChanged();
 				LocalMousePosition = null;
 				LocalTouchPosition = null;
 
@@ -447,7 +486,25 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(DragDirection.None)]
-		public virtual DragDirection DragDirection { get; set; } = DragDirection.None;
+		[Bindable(true)]
+		public virtual DragDirection DragDirection
+		{
+			get
+			{
+				return _dragDirection;
+			}
+
+			set
+			{
+				if (value == _dragDirection)
+				{
+					return;
+				}
+				
+				_dragDirection = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[XmlIgnore]
 		[Browsable(false)]
@@ -458,6 +515,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(0)]
+		[Bindable(true)]
 		public int ZIndex
 		{
 			get => _zIndex;
@@ -469,6 +527,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_zIndex = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -478,6 +537,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public virtual MouseCursorType? MouseCursor
 		{
 			get => _mouseCursorType;
@@ -489,6 +549,8 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_mouseCursorType = value;
+				OnPropertyChanged();
+
 				foreach (var child in Children)
 				{
 					child.MouseCursor = value;
@@ -501,25 +563,44 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(null)]
-		public string Tooltip { get; set; }
+		[Bindable(true)]
+		public string Tooltip
+		{
+			get
+			{
+				return _tooltip;
+			}
 
+			set
+			{
+				if (value == _tooltip)
+				{
+					return;
+				}
+				
+				_tooltip = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the scale factor applied to the widget. A value of (1, 1) is the original size.
 		/// </summary>
 		[Category("Transform")]
 		[DefaultValue("1, 1")]
+		[Bindable(true)]
 		public Vector2 Scale
 		{
 			get => _scale;
 			set
 			{
-				if (value == _scale)
+				if (_scale.EpsilonEquals(value))
 				{
 					return;
 				}
 
 				_scale = value;
+				OnPropertyChanged();
 				InvalidateTransform();
 			}
 		}
@@ -529,17 +610,19 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Transform")]
 		[DefaultValue("0.5, 0.5")]
+		[Bindable(true)]
 		public Vector2 TransformOrigin
 		{
 			get => _transformOrigin;
 			set
 			{
-				if (value == _transformOrigin)
+				if (_transformOrigin.EpsilonEquals(value))
 				{
 					return;
 				}
 
 				_transformOrigin = value;
+				OnPropertyChanged();
 				InvalidateTransform();
 			}
 		}
@@ -549,18 +632,20 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Transform")]
 		[DefaultValue(0.0f)]
+		[Bindable(true)]
 		public float Rotation
 		{
 			get => _rotation;
 
 			set
 			{
-				if (value == _rotation)
+				if (_rotation.EpsilonEquals(value) )
 				{
 					return;
 				}
 
 				_rotation = value;
+				OnPropertyChanged();
 				InvalidateTransform();
 			}
 		}
@@ -570,13 +655,32 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[XmlIgnore]
 		[Browsable(false)]
-		public Widget DragHandle { get; set; }
+		[Bindable(true)]
+		public Widget DragHandle
+		{
+			get
+			{
+				return _dragHandle;
+			}
+
+			set
+			{
+				if (value == _dragHandle)
+				{
+					return;
+				}
+				
+				_dragHandle = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Determines whether the widget had been placed on Desktop
 		/// </summary>
 		[XmlIgnore]
 		[Browsable(false)]
+		[Bindable(true)]
 		public bool IsPlaced
 		{
 			get
@@ -590,6 +694,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[XmlIgnore]
 		[Browsable(false)]
+		[Bindable(true)]
 		public virtual Desktop Desktop
 		{
 			get
@@ -616,6 +721,8 @@ namespace Myra.Graphics2D.UI
 				LocalTouchPosition = null;
 
 				_desktop = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(IsPlaced));
 
 				if (_desktop != null)
 				{
@@ -638,7 +745,25 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[XmlIgnore]
 		[Browsable(false)]
-		public bool IsModal { get; set; }
+		[Bindable(true)]
+		public bool IsModal
+		{
+			get
+			{
+				return _isModal;
+			}
+
+			set
+			{
+				if (value == _isModal)
+				{
+					return;
+				}
+				
+				_isModal = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the opacity of the widget, where 0.0 is fully transparent and 1.0 is fully opaque.
@@ -646,6 +771,7 @@ namespace Myra.Graphics2D.UI
 		[Category("Appearance")]
 		[DefaultValue(1.0f)]
 		[Range(0.0f, 1.0f)]
+		[Bindable(true)]
 		public float Opacity
 		{
 			get
@@ -660,7 +786,13 @@ namespace Myra.Graphics2D.UI
 					throw new ArgumentOutOfRangeException("value");
 				}
 
+				if (_opacity.EpsilonEquals(value))
+				{
+					return;
+				}
+				
 				_opacity = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -669,106 +801,234 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[XmlIgnore]
 		[Browsable(false)]
-		public Layout2D Layout2d { get; set; } = Layout2D.NullLayout;
+		[Bindable(true)]
+		public Layout2D Layout2d
+		{
+			get
+			{
+				return _layout2d;
+			}
+
+			set
+			{
+				if (value == _layout2d)
+				{
+					return;
+				}
+				
+				_layout2d = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the brush used to draw the background of the widget in its normal state.
 		/// </summary>
 		[Category("Appearance/Background")]
+		[Bindable(true)]
 		public IBrush Background
 		{
 			get => _backgrounds[WidgetVisualStateNormal];
-			set => _backgrounds[WidgetVisualStateNormal] = value;
+
+			set
+			{
+				if (Equals(value, _backgrounds[WidgetVisualStateNormal]))
+				{
+					return;
+				}
+
+				_backgrounds[WidgetVisualStateNormal] = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the brush used to draw the background of the widget when the mouse is hovering over it.
 		/// </summary>
 		[Category("Appearance/Background")]
+		[Bindable(true)]
 		public IBrush OverBackground
 		{
 			get => _backgrounds[WidgetVisualStateOver];
-			set => _backgrounds[WidgetVisualStateOver] = value;
+
+			set
+			{
+				if (Equals(value, _backgrounds[WidgetVisualStateOver]))
+				{
+					return;
+				}
+
+				_backgrounds[WidgetVisualStateOver] = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the brush used to draw the background of the widget when it is disabled.
 		/// </summary>
 		[Category("Appearance/Background")]
+		[Bindable(true)]
 		public IBrush DisabledBackground
 		{
 			get => _backgrounds[WidgetVisualStateDisabled];
-			set => _backgrounds[WidgetVisualStateDisabled] = value;
+
+			set
+			{
+				if (Equals(value, _backgrounds[WidgetVisualStateDisabled]))
+				{
+					return;
+				}
+
+				_backgrounds[WidgetVisualStateDisabled] = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the brush used to draw the background of the widget when it has keyboard focus.
 		/// </summary>
 		[Category("Appearance/Background")]
+		[Bindable(true)]
 		public IBrush FocusedBackground
 		{
 			get => _backgrounds[WidgetVisualStateFocused];
-			set => _backgrounds[WidgetVisualStateFocused] = value;
+
+			set
+			{
+				if (Equals(value, _backgrounds[WidgetVisualStateFocused]))
+				{
+					return;
+				}
+
+				_backgrounds[WidgetVisualStateFocused] = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the brush used for the widget's background when it is pressed.
 		/// </summary>
 		[Category("Appearance/Background")]
+		[Bindable(true)]
 		public IBrush PressedBackground
 		{
 			get => _backgrounds[WidgetVisualStatePressed];
-			set => _backgrounds[WidgetVisualStatePressed] = value;
+
+			set
+			{
+				if (Equals(value, _backgrounds[WidgetVisualStatePressed]))
+				{
+					return;
+				}
+
+				_backgrounds[WidgetVisualStatePressed] = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the brush used for the widget's border in its normal state.
 		/// </summary>
 		[Category("Appearance/Border")]
+		[Bindable(true)]
 		public IBrush Border
 		{
 			get => _borders[WidgetVisualStateNormal];
-			set => _borders[WidgetVisualStateNormal] = value;
+
+			set
+			{
+				if (Equals(value, _borders[WidgetVisualStateNormal]))
+				{
+					return;
+				}
+
+				_borders[WidgetVisualStateNormal] = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the brush used for the widget's border when the mouse is over it.
 		/// </summary>
 		[Category("Appearance/Border")]
+		[Bindable(true)]
 		public IBrush OverBorder
 		{
 			get => _borders[WidgetVisualStateOver];
-			set => _borders[WidgetVisualStateOver] = value;
+
+			set
+			{
+				if (Equals(value, _borders[WidgetVisualStateOver]))
+				{
+					return;
+				}
+
+				_borders[WidgetVisualStateOver] = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the brush used for the widget's border when it is disabled.
 		/// </summary>
 		[Category("Appearance/Border")]
+		[Bindable(true)]
 		public IBrush DisabledBorder
 		{
 			get => _borders[WidgetVisualStateDisabled];
-			set => _borders[WidgetVisualStateDisabled] = value;
+
+			set
+			{
+				if (Equals(value, _borders[WidgetVisualStateDisabled]))
+				{
+					return;
+				}
+
+				_borders[WidgetVisualStateDisabled] = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the brush used for the widget's border when it has focus.
 		/// </summary>
 		[Category("Appearance/Border")]
+		[Bindable(true)]
 		public IBrush FocusedBorder
 		{
 			get => _borders[WidgetVisualStateFocused];
-			set => _borders[WidgetVisualStateFocused] = value;
+
+			set
+			{
+				if (Equals(value, _borders[WidgetVisualStateFocused]))
+				{
+					return;
+				}
+
+				_borders[WidgetVisualStateFocused] = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the brush used for the widget's border when it is pressed.
 		/// </summary>
 		[Category("Appearance/Border")]
+		[Bindable(true)]
 		public IBrush PressedBorder
 		{
 			get => _borders[WidgetVisualStatePressed];
-			set => _borders[WidgetVisualStatePressed] = value;
+
+			set
+			{
+				if (Equals(value, _borders[WidgetVisualStatePressed]))
+				{
+					return;
+				}
+
+				_borders[WidgetVisualStatePressed] = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
@@ -776,6 +1036,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public virtual bool IsPressed
 		{
 			get => _isPressed;
@@ -787,6 +1048,8 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_isPressed = value;
+				OnPropertyChanged();
+
 				foreach (var child in ChildrenCopy)
 				{
 					child.IsPressed = value;
@@ -801,21 +1064,50 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance")]
 		[DefaultValue(false)]
-		public virtual bool ClipToBounds { get; set; }
+		[Bindable(true)]
+		public virtual bool ClipToBounds
+		{
+			get
+			{
+				return _clipToBounds;
+			}
+
+			set
+			{
+				if (value == _clipToBounds)
+				{
+					return;
+				}
+				
+				_clipToBounds = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets the parent widget in the widget hierarchy.
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		public Widget Parent { get; internal set; }
+		[Bindable(true)]
+		public Widget Parent
+		{
+			get
+			{
+				return _parent;
+			}
 
-		/// <summary>
-		/// Gets or sets a custom object associated with the widget for application-specific use.
-		/// </summary>
-		[Browsable(false)]
-		[XmlIgnore]
-		public object Tag { get; set; }
+			internal set
+			{
+				if (value == _parent)
+				{
+					return;
+				}
+				
+				_parent = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Zero-based bounds
@@ -874,14 +1166,32 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		public bool AcceptsKeyboardFocus { get; set; }
+		[Bindable(true)]
+		public bool AcceptsKeyboardFocus
+		{
+			get
+			{
+				return _acceptsKeyboardFocus;
+			}
 
+			set
+			{
+				if (value == _acceptsKeyboardFocus)
+				{
+					return;
+				}
+				
+				_acceptsKeyboardFocus = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets a value indicating whether the widget currently has keyboard focus.
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public bool IsKeyboardFocused
 		{
 			get
@@ -897,6 +1207,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_isKeyboardFocused = value;
+				OnPropertyChanged();
 				KeyboardFocusChanged?.Invoke(this, InputEventType.KeyboardFocusChanged);
 			}
 		}

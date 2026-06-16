@@ -13,13 +13,32 @@ namespace Myra.Graphics2D.UI
 	{
 		private bool _childrenDirty = true;
 		private readonly List<Widget> _childrenCopy = new List<Widget>();
+		private ILayout _childrenLayout;
 
 		/// <summary>
 		/// Gets or sets the layout that arranges this widget's child widgets.
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		public ILayout ChildrenLayout { get; set; }
+		[Bindable(true)]
+		public ILayout ChildrenLayout
+		{
+			get
+			{
+				return _childrenLayout;
+			}
+
+			set
+			{
+				if (Equals(value, _childrenLayout))
+				{
+					return;
+				}
+				
+				_childrenLayout = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets the collection of child widgets.

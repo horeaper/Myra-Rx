@@ -33,6 +33,12 @@ namespace Myra.Graphics2D.UI
 		private int? _startBoundsPos;
 		private int _thumbMaximumX, _thumbMaximumY;
 
+		private IImage _horizontalScrollBackground;
+		private IImage _horizontalScrollKnob;
+		private IImage _verticalScrollBackground;
+		private IImage _verticalScrollKnob;
+		private int _scrollMultiplier = 10;
+
 		[Browsable(false)]
 		[XmlIgnore]
 		internal int VerticalThumbWidth => (_verticalScrollingOn && ShowVerticalScrollBar) ? _verticalScrollbarThumb.Width : 0;
@@ -79,6 +85,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public Point ScrollPosition
 		{
 			get
@@ -99,6 +106,7 @@ namespace Myra.Graphics2D.UI
 
 				Content.Left = -value.X;
 				Content.Top = -value.Y;
+				OnPropertyChanged();
 			}
 		}
 
@@ -128,36 +136,96 @@ namespace Myra.Graphics2D.UI
 		/// Gets or sets the image used for the horizontal scrollbar background.
 		/// </summary>
 		[Category("Appearance")]
+		[Bindable(true)]
 		public IImage HorizontalScrollBackground
 		{
-			get; set;
+			get
+			{
+				return _horizontalScrollBackground;
+			}
+
+			set
+			{
+				if (Equals(value, _horizontalScrollBackground))
+				{
+					return;
+				}
+				
+				_horizontalScrollBackground = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the image used for the horizontal scrollbar knob (thumb).
 		/// </summary>
 		[Category("Appearance")]
+		[Bindable(true)]
 		public IImage HorizontalScrollKnob
 		{
-			get; set;
+			get
+			{
+				return _horizontalScrollKnob;
+			}
+
+			set
+			{
+				if (Equals(value, _horizontalScrollKnob))
+				{
+					return;
+				}
+				
+				_horizontalScrollKnob = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the image used for the vertical scrollbar background.
 		/// </summary>
 		[Category("Appearance")]
+		[Bindable(true)]
 		public IImage VerticalScrollBackground
 		{
-			get; set;
+			get
+			{
+				return _verticalScrollBackground;
+			}
+
+			set
+			{
+				if (Equals(value, _verticalScrollBackground))
+				{
+					return;
+				}
+				
+				_verticalScrollBackground = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the image used for the vertical scrollbar knob (thumb).
 		/// </summary>
 		[Category("Appearance")]
+		[Bindable(true)]
 		public IImage VerticalScrollKnob
 		{
-			get; set;
+			get
+			{
+				return _verticalScrollKnob;
+			}
+
+			set
+			{
+				if (Equals(value, _verticalScrollKnob))
+				{
+					return;
+				}
+				
+				_verticalScrollKnob = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
@@ -165,13 +233,32 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance")]
 		[DefaultValue(10)]
-		public int ScrollMultiplier { get; set; } = 10;
+		[Bindable(true)]
+		public int ScrollMultiplier
+		{
+			get
+			{
+				return _scrollMultiplier;
+			}
+
+			set
+			{
+				if (value == _scrollMultiplier)
+				{
+					return;
+				}
+				
+				_scrollMultiplier = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the widget to display in the scroll viewer.
 		/// </summary>
 		[Browsable(false)]
 		[Content]
+		[Bindable(true)]
 		public override Widget Content
 		{
 			get => _layout.Child;
@@ -179,6 +266,7 @@ namespace Myra.Graphics2D.UI
 			set
 			{
 				_layout.Child = value;
+				OnPropertyChanged();
 				ResetScroll();
 			}
 		}
@@ -188,6 +276,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(true)]
+		[Bindable(true)]
 		public bool ShowHorizontalScrollBar
 		{
 			get
@@ -203,6 +292,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_showHorizontalScrollBar = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -212,6 +302,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(true)]
+		[Bindable(true)]
 		public bool ShowVerticalScrollBar
 		{
 			get
@@ -227,6 +318,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_showVerticalScrollBar = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}

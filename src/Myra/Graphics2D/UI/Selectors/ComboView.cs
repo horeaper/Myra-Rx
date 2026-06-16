@@ -34,6 +34,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(300)]
+		[Bindable(true)]
 		public int? DropdownMaximumHeight
 		{
 			get
@@ -43,7 +44,13 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
+				if (value == _listView.MaxHeight)
+				{
+					return;
+				}
+
 				_listView.MaxHeight = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -99,10 +106,20 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public Widget SelectedItem
 		{
 			get => _listView.SelectedItem;
-			set => _listView.SelectedItem = value;
+
+			set
+			{
+				if (value == _listView.SelectedItem)
+				{
+					return;
+				}
+
+				_listView.SelectedItem = value;
+			}
 		}
 
 		/// <summary>
@@ -110,10 +127,21 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(SelectionMode.Single)]
+		[Bindable(true)]
 		public SelectionMode SelectionMode
 		{
 			get => _listView.SelectionMode;
-			set => _listView.SelectionMode = value;
+
+			set
+			{
+				if (value == _listView.SelectionMode)
+				{
+					return;
+				}
+
+				_listView.SelectionMode = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
@@ -121,10 +149,20 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int? SelectedIndex
 		{
 			get => _listView.SelectedIndex;
-			set => _listView.SelectedIndex = value;
+
+			set
+			{
+				if (value == _listView.SelectedIndex)
+				{
+					return;
+				}
+
+				_listView.SelectedIndex = value;
+			}
 		}
 
 		/// <summary>
@@ -220,6 +258,8 @@ namespace Myra.Graphics2D.UI
 		internal void UpdateSelectedItem()
 		{
 			_button.Content = SelectedItem.Clone();
+			OnPropertyChanged(nameof(SelectedIndex));
+			OnPropertyChanged(nameof(SelectedItem));
 		}
 
 		internal override IDictionary GetStylesDictionary(Stylesheet stylesheet) => stylesheet.ComboBoxStyles;

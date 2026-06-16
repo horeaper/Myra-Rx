@@ -28,9 +28,14 @@ namespace Myra.Graphics2D.UI
 		private Color? _color;
 		private ListViewButton _button;
 
+		private IImage _image;
+		private int _imageTextSpacing;
+		private int? _height;
+
 		/// <summary>
 		/// Gets or sets the text displayed on the tab.
 		/// </summary>
+		[Bindable(true)]
 		public string Text
 		{
 			get
@@ -46,6 +51,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_text = value;
+				OnPropertyChanged();
 				FireChanged();
 			}
 		}
@@ -54,6 +60,7 @@ namespace Myra.Graphics2D.UI
 		/// Gets or sets the color of the tab text, or null to use the style default.
 		/// </summary>
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public Color? Color
 		{
 			get
@@ -69,6 +76,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_color = value;
+				OnPropertyChanged();
 				FireChanged();
 			}
 		}
@@ -78,6 +86,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[Content]
+		[Bindable(true)]
 		public Widget Content
 		{
 			get => _content;
@@ -89,36 +98,84 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_content = value;
+				OnPropertyChanged();
 				FireChanged();
 			}
 		}
-
-		/// <summary>
-		/// Gets or sets an optional tag object associated with this tab item.
-		/// </summary>
-		[Browsable(false)]
-		[XmlIgnore]
-		public object Tag { get; set; }
 
 		/// <summary>
 		/// Gets or sets an optional image displayed alongside the tab text.
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		public IImage Image { get; set; }
+		[Bindable(true)]
+		public IImage Image
+		{
+			get
+			{
+				return _image;
+			}
+
+			set
+			{
+				if (Equals(value, _image))
+				{
+					return;
+				}
+				
+				_image = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the spacing in pixels between the image and text in the tab.
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		public int ImageTextSpacing { get; set; }
+		[Bindable(true)]
+		public int ImageTextSpacing
+		{
+			get
+			{
+				return _imageTextSpacing;
+			}
+
+			set
+			{
+				if (value == _imageTextSpacing)
+				{
+					return;
+				}
+				
+				_imageTextSpacing = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the height of the tab in pixels, or null to use the style default.
 		/// </summary>
 		[DefaultValue(null)]
-		public int? Height { get; set; }
+		[Bindable(true)]
+		public int? Height
+		{
+			get
+			{
+				return _height;
+			}
+
+			set
+			{
+				if (value == _height)
+				{
+					return;
+				}
+				
+				_height = value;
+				OnPropertyChanged();
+			}
+		}
 
 		[Browsable(false)]
 		[XmlIgnore]
@@ -163,10 +220,20 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public bool IsSelected
 		{
 			get => _button.IsPressed;
-			set => _button.IsPressed = value;
+
+			set
+			{
+				if (value == _button.IsPressed)
+				{
+					return;
+				}
+
+				_button.IsPressed = value;
+			}
 		}
 
 		/// <summary>
@@ -257,6 +324,8 @@ namespace Myra.Graphics2D.UI
 			{
 				SelectedChanged.Invoke(this, InputEventType.SelectionChanged);
 			}
+
+			OnPropertyChanged(nameof(IsSelected));
 		}
 
 		/// <summary>

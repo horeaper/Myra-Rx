@@ -30,12 +30,33 @@ namespace Myra.Graphics2D.UI
 		private Panel _panelContent;
 		private TabSelectorPosition _selectorPosition;
 
+		private TabControlStyle _tabControlStyle;
+		private bool _closeableTabs;
+
 		/// <summary>
 		/// Gets or sets the style applied to the tab control.
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		public TabControlStyle TabControlStyle { get; set; }
+		[Bindable(true)]
+		public TabControlStyle TabControlStyle
+		{
+			get
+			{
+				return _tabControlStyle;
+			}
+
+			set
+			{
+				if (value == _tabControlStyle)
+				{
+					return;
+				}
+				
+				_tabControlStyle = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the selection mode for tabs.
@@ -81,6 +102,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(TabSelectorPosition.Top)]
+		[Bindable(true)]
 		public TabSelectorPosition TabSelectorPosition
 		{
 			get
@@ -95,6 +117,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_selectorPosition = value;
+				OnPropertyChanged();
 				UpdateSelectorPosition();
 			}
 		}
@@ -104,7 +127,25 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(false)]
-		public bool CloseableTabs { get; set; }
+		[Bindable(true)]
+		public bool CloseableTabs
+		{
+			get
+			{
+				return _closeableTabs;
+			}
+
+			set
+			{
+				if (value == _closeableTabs)
+				{
+					return;
+				}
+				
+				_closeableTabs = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets a value indicating whether content extending beyond the tab control bounds is clipped.

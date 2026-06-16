@@ -198,18 +198,40 @@ namespace Myra.Graphics2D.UI.Properties
 		private string _filter;
 		private Type _parentType;
 
+		private TreeStyle _propertyGridStyle;
+		private string _category;
+
 		/// <summary>
 		/// Gets the tree style used for styling the property grid.
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		public TreeStyle PropertyGridStyle { get; private set; }
+		[Bindable(true)]
+		public TreeStyle PropertyGridStyle
+		{
+			get
+			{
+				return _propertyGridStyle;
+			}
+
+			private set
+			{
+				if (value == _propertyGridStyle)
+				{
+					return;
+				}
+				
+				_propertyGridStyle = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the object being displayed and edited in this property grid.
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public object Object
 		{
 			get { return _object; }
@@ -222,6 +244,7 @@ namespace Myra.Graphics2D.UI.Properties
 				}
 
 				_object = value;
+				OnPropertyChanged();
 				Rebuild();
 
 				ObjectChanged?.Invoke(this, InputEventType.ValueChanged);
@@ -233,6 +256,7 @@ namespace Myra.Graphics2D.UI.Properties
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public Type ParentType
 		{
 			get
@@ -247,7 +271,13 @@ namespace Myra.Graphics2D.UI.Properties
 
 			set
 			{
+				if (value == _parentType)
+				{
+					return;
+				}
+				
 				_parentType = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -256,13 +286,32 @@ namespace Myra.Graphics2D.UI.Properties
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		public string Category { get; private set; }
+		[Bindable(true)]
+		public string Category
+		{
+			get
+			{
+				return _category;
+			}
+
+			private set
+			{
+				if (value == _category)
+				{
+					return;
+				}
+				
+				_category = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets a value indicating whether collection properties should be ignored when building the property grid.
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool IgnoreCollections
 		{
 			get
@@ -277,7 +326,13 @@ namespace Myra.Graphics2D.UI.Properties
 
 			set
 			{
+				if (value == _ignoreCollections)
+				{
+					return;
+				}
+				
 				_ignoreCollections = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -317,6 +372,7 @@ namespace Myra.Graphics2D.UI.Properties
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int FirstColumnWidth
 		{
 			get
@@ -326,7 +382,13 @@ namespace Myra.Graphics2D.UI.Properties
 
 			set
 			{
+				if (value == _layout.ColumnsProportions[0].Value)
+				{
+					return;
+				}
+
 				_layout.ColumnsProportions[0].Value = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -355,6 +417,7 @@ namespace Myra.Graphics2D.UI.Properties
 		/// </summary>
 		[XmlIgnore]
 		[Browsable(false)]
+		[Bindable(true)]
 		public string Filter
 		{
 			get => _filter;
@@ -366,6 +429,7 @@ namespace Myra.Graphics2D.UI.Properties
 				}
 
 				_filter = value;
+				OnPropertyChanged();
 				Rebuild();
 			}
 		}
@@ -394,7 +458,7 @@ namespace Myra.Graphics2D.UI.Properties
 		/// <summary>
 		/// Occurs when a property value is changed in the grid.
 		/// </summary>
-		public event MyraEventHandler<GenericEventArgs<string>> PropertyChanged;
+		public event MyraEventHandler<GenericEventArgs<string>> ObjectPropertyChanged;
 
 		/// <summary>
 		/// Occurs when the edited object is changed.
@@ -461,13 +525,13 @@ namespace Myra.Graphics2D.UI.Properties
 		// Propagates a property change event up the hierarchy to the root property grid
 		private void FireChanged(string name)
 		{
-			var ev = PropertyChanged;
+			var ev = ObjectPropertyChanged;
 
 			// Walk up to the root grid's event handler
 			var p = _parentGrid;
 			while (p != null)
 			{
-				ev = p.PropertyChanged;
+				ev = p.ObjectPropertyChanged;
 				p = p._parentGrid;
 			}
 

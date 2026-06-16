@@ -82,25 +82,69 @@ namespace Myra.Graphics2D.UI
 		private int? _selectedRowIndex = null;
 		private int? _selectedColumnIndex = null;
 
+		private bool _showGridLines;
+		private Color _gridLinesColor = Color.White;
+		private IBrush _selectionBackground;
+		private IBrush _selectionHoverBackground;
+		private GridSelectionMode _gridSelectionMode;
+		private bool _hoverIndexCanBeNull = true;
+		private bool _canSelectNothing;
+
 		/// <summary>
 		/// Gets or sets a value indicating whether grid lines are displayed for debugging purposes.
 		/// </summary>
 		[Category("Debug")]
 		[DefaultValue(false)]
-		public bool ShowGridLines { get; set; }
+		[Bindable(true)]
+		public bool ShowGridLines
+		{
+			get
+			{
+				return _showGridLines;
+			}
+			set
+			{
+				if (value == _showGridLines)
+				{
+					return;
+				}
+				
+				_showGridLines = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the color of the grid lines when displayed.
 		/// </summary>
 		[Category("Debug")]
 		[DefaultValue("White")]
-		public Color GridLinesColor { get; set; }
+		[Bindable(true)]
+		public Color GridLinesColor
+		{
+			get
+			{
+				return _gridLinesColor;
+			}
+
+			set
+			{
+				if (value.Equals(_gridLinesColor))
+				{
+					return;
+				}
+				
+				_gridLinesColor = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the spacing in pixels between grid columns.
 		/// </summary>
 		[Category("Grid")]
 		[DefaultValue(0)]
+		[Bindable(true)]
 		public int ColumnSpacing
 		{
 			get => _layout.ColumnSpacing;
@@ -112,6 +156,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_layout.ColumnSpacing = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -121,6 +166,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Grid")]
 		[DefaultValue(0)]
+		[Bindable(true)]
 		public int RowSpacing
 		{
 			get { return _layout.RowSpacing; }
@@ -132,6 +178,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_layout.RowSpacing = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -140,22 +187,43 @@ namespace Myra.Graphics2D.UI
 		/// Gets or sets the default proportion used for columns when not explicitly specified.
 		/// </summary>
 		[Browsable(false)]
+		[Bindable(true)]
 		public Proportion DefaultColumnProportion
 		{
 			get => _layout.DefaultColumnProportion;
-			set => _layout.DefaultColumnProportion = value;
+
+			set
+			{
+				if (value == _layout.DefaultColumnProportion)
+				{
+					return;
+				}
+
+				_layout.DefaultColumnProportion = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the default proportion used for rows when not explicitly specified.
 		/// </summary>
 		[Browsable(false)]
+		[Bindable(true)]
 		public Proportion DefaultRowProportion
 		{
 			get => _layout.DefaultRowProportion;
-			set => _layout.DefaultRowProportion = value;
-		}
 
+			set
+			{
+				if (value == _layout.DefaultRowProportion)
+				{
+					return;
+				}
+
+				_layout.DefaultRowProportion = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets the collection of column proportions that define how columns divide available space.
@@ -169,39 +237,128 @@ namespace Myra.Graphics2D.UI
 		[Browsable(false)]
 		public ObservableCollection<Proportion> RowsProportions => _layout.RowsProportions;
 
-
 		/// <summary>
 		/// Gets or sets the brush used to draw the background of selected rows, columns, or cells.
 		/// </summary>
 		[Category("Appearance")]
-		public IBrush SelectionBackground { get; set; }
+		[Bindable(true)]
+		public IBrush SelectionBackground
+		{
+			get
+			{
+				return _selectionBackground;
+			}
+
+			set
+			{
+				if (Equals(value, _selectionBackground))
+				{
+					return;
+				}
+				
+				_selectionBackground = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the brush used to draw the background of rows, columns, or cells being hovered over.
 		/// </summary>
 		[Category("Appearance")]
-		public IBrush SelectionHoverBackground { get; set; }
+		[Bindable(true)]
+		public IBrush SelectionHoverBackground
+		{
+			get
+			{
+				return _selectionHoverBackground;
+			}
+
+			set
+			{
+				if (Equals(value, _selectionHoverBackground))
+				{
+					return;
+				}
+				
+				_selectionHoverBackground = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the selection mode for the grid (rows, columns, cells, or none).
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(GridSelectionMode.None)]
-		public GridSelectionMode GridSelectionMode { get; set; }
+		[Bindable(true)]
+		public GridSelectionMode GridSelectionMode
+		{
+			get
+			{
+				return _gridSelectionMode;
+			}
+
+			set
+			{
+				if (value == _gridSelectionMode)
+				{
+					return;
+				}
+				
+				_gridSelectionMode = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the hover index can be null when the mouse is outside the grid.
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(true)]
-		public bool HoverIndexCanBeNull { get; set; }
+		[Bindable(true)]
+		public bool HoverIndexCanBeNull
+		{
+			get
+			{
+				return _hoverIndexCanBeNull;
+			}
+
+			set
+			{
+				if (value == _hoverIndexCanBeNull)
+				{
+					return;
+				}
+				
+				_hoverIndexCanBeNull = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets a value indicating whether nothing can be selected by clicking an already-selected item.
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(false)]
-		public bool CanSelectNothing { get; set; }
+		[Bindable(true)]
+		public bool CanSelectNothing
+		{
+			get
+			{
+				return _canSelectNothing;
+			}
+
+			set
+			{
+				if (value == _canSelectNothing)
+				{
+					return;
+				}
+				
+				_canSelectNothing = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets the X coordinates of the vertical grid lines.
@@ -250,6 +407,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int? HoverRowIndex
 		{
 			get
@@ -265,6 +423,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_hoverRowIndex = value;
+				OnPropertyChanged();
 
 				var ev = HoverIndexChanged;
 				if (ev != null)
@@ -279,6 +438,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int? HoverColumnIndex
 		{
 			get
@@ -294,6 +454,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_hoverColumnIndex = value;
+				OnPropertyChanged();
 
 				var ev = HoverIndexChanged;
 				if (ev != null)
@@ -308,6 +469,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int? SelectedRowIndex
 		{
 			get { return _selectedRowIndex; }
@@ -320,6 +482,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_selectedRowIndex = value;
+				OnPropertyChanged();
 
 				var ev = SelectedIndexChanged;
 				if (ev != null)
@@ -334,6 +497,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int? SelectedColumnIndex
 		{
 			get { return _selectedColumnIndex; }
@@ -346,6 +510,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_selectedColumnIndex = value;
+				OnPropertyChanged();
 
 				var ev = SelectedIndexChanged;
 				if (ev != null)

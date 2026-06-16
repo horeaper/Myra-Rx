@@ -60,7 +60,7 @@ namespace Myra.Graphics2D.UI.Properties
 
 			_propertyGrid = new PropertyGrid();
 			Grid.SetColumn(_propertyGrid, 1);
-			_propertyGrid.PropertyChanged += PropertyGridOnPropertyChanged;
+			_propertyGrid.ObjectPropertyChanged += ObjectPropertyGridOnObjectPropertyChanged;
 			splitPanel.Widgets.Add(_propertyGrid);
 
 			Children.Add(splitPanel);
@@ -147,7 +147,7 @@ namespace Myra.Graphics2D.UI.Properties
 			UpdateButtonsEnabled();
 		}
 
-		private void PropertyGridOnPropertyChanged(object sender, MyraEventArgs eventArgs)
+		private void ObjectPropertyGridOnObjectPropertyChanged(object sender, MyraEventArgs eventArgs)
 		{
 			if (_listItems.SelectedItem == null)
 			{

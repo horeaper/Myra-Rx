@@ -62,14 +62,19 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(CheckPosition.Left)]
+		[Bindable(true)]
 		public CheckPosition CheckPosition
 		{
 			get => _checkPosition;
 			set
 			{
-				if (_checkPosition == value) return;
+				if (value == _checkPosition)
+				{
+					return;
+				}
 
 				_checkPosition = value;
+				OnPropertyChanged();
 				UpdateChildren();
 			}
 		}
@@ -80,10 +85,21 @@ namespace Myra.Graphics2D.UI
 		[Category("Behavior")]
 		[DefaultValue(0)]
 		[StylePropertyPath("ImageTextSpacing")]
+		[Bindable(true)]
 		public int CheckContentSpacing
 		{
 			get => _layout.Spacing;
-			set => _layout.Spacing = value;
+
+			set
+			{
+				if (value == _layout.Spacing)
+				{
+					return;
+				}
+
+				_layout.Spacing = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
@@ -91,17 +107,19 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance")]
 		[StylePropertyPath("ImageStyle/Image")]
+		[Bindable(true)]
 		public IImage UncheckedImage
 		{
 			get => _uncheckedImage;
 			set
 			{
-				if (value == _uncheckedImage)
+				if (Equals(value, _uncheckedImage))
 				{
 					return;
 				}
 
 				_uncheckedImage = value;
+				OnPropertyChanged();
 				UpdateImage();
 			}
 		}
@@ -111,17 +129,19 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance")]
 		[StylePropertyPath("ImageStyle/PressedImage")]
+		[Bindable(true)]
 		public IImage CheckedImage
 		{
 			get => _checkedImage;
 			set
 			{
-				if (value == _checkedImage)
+				if (Equals(value, _checkedImage))
 				{
 					return;
 				}
 
 				_checkedImage = value;
+				OnPropertyChanged();
 				UpdateImage();
 			}
 		}
@@ -131,6 +151,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[Content]
+		[Bindable(true)]
 		public override Widget Content
 		{
 			get => _content;
@@ -139,7 +160,7 @@ namespace Myra.Graphics2D.UI
 				if (_content == value) return;
 
 				_content = value;
-
+				OnPropertyChanged();
 				UpdateChildren();
 			}
 		}

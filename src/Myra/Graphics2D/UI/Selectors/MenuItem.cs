@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Xml.Serialization;
 using System;
+using System.Windows.Input;
 using Myra.Attributes;
 using Myra.MML;
 using FontStashSharp.RichText;
@@ -31,6 +32,12 @@ namespace Myra.Graphics2D.UI
 		private bool _displayTextDirty = true;
 		private string _displayText, _disabledDisplayText;
 
+		private Menu _menu;
+		private char? _underscoreChar;
+		private int _index;
+		private ICommand _command;
+		private object _commandParameter;
+
 		internal readonly Image ImageWidget = new Image
 		{
 			VerticalAlignment = VerticalAlignment.Center
@@ -53,6 +60,7 @@ namespace Myra.Graphics2D.UI
 		/// Gets or sets the text displayed for this menu item. An ampersand (&amp;) marks a mnemonic character.
 		/// </summary>
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public string Text
 		{
 			get { return _text; }
@@ -64,6 +72,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_text = value;
+				OnPropertyChanged();
 				_displayTextDirty = true;
 
 				UnderscoreChar = null;
@@ -102,6 +111,7 @@ namespace Myra.Graphics2D.UI
 		/// Gets or sets the color of the menu item text.
 		/// </summary>
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public Color? Color
 		{
 			get
@@ -117,23 +127,15 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_color = value;
+				OnPropertyChanged();
 				FireChanged();
 			}
 		}
 
 		/// <summary>
-		/// Gets or sets arbitrary user data associated with this menu item.
-		/// </summary>
-		[Browsable(false)]
-		[XmlIgnore]
-		public object Tag
-		{
-			get; set;
-		}
-
-		/// <summary>
 		/// Gets or sets the image displayed next to the menu item text.
 		/// </summary>
+		[Bindable(true)]
 		public IImage Image
 		{
 			get
@@ -143,12 +145,13 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (value == _image)
+				if (Equals(value, _image))
 				{
 					return;
 				}
 
 				_image = value;
+				OnPropertyChanged();
 				FireChanged();
 			}
 		}
@@ -157,6 +160,7 @@ namespace Myra.Graphics2D.UI
 		/// Gets or sets the text displayed as a keyboard shortcut hint next to the menu item.
 		/// </summary>
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public string ShortcutText
 		{
 			get
@@ -172,6 +176,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_shortcutText = value;
+				OnPropertyChanged();
 				FireChanged();
 			}
 		}
@@ -180,6 +185,7 @@ namespace Myra.Graphics2D.UI
 		/// Gets or sets the color of the shortcut text.
 		/// </summary>
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public Color? ShortcutColor
 		{
 			get
@@ -195,6 +201,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_shortcutColor = value;
+				OnPropertyChanged();
 				FireChanged();
 			}
 		}
@@ -204,7 +211,25 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		public Menu Menu { get; set; }
+		[Bindable(true)]
+		public Menu Menu
+		{
+			get
+			{
+				return _menu;
+			}
+
+			set
+			{
+				if (value == _menu)
+				{
+					return;
+				}
+				
+				_menu = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets the collection of submenu items nested under this menu item.
@@ -221,13 +246,20 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public bool Enabled
 		{
 			get { return ImageWidget.Enabled; }
 
 			set
 			{
+				if (value == ImageWidget.Enabled)
+				{
+					return;
+				}
+
 				ImageWidget.Enabled = Label.Enabled = Shortcut.Enabled = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -236,7 +268,25 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		public char? UnderscoreChar { get; private set; }
+		[Bindable(true)]
+		public char? UnderscoreChar
+		{
+			get
+			{
+				return _underscoreChar;
+			}
+
+			private set
+			{
+				if (value == _underscoreChar)
+				{
+					return;
+				}
+				
+				_underscoreChar = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets a value indicating whether this menu item can be opened (has submenu items).
@@ -256,7 +306,73 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		public int Index { get; set; }
+		[Bindable(true)]
+		public int Index
+		{
+			get
+			{
+				return _index;
+			}
+
+			set
+			{
+				if (value == _index)
+				{
+					return;
+				}
+				
+				_index = value;
+				OnPropertyChanged();
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the command to invoke when this button is pressed.
+		/// </summary>
+		[Bindable(true)]
+		public ICommand Command
+		{
+			get
+			{
+				return _command;
+			}
+
+			set
+			{
+				if (value == _command)
+				{
+					return;
+				}
+
+				var oldCommand = _command;
+				_command = value;
+				OnPropertyChanged();
+				OnCommandChanged(oldCommand);
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the parameter to pass to the <see cref="P:Myra.Graphics2D.UI.Command" /> property.
+		/// </summary>
+		[Bindable(true)]
+		public object CommandParameter
+		{
+			get
+			{
+				return _commandParameter;
+			}
+
+			set
+			{
+				if (value == _commandParameter)
+				{
+					return;
+				}
+
+				_commandParameter = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Occurs when this menu item is selected.
@@ -396,6 +512,8 @@ namespace Myra.Graphics2D.UI
 			{
 				ev(this, new MyraEventArgs(InputEventType.SelectionChanged));
 			}
+
+			ExecuteCommand();
 		}
 
 		/// <summary>
@@ -417,6 +535,44 @@ namespace Myra.Graphics2D.UI
 			if (ev != null)
 			{
 				ev(this, new MyraEventArgs(InputEventType.ValueChanged));
+			}
+		}
+
+		private void ExecuteCommand()
+		{
+			if (Command?.CanExecute(CommandParameter) == true)
+			{
+				Command.Execute(CommandParameter);
+			}
+		}
+
+		private void OnCommandChanged(ICommand oldCommand)
+		{
+			if (oldCommand != null)
+			{
+				oldCommand.CanExecuteChanged -= Command_CanExecuteChanged;
+			}
+			if (Command != null)
+			{
+				Command.CanExecuteChanged += Command_CanExecuteChanged;
+			}
+			UpdateCanExecute();
+		}
+
+		private void Command_CanExecuteChanged(object sender, EventArgs e)
+		{
+			UpdateCanExecute();
+		}
+
+		private void UpdateCanExecute()
+		{
+			if (Command != null)
+			{
+				Enabled = Command.CanExecute(CommandParameter);
+			}
+			else
+			{
+				Enabled = true;
 			}
 		}
 	}

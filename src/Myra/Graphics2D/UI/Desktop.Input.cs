@@ -1,5 +1,6 @@
 ﻿using Myra.Utility;
 using System;
+using System.ComponentModel;
 using Myra.Events;
 
 #if MONOGAME || FNA
@@ -76,6 +77,7 @@ namespace Myra.Graphics2D.UI
 		/// <summary>
 		/// Current mouse position in the global coordinates
 		/// </summary>
+		[Bindable(true)]
 		public Point MousePosition
 		{
 			get => _mousePosition;
@@ -87,6 +89,8 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_mousePosition = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(IsMouseOverGUI));
 				InputEventsManager.Queue(this, InputEventType.MouseMoved);
 			}
 		}
@@ -95,6 +99,7 @@ namespace Myra.Graphics2D.UI
 		/// Current touch position in the global coordinates
 		/// Null if there is no touch
 		/// </summary>
+		[Bindable(true)]
 		public Point? TouchPosition
 		{
 			get => _touchPosition;
@@ -108,6 +113,9 @@ namespace Myra.Graphics2D.UI
 
 				var oldValue = _touchPosition;
 				_touchPosition = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(IsTouchDown));
+				OnPropertyChanged(nameof(IsTouchOverGUI));
 
 				if (value != null && oldValue == null)
 				{
@@ -133,6 +141,7 @@ namespace Myra.Graphics2D.UI
 		/// <summary>
 		/// Gets or sets the mouse wheel delta for the current frame.
 		/// </summary>
+		[Bindable(true)]
 		public float MouseWheelDelta
 		{
 			get => _mouseWheelDelta;
@@ -140,6 +149,7 @@ namespace Myra.Graphics2D.UI
 			set
 			{
 				_mouseWheelDelta = value;
+				OnPropertyChanged();
 
 				if (!value.IsZero())
 				{

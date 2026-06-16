@@ -39,6 +39,9 @@ namespace Myra.Graphics2D.UI
 		private readonly ObservableCollection<Proportion> _proportions = new ObservableCollection<Proportion>();
 		private bool _childrenDirty = true;
 
+		private bool _showGridLines;
+		private Color _gridLinesColor = Color.White;
+
 		/// <summary>
 		/// Gets the orientation of the stack panel (horizontal or vertical).
 		/// </summary>
@@ -51,34 +54,92 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Debug")]
 		[DefaultValue(false)]
-		public bool ShowGridLines { get; set; }
+		[Bindable(true)]
+		public bool ShowGridLines
+		{
+			get
+			{
+				return _showGridLines;
+			}
+
+			set
+			{
+				if (value == _showGridLines)
+				{
+					return;
+				}
+				
+				_showGridLines = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the color of the grid lines shown for debugging.
 		/// </summary>
 		[Category("Debug")]
 		[DefaultValue("White")]
-		public Color GridLinesColor { get; set; }
+		[Bindable(true)]
+		public Color GridLinesColor
+		{
+			get
+			{
+				return _gridLinesColor;
+			}
+
+			set
+			{
+				if (value.Equals(_gridLinesColor))
+				{
+					return;
+				}
+				
+				_gridLinesColor = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the spacing between child elements.
 		/// </summary>
 		[Category("Layout")]
 		[DefaultValue(0)]
+		[Bindable(true)]
 		public int Spacing
 		{
 			get => _layout.Spacing;
-			set => _layout.Spacing = value;
+
+			set
+			{
+				if (value == _layout.Spacing)
+				{
+					return;
+				}
+
+				_layout.Spacing = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the default proportion for child elements.
 		/// </summary>
 		[Browsable(false)]
+		[Bindable(true)]
 		public Proportion DefaultProportion
 		{
 			get => _layout.DefaultProportion;
-			set => _layout.DefaultProportion = value;
+
+			set
+			{
+				if (value == _layout.DefaultProportion)
+				{
+					return;
+				}
+
+				_layout.DefaultProportion = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>

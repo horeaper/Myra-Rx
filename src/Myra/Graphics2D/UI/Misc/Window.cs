@@ -31,11 +31,13 @@ namespace Myra.Graphics2D.UI
 		private readonly Label _titleLabel;
 		private Widget _content;
 		private Widget _previousKeyboardFocus;
+		private bool _result;
 
 		/// <summary>
 		/// Gets or sets the title text displayed in the window's title bar.
 		/// </summary>
 		[Category("Appearance")]
+		[Bindable(true)]
 		public string Title
 		{
 			get
@@ -45,7 +47,13 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
+				if (value == _titleLabel.Text)
+				{
+					return;
+				}
+
 				_titleLabel.Text = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -54,6 +62,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance")]
 		[StylePropertyPath("TitleStyle/TextColor")]
+		[Bindable(true)]
 		public Color TitleTextColor
 		{
 			get
@@ -62,7 +71,13 @@ namespace Myra.Graphics2D.UI
 			}
 			set
 			{
+				if (value == _titleLabel.TextColor)
+				{
+					return;
+				}
+
 				_titleLabel.TextColor = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -71,6 +86,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance")]
 		[StylePropertyPath("TitleStyle/Font")]
+		[Bindable(true)]
 		public SpriteFontBase TitleFont
 		{
 			get
@@ -79,7 +95,13 @@ namespace Myra.Graphics2D.UI
 			}
 			set
 			{
+				if (value == _titleLabel.Font)
+				{
+					return;
+				}
+
 				_titleLabel.Font = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -102,6 +124,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[Content]
+		[Bindable(true)]
 		public override Widget Content
 		{
 			get
@@ -129,6 +152,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_content = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -137,7 +161,25 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		public bool Result { get; set; }
+		[Bindable(true)]
+		public bool Result
+		{
+			get
+			{
+				return _result;
+			}
+
+			set
+			{
+				if (value == _result)
+				{
+					return;
+				}
+				
+				_result = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the horizontal alignment of the window.

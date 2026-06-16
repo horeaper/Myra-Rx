@@ -18,10 +18,30 @@ namespace Myra.Graphics2D.UI
 	/// </summary>
 	public abstract class SeparatorWidget : Image
 	{
+		private int _thickness;
+
 		/// <summary>
 		/// Gets or sets the thickness of the separator line in pixels.
 		/// </summary>
-		public int Thickness { get; set; }
+		[Bindable(true)]
+		public int Thickness
+		{
+			get
+			{
+				return _thickness;
+			}
+
+			set
+			{
+				if (value == _thickness)
+				{
+					return;
+				}
+				
+				_thickness = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets the orientation (horizontal or vertical) of the separator.

@@ -3,6 +3,8 @@ using System.ComponentModel;
 using Myra.Events;
 using System.Collections;
 using Myra.Attributes;
+using System;
+
 
 
 #if MONOGAME || FNA
@@ -27,6 +29,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool IsToggled
 		{
 			get => IsPressed;
@@ -38,10 +41,21 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[Content]
+		[Bindable(true)]
 		public override Widget Content
 		{
 			get => _layout.Child;
-			set => _layout.Child = value;
+
+			set
+			{
+				if (value == _layout.Child)
+				{
+					return;
+				}
+
+				_layout.Child = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
@@ -70,6 +84,12 @@ namespace Myra.Graphics2D.UI
 			_layout = new SingleItemLayout<Widget>(this);
 			ChildrenLayout = _layout;
 			SetStyle(stylesheet, styleName);
+			PressedChanged += ToggleButton_PressedChanged;
+		}
+
+		private void ToggleButton_PressedChanged(object sender, MyraEventArgs e)
+		{
+			OnPropertyChanged(nameof(IsToggled));
 		}
 
 		/// <summary>

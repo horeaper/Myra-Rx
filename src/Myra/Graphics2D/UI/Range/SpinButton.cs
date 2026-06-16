@@ -4,6 +4,7 @@ using System.Linq;
 using Myra.Graphics2D.UI.Styles;
 using System.Xml.Serialization;
 using Myra.Events;
+using Myra.Utility;
 using System.Collections;
 
 
@@ -30,26 +31,86 @@ namespace Myra.Graphics2D.UI
 		private int _decimalPlaces = 0;
 		private float _increment = 1f;
 
+		private bool _nullable;
+		private float? _maximum;
+		private float? _minimum;
+		private bool _fixedNumberSize;
+		private float _mulIncrement = 1f;
+
 		/// <summary>
 		/// Gets or sets a value indicating whether null is an acceptable value for this spin button. Default is false.
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(false)]
-		public bool Nullable { get; set; }
+		[Bindable(true)]
+		public bool Nullable
+		{
+			get
+			{
+				return _nullable;
+			}
+
+			set
+			{
+				if (value == _nullable)
+				{
+					return;
+				}
+				
+				_nullable = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the maximum value allowed in the spin button, or null for no maximum limit.
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(null)]
-		public float? Maximum { get; set; }
+		[Bindable(true)]
+		public float? Maximum
+		{
+			get
+			{
+				return _maximum;
+			}
+
+			set
+			{
+				if (value == _maximum)
+				{
+					return;
+				}
+				
+				_maximum = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the minimum value allowed in the spin button, or null for no minimum limit.
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(null)]
-		public float? Minimum { get; set; }
+		[Bindable(true)]
+		public float? Minimum
+		{
+			get
+			{
+				return _minimum;
+			}
+
+			set
+			{
+				if (value == _minimum)
+				{
+					return;
+				}
+				
+				_minimum = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the horizontal alignment of the spin button. Default is Left.
@@ -88,6 +149,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(0.0f)]
+		[Bindable(true)]
 		public float? Value
 		{
 			get
@@ -146,6 +208,8 @@ namespace Myra.Graphics2D.UI
 				{
 					_textField.CursorPosition = 0;
 				}
+
+				OnPropertyChanged();
 			}
 		}
 
@@ -154,6 +218,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(1f)]
+		[Bindable(true)]
 		public float Increment
 		{
 			get
@@ -165,11 +230,23 @@ namespace Myra.Graphics2D.UI
 			{
 				if (Integer)
 				{
+					if ((int)value == _increment)
+					{
+						return;
+					}
+
 					_increment = (int)value;
+					OnPropertyChanged();
 				}
 				else
 				{
+					if (_increment.EpsilonEquals(value))
+					{
+						return;
+					}
+					
 					_increment = value;
+					OnPropertyChanged();
 				}
 			}
 		}
@@ -179,6 +256,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(0)]
+		[Bindable(true)]
 		public int DecimalPlaces
 		{
 			get
@@ -190,11 +268,23 @@ namespace Myra.Graphics2D.UI
 			{
 				if (Integer)
 				{
+					if (_decimalPlaces == 0)
+					{
+						return;
+					}
+
 					_decimalPlaces = 0;
+					OnPropertyChanged();
 				}
 				else
 				{
+					if (value == _decimalPlaces)
+					{
+						return;
+					}
+					
 					_decimalPlaces = value;
+					OnPropertyChanged();
 				}
 			}
 		}
@@ -204,13 +294,32 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(false)]
-		public bool FixedNumberSize { get; set; }
+		[Bindable(true)]
+		public bool FixedNumberSize
+		{
+			get
+			{
+				return _fixedNumberSize;
+			}
+
+			set
+			{
+				if (value == _fixedNumberSize)
+				{
+					return;
+				}
+				
+				_fixedNumberSize = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the spin button should only accept integer values.
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool Integer
 		{
 			get
@@ -220,11 +329,21 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
+				if (value == _integer)
+				{
+					return;
+				}
+
 				_integer = value;
+				OnPropertyChanged();
+
 				if (Integer)
 				{
 					_increment = (int)_increment;
-					Value = (int)Value;
+					if (Value != null)
+					{
+						Value = (int)Value;
+					}
 				}
 			}
 		}
@@ -234,7 +353,25 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(1f)]
-		public float Mul_Increment { get; set; } = 1f;
+		[Bindable(true)]
+		public float Mul_Increment
+		{
+			get
+			{
+				return _mulIncrement;
+			}
+
+			set
+			{
+				if (value == _mulIncrement)
+				{
+					return;
+				}
+				
+				_mulIncrement = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets the text box widget that contains the spin button's text input.

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using Myra.Graphics2D.UI.Styles;
@@ -32,6 +33,10 @@ namespace Myra.Graphics2D.UI
 		private bool _dirty = true;
 		private bool _internalSetSelectedIndex = false;
 
+		private MenuStyle _menuStyle;
+		private MenuItem _openMenuItem;
+		private HorizontalAlignment _labelHorizontalAlignment;
+
 		/// <summary>
 		/// Gets the orientation (horizontal or vertical) of the menu.
 		/// </summary>
@@ -44,20 +49,56 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		public MenuStyle MenuStyle { get; private set; }
+		[Bindable(true)]
+		public MenuStyle MenuStyle
+		{
+			get
+			{
+				return _menuStyle;
+			}
+
+			private set
+			{
+				if (value == _menuStyle)
+				{
+					return;
+				}
+				
+				_menuStyle = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets the menu item that currently has an open submenu, or null if no submenu is open.
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		internal MenuItem OpenMenuItem { get; private set; }
+		internal MenuItem OpenMenuItem
+		{
+			get
+			{
+				return _openMenuItem;
+			}
+
+			private set
+			{
+				if (value == _openMenuItem)
+				{
+					return;
+				}
+
+				_openMenuItem = value;
+				OnPropertyChanged(nameof(IsOpen));
+			}
+		}
 
 		/// <summary>
 		/// Gets a value indicating whether any submenu is currently open.
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public bool IsOpen
 		{
 			get
@@ -78,6 +119,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance")]
 		[StylePropertyPath("LabelStyle/Font")]
+		[Bindable(true)]
 		public SpriteFontBase LabelFont
 		{
 			get
@@ -87,7 +129,13 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
+				if (value == MenuStyle.LabelStyle.Font)
+				{
+					return;
+				}
+
 				MenuStyle.LabelStyle.Font = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -96,6 +144,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance")]
 		[StylePropertyPath("LabelStyle/TextColor")]
+		[Bindable(true)]
 		public Color LabelColor
 		{
 			get
@@ -105,7 +154,13 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
+				if (value == MenuStyle.LabelStyle.TextColor)
+				{
+					return;
+				}
+
 				MenuStyle.LabelStyle.TextColor = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -113,6 +168,7 @@ namespace Myra.Graphics2D.UI
 		/// Gets or sets the brush used to draw the background when hovering over a menu item.
 		/// </summary>
 		[Category("Appearance")]
+		[Bindable(true)]
 		public IBrush SelectionHoverBackground
 		{
 			get
@@ -122,7 +178,13 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
+				if (Equals(value, InternalChild.SelectionHoverBackground))
+				{
+					return;
+				}
+
 				InternalChild.SelectionHoverBackground = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -130,6 +192,7 @@ namespace Myra.Graphics2D.UI
 		/// Gets or sets the brush used to draw the background of a selected menu item.
 		/// </summary>
 		[Category("Appearance")]
+		[Bindable(true)]
 		public IBrush SelectionBackground
 		{
 			get
@@ -139,7 +202,13 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
+				if (Equals(value, InternalChild.SelectionBackground))
+				{
+					return;
+				}
+
 				InternalChild.SelectionBackground = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -148,13 +217,32 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance")]
 		[DefaultValue(HorizontalAlignment.Left)]
-		public HorizontalAlignment LabelHorizontalAlignment { get; set; }
+		[Bindable(true)]
+		public HorizontalAlignment LabelHorizontalAlignment
+		{
+			get
+			{
+				return _labelHorizontalAlignment;
+			}
+
+			set
+			{
+				if (value == _labelHorizontalAlignment)
+				{
+					return;
+				}
+				
+				_labelHorizontalAlignment = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the hover index can be null when no item is hovered.
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(true)]
+		[Bindable(true)]
 		public bool HoverIndexCanBeNull
 		{
 			get
@@ -164,7 +252,13 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
+				if (value == InternalChild.HoverIndexCanBeNull)
+				{
+					return;
+				}
+
 				InternalChild.HoverIndexCanBeNull = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -199,6 +293,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int? HoverIndex
 		{
 			get
@@ -213,15 +308,26 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-
 				if (Orientation == Orientation.Horizontal)
 				{
+					if (value == InternalChild.HoverColumnIndex)
+					{
+						return;
+					}
+
 					InternalChild.HoverColumnIndex = value;
 				}
 				else
 				{
+					if (value == InternalChild.HoverRowIndex)
+					{
+						return;
+					}
+
 					InternalChild.HoverRowIndex = value;
 				}
+
+				OnPropertyChanged();
 			}
 		}
 
@@ -230,6 +336,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int? SelectedIndex
 		{
 			get
@@ -246,12 +353,24 @@ namespace Myra.Graphics2D.UI
 			{
 				if (Orientation == Orientation.Horizontal)
 				{
+					if (value == InternalChild.SelectedColumnIndex)
+					{
+						return;
+					}
+
 					InternalChild.SelectedColumnIndex = value;
 				}
 				else
 				{
+					if (value == InternalChild.SelectedRowIndex)
+					{
+						return;
+					}
+
 					InternalChild.SelectedRowIndex = value;
 				}
+
+				OnPropertyChanged();
 			}
 		}
 

@@ -34,6 +34,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public bool IsMouseInside => _localMousePosition != null;
 
 		/// <summary>
@@ -42,6 +43,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public Point? LocalMousePosition
 		{
 			get => _localMousePosition;
@@ -54,6 +56,8 @@ namespace Myra.Graphics2D.UI
 
 				var oldValue = _localMousePosition;
 				_localMousePosition = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(IsMouseInside));
 
 				if (Desktop == null)
 				{
@@ -84,6 +88,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public bool IsTouchInside => _localTouchPosition != null;
 
 		/// <summary>
@@ -92,6 +97,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public Point? LocalTouchPosition
 		{
 			get => _localTouchPosition;
@@ -104,6 +110,8 @@ namespace Myra.Graphics2D.UI
 
 				var oldValue = _localTouchPosition;
 				_localTouchPosition = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(IsTouchInside));
 
 				if (Desktop == null)
 				{

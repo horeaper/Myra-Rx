@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using Myra.Events;
@@ -26,7 +28,7 @@ namespace Myra.Graphics2D.UI
 	/// <summary>
 	/// Represents the main UI desktop/screen that manages all widgets and handles user input.
 	/// </summary>
-	public partial class Desktop : ITransformable, IDisposable
+	public partial class Desktop : ITransformable, IDisposable, INotifyPropertyChanged
 	{
 		// Transform and layout state
 		private Rectangle _lastBounds;  // Cached bounds from last BoundsFetcher call
@@ -58,6 +60,11 @@ namespace Myra.Graphics2D.UI
 
 		private bool _isDisposed = false;  // Disposal flag to prevent double-dispose
 
+		private Widget _contextMenu;
+		private Widget _tooltip;
+		private float _opacity = 1.0f;
+		private IBrush _background;
+
 		/// <summary>
 		/// Gets or sets the function that fetches the bounds of the desktop.
 		/// </summary>
@@ -66,6 +73,7 @@ namespace Myra.Graphics2D.UI
 		/// <summary>
 		/// Gets or sets the root widget that covers the entire desktop.
 		/// </summary>
+		[Bindable(true)]
 		public Widget Root
 		{
 			get
@@ -93,6 +101,8 @@ namespace Myra.Graphics2D.UI
 				{
 					Widgets.Add(value);
 				}
+
+				OnPropertyChanged();
 			}
 		}
 
@@ -144,16 +154,53 @@ namespace Myra.Graphics2D.UI
 		/// <summary>
 		/// Gets the context menu widget currently displayed on the desktop.
 		/// </summary>
-		public Widget ContextMenu { get; private set; }
+		[Bindable(true)]
+		public Widget ContextMenu
+		{
+			get
+			{
+				return _contextMenu;
+			}
+
+			private set
+			{
+				if (value == _contextMenu)
+				{
+					return;
+				}
+				
+				_contextMenu = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets the tooltip widget currently displayed on the desktop.
 		/// </summary>
-		public Widget Tooltip { get; private set; }
+		[Bindable(true)]
+		public Widget Tooltip
+		{
+			get
+			{
+				return _tooltip;
+			}
+
+			private set
+			{
+				if (value == _tooltip)
+				{
+					return;
+				}
+				
+				_tooltip = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the widget that currently has keyboard focus.
 		/// </summary>
+		[Bindable(true)]
 		public Widget FocusedKeyboardWidget
 		{
 			get { return _focusedKeyboardWidget; }
@@ -180,6 +227,8 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_focusedKeyboardWidget = value;
+				OnPropertyChanged();
+
 				if (oldValue != null)
 				{
 					oldValue.OnLostKeyboardFocus();
@@ -196,11 +245,31 @@ namespace Myra.Graphics2D.UI
 		/// <summary>
 		/// Gets or sets the opacity of the desktop (0.0 to 1.0).
 		/// </summary>
-		public float Opacity { get; set; }
+		[DefaultValue(1.0f)]
+		[Bindable(true)]
+		public float Opacity
+		{
+			get
+			{
+				return _opacity;
+			}
+
+			set
+			{
+				if (value.Equals(_opacity))
+				{
+					return;
+				}
+				
+				_opacity = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the scale factor for the desktop and all its widgets.
 		/// </summary>
+		[Bindable(true)]
 		public Vector2 Scale
 		{
 			get => _scale;
@@ -212,6 +281,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_scale = value;
+				OnPropertyChanged();
 				InvalidateTransform();
 			}
 
@@ -220,6 +290,7 @@ namespace Myra.Graphics2D.UI
 		/// <summary>
 		/// Gets or sets the origin point for transformations (rotation and scale).
 		/// </summary>
+		[Bindable(true)]
 		public Vector2 TransformOrigin
 		{
 			get => _transformOrigin;
@@ -231,6 +302,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_transformOrigin = value;
+				OnPropertyChanged();
 				InvalidateTransform();
 			}
 		}
@@ -238,6 +310,7 @@ namespace Myra.Graphics2D.UI
 		/// <summary>
 		/// Gets or sets the rotation angle of the desktop in radians.
 		/// </summary>
+		[Bindable(true)]
 		public float Rotation
 		{
 			get => _rotation;
@@ -250,6 +323,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_rotation = value;
+				OnPropertyChanged();
 				InvalidateTransform();
 			}
 		}
@@ -267,6 +341,7 @@ namespace Myra.Graphics2D.UI
 		/// <summary>
 		/// Gets a value indicating whether the mouse cursor is over a GUI widget.
 		/// </summary>
+		[Bindable(true)]
 		public bool IsMouseOverGUI
 		{
 			get
@@ -278,6 +353,7 @@ namespace Myra.Graphics2D.UI
 		/// <summary>
 		/// Gets a value indicating whether a touch point is over a GUI widget.
 		/// </summary>
+		[Bindable(true)]
 		public bool IsTouchOverGUI
 		{
 			get
@@ -351,7 +427,25 @@ namespace Myra.Graphics2D.UI
 		/// <summary>
 		/// Gets or sets the background brush for the desktop.
 		/// </summary>
-		public IBrush Background { get; set; }
+		[Bindable(true)]
+		public IBrush Background
+		{
+			get
+			{
+				return _background;
+			}
+
+			set
+			{
+				if (Equals(value, _background))
+				{
+					return;
+				}
+				
+				_background = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Occurs before a context menu is closed.
@@ -1130,6 +1224,21 @@ namespace Myra.Graphics2D.UI
 			var size = CrossEngineStuff.ViewSize;
 
 			return new Rectangle(0, 0, size.X, size.Y);
+		}
+
+		/// <summary>
+		/// Occurs when a bindable property value changes.
+		/// </summary>
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		/// <summary>
+		/// Invoked whenever the effective value of any bindable property on this <see cref="T:Myra.MML.BaseObject" /> has been updated.
+		/// </summary>
+		/// <param name="propertyName">Name of the changed property.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }

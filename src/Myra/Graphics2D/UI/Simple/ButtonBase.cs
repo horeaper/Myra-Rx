@@ -1,4 +1,7 @@
-﻿using Myra.Graphics2D.UI.Styles;
+﻿using System;
+using System.ComponentModel;
+using System.Windows.Input;
+using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using Myra.Events;
 
@@ -10,6 +13,51 @@ namespace Myra.Graphics2D.UI
 	public abstract class ButtonBase : ContentControl
 	{
 		private bool _isClicked = false;
+		private ICommand _command;
+		private object _commandParameter;
+
+		/// <summary>
+		/// Gets or sets the command to invoke when this button is pressed.
+		/// </summary>
+		[Bindable(true)]
+		public ICommand Command
+		{
+			get => _command;
+
+			set
+			{
+				if (value == _command)
+				{
+					return;
+				}
+
+				var oldCommand = _command;
+				_command = value;
+				OnPropertyChanged();
+				OnCommandChanged(oldCommand);
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the parameter to pass to the <see cref="P:Myra.Graphics2D.UI.Command" /> property.
+		/// </summary>
+		[Bindable(true)]
+		public object CommandParameter
+		{
+			get => _commandParameter;
+
+			set
+			{
+				if (value == _commandParameter)
+				{
+					return;
+				}
+
+				_commandParameter = value;
+				OnPropertyChanged();
+			}
+		}
+
 
 		/// <summary>
 		/// Occurs when the button is clicked.
@@ -51,6 +99,7 @@ namespace Myra.Graphics2D.UI
 			if (_isClicked)
 			{
 				Click.Invoke(this, InputEventType.TouchUp);
+				ExecuteCommand();
 				_isClicked = false;
 			}
 		}
@@ -104,6 +153,44 @@ namespace Myra.Graphics2D.UI
 			var buttonBase = (ButtonBase)w;
 			PressedBackground = buttonBase.PressedBackground;
 			IsPressed = buttonBase.IsPressed;
+		}
+
+		private void ExecuteCommand()
+		{
+			if (Command?.CanExecute(CommandParameter) == true)
+			{
+				Command.Execute(CommandParameter);
+			}
+		}
+
+		private void OnCommandChanged(ICommand oldCommand)
+		{
+			if (oldCommand != null)
+			{
+				oldCommand.CanExecuteChanged -= Command_CanExecuteChanged;
+			}
+			if (Command != null)
+			{
+				Command.CanExecuteChanged += Command_CanExecuteChanged;
+			}
+			UpdateCanExecute();
+		}
+
+		private void Command_CanExecuteChanged(object sender, EventArgs e)
+		{
+			UpdateCanExecute();
+		}
+
+		private void UpdateCanExecute()
+		{
+			if (Command != null)
+			{
+				Enabled = Command.CanExecute(CommandParameter);
+			}
+			else
+			{
+				Enabled = true;
+			}
 		}
 	}
 }

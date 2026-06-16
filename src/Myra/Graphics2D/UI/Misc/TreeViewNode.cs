@@ -1,4 +1,5 @@
-﻿using Myra.Graphics2D.UI.Styles;
+﻿using System.ComponentModel;
+using Myra.Graphics2D.UI.Styles;
 
 namespace Myra.Graphics2D.UI
 {
@@ -16,11 +17,20 @@ namespace Myra.Graphics2D.UI
 		/// <summary>
 		/// Gets or sets a value indicating whether the node is expanded to show its child nodes.
 		/// </summary>
+		[Bindable(true)]
 		public bool IsExpanded
 		{
 			get { return _mark.IsPressed; }
 
-			set { _mark.IsPressed = value; }
+			set
+			{
+				if (value == _mark.IsPressed)
+				{
+					return;
+				}
+
+				_mark.IsPressed = value;
+			}
 		}
 
 		/// <summary>
@@ -47,9 +57,26 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		public TreeViewNode ParentNode { get; internal set; }
 
+		/// <inheritdoc />
+		[DefaultValue(HorizontalAlignment.Stretch)]
+		public override HorizontalAlignment HorizontalAlignment
+		{
+			get { return base.HorizontalAlignment; }
+			set { base.HorizontalAlignment = value; }
+		}
+
+		/// <inheritdoc />
+		[DefaultValue(VerticalAlignment.Stretch)]
+		public override VerticalAlignment VerticalAlignment
+		{
+			get { return base.VerticalAlignment; }
+			set { base.VerticalAlignment = value; }
+		}
+
 		/// <summary>
 		/// Gets or sets the widget displayed as the node's content.
 		/// </summary>
+		[Bindable(true)]
 		public override Widget Content
 		{
 			get => _content;
@@ -67,6 +94,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_content = value;
+				OnPropertyChanged();
 
 				if (_content != null)
 				{
@@ -99,6 +127,7 @@ namespace Myra.Graphics2D.UI
 			_mark.PressedChanged += (s, a) =>
 			{
 				_childNodesStackPanel.Visible = _mark.IsPressed;
+				OnPropertyChanged(nameof(IsExpanded));
 			};
 
 			Children.Add(_mark);

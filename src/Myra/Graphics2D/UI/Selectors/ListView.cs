@@ -266,19 +266,58 @@ namespace Myra.Graphics2D.UI
 
 		internal ComboView _parentCombo;
 
+		private ListBoxStyle _listBoxStyle;
+		private SelectionMode _selectionMode;
+
 		/// <summary>
 		/// Gets or sets the style applied to the list view.
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
-		public ListBoxStyle ListBoxStyle { get; set; }
+		[Bindable(true)]
+		public ListBoxStyle ListBoxStyle
+		{
+			get
+			{
+				return _listBoxStyle;
+			}
+
+			set
+			{
+				if (value == _listBoxStyle)
+				{
+					return;
+				}
+				
+				_listBoxStyle = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets whether items can be selected individually or in multiple selections.
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(SelectionMode.Single)]
-		public SelectionMode SelectionMode { get; set; }
+		[Bindable(true)]
+		public SelectionMode SelectionMode
+		{
+			get
+			{
+				return _selectionMode;
+			}
+
+			set
+			{
+				if (value == _selectionMode)
+				{
+					return;
+				}
+				
+				_selectionMode = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets the scroll viewer that manages scrolling for the list view items.
@@ -299,6 +338,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public int? SelectedIndex
 		{
 			get
@@ -334,6 +374,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Browsable(false)]
 		[XmlIgnore]
+		[Bindable(true)]
 		public Widget SelectedItem
 		{
 			get
@@ -349,6 +390,8 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_selectedItem = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(SelectedIndex));
 
 				if (_selectedItem != null)
 				{

@@ -23,6 +23,10 @@ namespace Myra.Graphics2D.UI
 	{
 		private float _value;
 
+		private float _minimum;
+		private float _maximum = 100.0f;
+		private IBrush _filler;
+
 		/// <summary>
 		/// Gets the orientation of the progress bar (horizontal or vertical).
 		/// </summary>
@@ -35,20 +39,57 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(0.0f)]
-		public float Minimum { get; set; }
+		[Bindable(true)]
+		public float Minimum
+		{
+			get
+			{
+				return _minimum;
+			}
+
+			set
+			{
+				if (_minimum.EpsilonEquals(value))
+				{
+					return;
+				}
+				
+				_minimum = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the maximum value of the progress bar. Default is 100.0.
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(100.0f)]
-		public float Maximum { get; set; }
+		[Bindable(true)]
+		public float Maximum
+		{
+			get
+			{
+				return _maximum;
+			}
+
+			set
+			{
+				if (_maximum.EpsilonEquals(value))
+				{
+					return;
+				}
+				
+				_maximum = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the current value of the progress bar between Minimum and Maximum. Default is 0.0.
 		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(0.0f)]
+		[Bindable(true)]
 		public float Value
 		{
 			get
@@ -64,6 +105,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_value = value;
+				OnPropertyChanged();
 
 				ValueChanged.Invoke(this, InputEventType.ValueChanged);
 			}
@@ -73,7 +115,25 @@ namespace Myra.Graphics2D.UI
 		/// Gets or sets the brush used to fill the progress bar.
 		/// </summary>
 		[Category("Appearance")]
-		public IBrush Filler { get; set; }
+		[Bindable(true)]
+		public IBrush Filler
+		{
+			get
+			{
+				return _filler;
+			}
+
+			set
+			{
+				if (Equals(value, _filler))
+				{
+					return;
+				}
+				
+				_filler = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Occurs when the value of the progress bar changes.

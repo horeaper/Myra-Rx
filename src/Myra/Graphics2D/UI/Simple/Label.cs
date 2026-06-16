@@ -38,12 +38,14 @@ namespace Myra.Graphics2D.UI
 		};
 
 		private bool _singleLine = false;
+		private TextHorizontalAlignment _textAlign;
 
 		/// <summary>
 		/// Gets or sets the vertical spacing in pixels between lines of text.
 		/// </summary>
 		[Category("Appearance")]
 		[DefaultValue(0)]
+		[Bindable(true)]
 		public int VerticalSpacing
 		{
 			get
@@ -52,7 +54,13 @@ namespace Myra.Graphics2D.UI
 			}
 			set
 			{
+				if (value == _richText.VerticalSpacing)
+				{
+					return;
+				}
+
 				_richText.VerticalSpacing = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -62,6 +70,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance")]
 		[DefaultValue(null)]
+		[Bindable(true)]
 		public string Text
 		{
 			get
@@ -76,6 +85,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_richText.Text = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -84,6 +94,7 @@ namespace Myra.Graphics2D.UI
 		/// Gets or sets the font used to render the label text.
 		/// </summary>
 		[Category("Appearance")]
+		[Bindable(true)]
 		public SpriteFontBase Font
 		{
 			get
@@ -92,7 +103,13 @@ namespace Myra.Graphics2D.UI
 			}
 			set
 			{
+				if (value == _richText.Font)
+				{
+					return;
+				}
+
 				_richText.Font = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -102,6 +119,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance")]
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool Wrap
 		{
 			get
@@ -117,6 +135,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_wrap = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -126,6 +145,7 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance")]
 		[DefaultValue(false)]
+		[Bindable(true)]
 		public bool SingleLine
 		{
 			get
@@ -141,6 +161,7 @@ namespace Myra.Graphics2D.UI
 				}
 
 				_singleLine = value;
+				OnPropertyChanged();
 				InvalidateMeasure();
 			}
 		}
@@ -150,10 +171,21 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance")]
 		[DefaultValue(AutoEllipsisMethod.None)]
+		[Bindable(true)]
 		public AutoEllipsisMethod AutoEllipsisMethod
 		{
 			get => _richText.AutoEllipsisMethod;
-			set => _richText.AutoEllipsisMethod = value;
+
+			set
+			{
+				if (value == _richText.AutoEllipsisMethod)
+				{
+					return;
+				}
+
+				_richText.AutoEllipsisMethod = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
@@ -161,10 +193,21 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance")]
 		[DefaultValue("...")]
+		[Bindable(true)]
 		public string AutoEllipsisString
 		{
 			get => _richText.AutoEllipsisString;
-			set => _richText.AutoEllipsisString = value;
+
+			set
+			{
+				if (value == _richText.AutoEllipsisString)
+				{
+					return;
+				}
+
+				_richText.AutoEllipsisString = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
@@ -172,67 +215,150 @@ namespace Myra.Graphics2D.UI
 		/// </summary>
 		[Category("Appearance")]
 		[DefaultValue(TextHorizontalAlignment.Left)]
-		public TextHorizontalAlignment TextAlign { get; set; }
+		[Bindable(true)]
+		public TextHorizontalAlignment TextAlign
+		{
+			get
+			{
+				return _textAlign;
+			}
+
+			set
+			{
+				if (value == _textAlign)
+				{
+					return;
+				}
+				
+				_textAlign = value;
+				OnPropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the text color in the label's normal state.
 		/// </summary>
 		[Category("Appearance/TextColor")]
+		[Bindable(true)]
 		public Color TextColor
 		{
 			get => _colors[WidgetVisualStateNormal].Value;
-			set => _colors[WidgetVisualStateNormal] = value;
+
+			set
+			{
+				if (value == _colors[WidgetVisualStateNormal])
+				{
+					return;
+				}
+
+				_colors[WidgetVisualStateNormal] = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the text color when the mouse is over the label.
 		/// </summary>
 		[Category("Appearance/TextColor")]
+		[Bindable(true)]
 		public Color? OverTextColor
 		{
 			get => _colors[WidgetVisualStateOver];
-			set => _colors[WidgetVisualStateOver] = value;
+
+			set
+			{
+				if (value == _colors[WidgetVisualStateOver])
+				{
+					return;
+				}
+
+				_colors[WidgetVisualStateOver] = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the text color when the label is disabled.
 		/// </summary>
 		[Category("Appearance/TextColor")]
+		[Bindable(true)]
 		public Color? DisabledTextColor
 		{
 			get => _colors[WidgetVisualStateDisabled];
-			set => _colors[WidgetVisualStateDisabled] = value;
+
+			set
+			{
+				if (value == _colors[WidgetVisualStateDisabled])
+				{
+					return;
+				}
+
+				_colors[WidgetVisualStateDisabled] = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the text color when the label has focus.
 		/// </summary>
 		[Category("Appearance/TextColor")]
+		[Bindable(true)]
 		public Color? FocusedTextColor
 		{
 			get => _colors[WidgetVisualStateFocused];
-			set => _colors[WidgetVisualStateFocused] = value;
+
+			set
+			{
+				if (value == _colors[WidgetVisualStateFocused])
+				{
+					return;
+				}
+
+				_colors[WidgetVisualStateFocused] = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets the text color when the label is pressed.
 		/// </summary>
 		[Category("Appearance/TextColor")]
+		[Bindable(true)]
 		public Color? PressedTextColor
 		{
 			get => _colors[WidgetVisualStatePressed];
-			set => _colors[WidgetVisualStatePressed] = value;
+
+			set
+			{
+				if (value == _colors[WidgetVisualStatePressed])
+				{
+					return;
+				}
+
+				_colors[WidgetVisualStatePressed] = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the text supports rich text formatting commands.
 		/// </summary>
 		[DefaultValue(true)]
+		[Bindable(true)]
 		public bool SupportsCommands
 		{
 			get => _richText.SupportsCommands;
 
-			set => _richText.SupportsCommands = value;
+			set
+			{
+				if (value == _richText.SupportsCommands)
+				{
+					return;
+				}
+
+				_richText.SupportsCommands = value;
+				OnPropertyChanged();
+			}
 		}
 
 		/// <summary>

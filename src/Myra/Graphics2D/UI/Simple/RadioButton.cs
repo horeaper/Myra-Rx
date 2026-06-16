@@ -1,5 +1,7 @@
 ﻿using Myra.Graphics2D.UI.Styles;
+using Myra.Events;
 using System.Collections;
+using System.ComponentModel;
 
 namespace Myra.Graphics2D.UI
 {
@@ -8,6 +10,34 @@ namespace Myra.Graphics2D.UI
 	/// </summary>
 	public class RadioButton : CheckButtonBase
 	{
+		/// <summary>
+		/// Gets or sets a value indicating whether the radio button is checked.
+		/// </summary>
+		[Category("Behavior")]
+		[DefaultValue(false)]
+		[Bindable(true)]
+		public bool IsChecked
+		{
+			get => IsPressed;
+			set => IsPressed = value;
+		}
+
+		/// <summary>
+		/// Occurs when the checked state of the radio button changes.
+		/// </summary>
+		public event MyraEventHandler IsCheckedChanged
+		{
+			add
+			{
+				PressedChanged += value;
+			}
+
+			remove
+			{
+				PressedChanged -= value;
+			}
+		}
+
 		/// <summary>
 		/// Gets or sets a value indicating whether this radio button is pressed/selected.
 		/// Only one radio button in a group can be pressed at a time.
@@ -56,6 +86,12 @@ namespace Myra.Graphics2D.UI
 		public RadioButton(Stylesheet stylesheet, string styleName = Stylesheet.DefaultStyleName)
 		{
 			SetStyle(stylesheet, styleName);
+			PressedChanged += RadioButton_PressedChanged;
+		}
+
+		private void RadioButton_PressedChanged(object sender, MyraEventArgs e)
+		{
+			OnPropertyChanged(nameof(IsChecked));
 		}
 
 		/// <summary>
