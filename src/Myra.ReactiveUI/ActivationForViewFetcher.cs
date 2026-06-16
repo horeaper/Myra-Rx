@@ -29,9 +29,11 @@ namespace ReactiveUI.Myra
 				var visibleChanged = Observable.FromEvent<MyraEventHandler, bool>(
 					eventHandler =>
 					{
-						void Handler(object? sender, MyraEventArgs e) => eventHandler(widget.IsPlaced);
+						void Handler(object? sender, MyraEventArgs e) => eventHandler(widget.Visible);
 						return Handler;
-					}, h => widget.VisibleChanged += h, h => widget.VisibleChanged -= h);
+					},
+					h => widget.VisibleChanged += h,
+					h => widget.VisibleChanged -= h);
 
 				var controlActivation = placeChanged.Merge(visibleChanged).DistinctUntilChanged();
 

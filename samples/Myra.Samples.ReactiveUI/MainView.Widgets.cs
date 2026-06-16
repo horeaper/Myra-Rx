@@ -21,65 +21,81 @@ namespace Myra.Samples.RxUI
 
 		void InitializeComponent()
 		{
-			labelSlider = new Label {
+			labelSlider = new Label
+			{
 				Margin = new Thickness(5, 0),
 			};
-			slider = new HorizontalSlider {
+			slider = new HorizontalSlider
+			{
 				Margin = new Thickness(15, 0),
 			};
-			progressBar = new HorizontalProgressBar {
+			progressBar = new HorizontalProgressBar
+			{
 				Margin = new Thickness(5, 0),
 			};
 
-			labelText = new Label {
+			labelText = new Label
+			{
 				Margin = new Thickness(5, 0),
 			};
-			textBox = new TextBox {
+			textBox = new TextBox
+			{
 				Margin = new Thickness(5, 0),
 			};
-			buttonReset = new Button {
+			buttonReset = new Button
+			{
 				Padding = new Thickness(20, 3),
 				Margin = new Thickness(15, 0),
-				Content = new Label {
+				Content = new Label
+				{
 					Text = "Reset",
 				}
 			};
 
-			labelChecked = new Label {
+			labelChecked = new Label
+			{
 				Margin = new Thickness(5, 0),
 			};
-			checkBox = new CheckButton {
+			checkBox = new CheckButton
+			{
 				Margin = new Thickness(5, 0),
-				Content = new Label {
+				Content = new Label
+				{
 					Text = "Enable Button",
 					Margin = new Thickness(5, 0),
 				},
 			};
 
-			labelCombo = new Label {
+			labelCombo = new Label
+			{
 				Margin = new Thickness(5, 0),
 			};
-			comboBox = new ComboView {
+			comboBox = new ComboView
+			{
 				Width = 100,
 				Margin = new Thickness(5, 0),
 			};
-			comboBox.Widgets.Add(new Label {
+			comboBox.Widgets.Add(new Label
+			{
 				Text = "Red",
 				TextColor = FSColor.Red,
 				Margin = new Thickness(5, 3),
 			});
-			comboBox.Widgets.Add(new Label {
+			comboBox.Widgets.Add(new Label
+			{
 				Text = "Green",
 				TextColor = FSColor.Red,
 				Margin = new Thickness(5, 3),
 			});
-			comboBox.Widgets.Add(new Label {
+			comboBox.Widgets.Add(new Label
+			{
 				Text = "Blue",
 				TextColor = FSColor.Red,
 				Margin = new Thickness(5, 3),
 			});
 
-			var layoutRoot = new VerticalStackPanel {
+			var layoutRoot = new VerticalStackPanel
+			{
 				Width = 300,
 				Spacing = 5,
 			};

@@ -1,37 +1,26 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Reactive.Concurrency;
-using Splat;
-
-namespace ReactiveUI.Myra
+﻿namespace ReactiveUI.Myra
 {
 	public sealed class Registrations : IWantsToRegisterStuff
 	{
-#if NET6_0_OR_GREATER
-		[RequiresDynamicCode("Register uses methods that require dynamic code generation")]
-		[RequiresUnreferencedCode("Register uses methods that may require unreferenced code")]
-#endif
-		public void Register(Action<Func<object>, Type> registerFunction)
+		public void Register(IRegistrar registrar)
 		{
-			registerFunction(static () => new PlatformOperations(), typeof(IPlatformOperations));
+			registrar.RegisterConstant<IPlatformOperations>(static () => new PlatformOperations());
 
-			registerFunction(static () => new CreatesMyraCommandBinding(), typeof(ICreatesCommandBinding));
-			registerFunction(static () => new MyraCreatesObservableForProperty(), typeof(ICreatesObservableForProperty));
-			registerFunction(static () => new ActivationForViewFetcher(), typeof(IActivationForViewFetcher));
+			registrar.RegisterConstant<ICreatesCommandBinding>(static () => new CreatesMyraCommandBinding());
+			registrar.RegisterConstant<ICreatesObservableForProperty>(static () => new MyraCreatesObservableForProperty());
+			registrar.RegisterConstant<IActivationForViewFetcher>(static () => new ActivationForViewFetcher());
+			registrar.RegisterConstant<ISetMethodBindingConverter>(static () => new ContainerSetMethodBindingConverter());
+			registrar.RegisterConstant<ISetMethodBindingConverter>(static () => new MenuSetMethodBindingConverter());
 
-			registerFunction(static () => new StringConverter(), typeof(IBindingTypeConverter));
-			registerFunction(static () => new IntegerToStringTypeConverter(), typeof(IBindingTypeConverter));
-			registerFunction(static () => new NullableIntegerToStringTypeConverter(), typeof(IBindingTypeConverter));
-			registerFunction(static () => new SingleToStringTypeConverter(), typeof(IBindingTypeConverter));
-			registerFunction(static () => new DoubleToStringTypeConverter(), typeof(IBindingTypeConverter));
-			registerFunction(static () => new DecimalToStringTypeConverter(), typeof(IBindingTypeConverter));
-#if NET6_0_OR_GREATER
-			registerFunction(static () => new ComponentModelTypeConverter(), typeof(IBindingTypeConverter));
-#endif
-
-			if (!ModeDetector.InUnitTestRunner())
-			{
-				RxApp.MainThreadScheduler = new WaitForDispatcherScheduler(static () => new SynchronizationContextScheduler(SynchronizationContext.Current!));
-			}
+			registrar.RegisterConstant<IBindingTypeConverter>(static () => new StringConverter());
+			registrar.RegisterConstant<IBindingTypeConverter>(static () => new ByteToStringTypeConverter());
+			registrar.RegisterConstant<IBindingTypeConverter>(static () => new IntegerToStringTypeConverter());
+			registrar.RegisterConstant<IBindingTypeConverter>(static () => new NullableIntegerToStringTypeConverter());
+			registrar.RegisterConstant<IBindingTypeConverter>(static () => new SingleToStringTypeConverter());
+			registrar.RegisterConstant<IBindingTypeConverter>(static () => new NullableSingleToStringTypeConverter());
+			registrar.RegisterConstant<IBindingTypeConverter>(static () => new DoubleToStringTypeConverter());
+			registrar.RegisterConstant<IBindingTypeConverter>(static () => new DecimalToStringTypeConverter());
+			registrar.RegisterConstant<IBindingFallbackConverter>(static () => new ComponentModelFallbackConverter());
 		}
 	}
 }

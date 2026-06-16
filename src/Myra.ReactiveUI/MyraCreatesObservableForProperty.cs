@@ -10,10 +10,7 @@ namespace ReactiveUI.Myra
 {
 	public sealed class MyraCreatesObservableForProperty : ICreatesObservableForProperty
 	{
-#if NET6_0_OR_GREATER
-		[RequiresDynamicCode("GetAffinityForObject uses methods that require dynamic code generation")]
-		[RequiresUnreferencedCode("GetAffinityForObject uses methods that may require unreferenced code")]
-#endif
+		[RequiresUnreferencedCode("Uses reflection over runtime types which is not trim- or AOT-safe.")]
 		public int GetAffinityForObject(Type type, string propertyName, bool beforeChanged = false)
 		{
 			if (!typeof(BaseObject).IsAssignableFrom(type))
@@ -31,6 +28,7 @@ namespace ReactiveUI.Myra
 			return !beforeChanged && attr?.Bindable == true ? 8 : 0;
 		}
 
+		[RequiresUnreferencedCode("Uses reflection over runtime types which is not trim- or AOT-safe.")]
 		public IObservable<IObservedChange<object?, object?>> GetNotificationForProperty(object sender, Expression expression, string propertyName, bool beforeChanged = false, bool suppressWarnings = false)
 		{
 			var type = sender.GetType();

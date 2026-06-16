@@ -11,7 +11,8 @@ namespace Myra.Samples.RxUI
 
 		public RxUIGame()
 		{
-			_graphics = new GraphicsDeviceManager(this) {
+			_graphics = new GraphicsDeviceManager(this)
+			{
 				PreferredBackBufferWidth = 1024,
 				PreferredBackBufferHeight = 720
 			};
@@ -26,7 +27,8 @@ namespace Myra.Samples.RxUI
 			MyraEnvironment.Platform = new MGPlatform(GraphicsDevice);
 
 			_mainView = new MainView();
-			_desktop = new Desktop {
+			_desktop = new Desktop
+			{
 				Root = _mainView,
 			};
 		}

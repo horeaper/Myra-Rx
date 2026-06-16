@@ -10,29 +10,7 @@ namespace ReactiveUI.Myra
 {
 	public sealed class CreatesMyraCommandBinding : ICreatesCommandBinding
 	{
-		public int GetAffinityForObject(Type type, bool hasEventTarget)
-		{
-			if (typeof(ButtonBase).IsAssignableFrom(type) || typeof(MenuItem).IsAssignableFrom(type))
-			{
-				return 10;
-			}
-			if (hasEventTarget)
-			{
-				return 6;
-			}
-			if (typeof(Widget).IsAssignableFrom(type))
-			{
-				return 4;
-			}
-
-			return 0;
-		}
-
-#if NET6_0_OR_GREATER
 		public int GetAffinityForObject<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicEvents | DynamicallyAccessedMemberTypes.PublicProperties)] T>(bool hasEventTarget)
-#else
-		public int GetAffinityForObject<T>(bool hasEventTarget)
-#endif
 		{
 			var type = typeof(T);
 
@@ -52,51 +30,42 @@ namespace ReactiveUI.Myra
 			return 0;
 		}
 
-#if NET6_0_OR_GREATER
-		[RequiresDynamicCode("BindCommandToObject uses methods that require dynamic code generation")]
-		[RequiresUnreferencedCode("BindCommandToObject uses methods that may require unreferenced code")]
-#endif
-		public IDisposable? BindCommandToObject(ICommand? command, object? target, IObservable<object?> commandParameter)
+		[RequiresUnreferencedCode("String/reflection-based event binding may require members removed by trimming.")]
+		public IDisposable? BindCommandToObject<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.PublicEvents | DynamicallyAccessedMemberTypes.NonPublicEvents)] T>(ICommand? command, T? target, IObservable<object?> commandParameter)
+			where T : class
 		{
+			ArgumentNullException.ThrowIfNull(target);
+
 			if (command == null)
 			{
-				throw new ArgumentNullException(nameof(command));
-			}
-			if (target == null)
-			{
-				throw new ArgumentNullException(nameof(target));
+				return Disposable.Empty;
 			}
 
-			var type = target.GetType();
-			if (typeof(ButtonBase).IsAssignableFrom(type))
+			if (target is ButtonBase)
 			{
-				return BindCommandToObject<MyraEventArgs>(command, target, commandParameter, "Click");
+				return BindCommandToObject<T, MyraEventArgs>(command, target, commandParameter, "Click");
 			}
-			if (typeof(MenuItem).IsAssignableFrom(type))
+			if (target is MenuItem)
 			{
-				return BindCommandToObject<MyraEventArgs>(command, target, commandParameter, "Selected");
+				return BindCommandToObject<T, MyraEventArgs>(command, target, commandParameter, "Selected");
 			}
-			if (typeof(Widget).IsAssignableFrom(type))
+			if (target is Widget)
 			{
-				return BindCommandToObject<MyraEventArgs>(command, target, commandParameter, "TouchUp");
+				return BindCommandToObject<T, MyraEventArgs>(command, target, commandParameter, "TouchUp");
 			}
 
 			return null;
 		}
 
-#if NET6_0_OR_GREATER
-		[RequiresDynamicCode("BindCommandToObject uses methods that require dynamic code generation")]
-		[RequiresUnreferencedCode("BindCommandToObject uses methods that may require unreferenced code")]
-#endif
-		public IDisposable BindCommandToObject<TEventArgs>(ICommand? command, object? target, IObservable<object?> commandParameter, string eventName)
+		[RequiresUnreferencedCode("String/reflection-based event binding may require members removed by trimming.")]
+		public IDisposable BindCommandToObject<T, TEventArgs>(ICommand? command, T? target, IObservable<object?> commandParameter, string eventName)
+			where T : class
 		{
+			ArgumentNullException.ThrowIfNull(target);
+
 			if (command == null)
 			{
-				throw new ArgumentNullException(nameof(command));
-			}
-			if (target == null)
-			{
-				throw new ArgumentNullException(nameof(target));
+				return Disposable.Empty;
 			}
 
 			var ret = new CompositeDisposable();
@@ -116,17 +85,64 @@ namespace ReactiveUI.Myra
 
 			if (typeof(Widget).IsAssignableFrom(targetType) || typeof(MenuItem).IsAssignableFrom(targetType))
 			{
-				var enabledProperty = targetType.GetProperty("Enabled", BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+				var enabledProperty = targetType.GetProperty("Enabled", BindingFlags.Public | BindingFlags.Instance);
 				if (enabledProperty != null)
 				{
-					object? latestParam = null;
-					ret.Add(commandParameter.Subscribe(x => latestParam = x));
-
 					ret.Add(Observable.FromEvent<EventHandler, bool>(
-							eventHandler => (_, __) => eventHandler(command.CanExecute(latestParam)),
+							eventHandler => (_, _) => eventHandler(command.CanExecute(latestParameter)),
 							x => command.CanExecuteChanged += x,
 							x => command.CanExecuteChanged -= x)
-						.StartWith(command.CanExecute(latestParam))
+						.StartWith(command.CanExecute(latestParameter))
+						.Subscribe(x => enabledProperty.SetValue(target, x, null)));
+				}
+			}
+
+			return ret;
+		}
+
+		public IDisposable? BindCommandToObject<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.PublicEvents | DynamicallyAccessedMemberTypes.NonPublicEvents)] T, TEventArgs>(ICommand? command, T? target, IObservable<object?> commandParameter, Action<EventHandler<TEventArgs>> addHandler, Action<EventHandler<TEventArgs>> removeHandler)
+			where T : class
+			where TEventArgs : EventArgs
+		{
+			ArgumentNullException.ThrowIfNull(target);
+			ArgumentNullException.ThrowIfNull(addHandler);
+			ArgumentNullException.ThrowIfNull(removeHandler);
+
+			if (command == null)
+			{
+				return Disposable.Empty;
+			}
+
+			object? latestParameter = null;
+			var targetType = target.GetType();
+
+			void Handler(object? s, TEventArgs e)
+			{
+				var param = Volatile.Read(ref latestParameter);
+				if (command.CanExecute(param))
+				{
+					command.Execute(param);
+				}
+			}
+
+			var ret = new CompositeDisposable
+			{
+				commandParameter.Subscribe(x => Volatile.Write(ref latestParameter, x))
+			};
+
+			addHandler(Handler);
+			ret.Add(Disposable.Create(() => removeHandler(Handler)));
+
+			if (typeof(Widget).IsAssignableFrom(targetType) || typeof(MenuItem).IsAssignableFrom(targetType))
+			{
+				var enabledProperty = targetType.GetProperty("Enabled", BindingFlags.Public | BindingFlags.Instance);
+				if (enabledProperty != null)
+				{
+					ret.Add(Observable.FromEvent<EventHandler, bool>(
+							eventHandler => (_, _) => eventHandler(command.CanExecute(Volatile.Read(ref latestParameter))),
+							x => command.CanExecuteChanged += x,
+							x => command.CanExecuteChanged -= x)
+						.StartWith(command.CanExecute(latestParameter))
 						.Subscribe(x => enabledProperty.SetValue(target, x, null)));
 				}
 			}

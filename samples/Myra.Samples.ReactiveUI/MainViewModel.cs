@@ -6,7 +6,7 @@ namespace Myra.Samples.RxUI
 	public partial class MainViewModel : ReactiveObject
 	{
 		[Reactive]
-		int _sliderValue;
+		float _sliderValue;
 
 		[Reactive]
 		string _textValue = string.Empty;
