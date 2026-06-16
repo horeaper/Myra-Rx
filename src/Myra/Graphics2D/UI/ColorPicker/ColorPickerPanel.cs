@@ -4,6 +4,7 @@ using System.ComponentModel;
 using FontStashSharp.RichText;
 using Myra.Events;
 using Myra.Graphics2D.UI.Styles;
+using Myra.Utility;
 
 #if MONOGAME || FNA
 using Microsoft.Xna.Framework;
@@ -152,7 +153,7 @@ namespace Myra.Graphics2D.UI.ColorPicker
 			get => _colorDisplay.Opacity;
 			set
 			{
-				if (value == _colorDisplay.Opacity)
+				if (value.EpsilonEquals(_colorDisplay.Opacity))
 				{
 					return;
 				}

@@ -256,7 +256,7 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (value.Equals(_opacity))
+				if (value.EpsilonEquals(_opacity))
 				{
 					return;
 				}

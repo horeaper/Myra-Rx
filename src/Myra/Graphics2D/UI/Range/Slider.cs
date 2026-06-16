@@ -49,7 +49,7 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (_minimum.EpsilonEquals(value))
+				if (value.EpsilonEquals(_minimum))
 				{
 					return;
 				}
@@ -73,7 +73,7 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (_maximum.EpsilonEquals(value))
+				if (value.EpsilonEquals(_maximum))
 				{
 					return;
 				}
@@ -109,7 +109,7 @@ namespace Myra.Graphics2D.UI
 					value = Minimum;
 				}
 
-				if (_value.EpsilonEquals(value))
+				if (value.EpsilonEquals(_value))
 				{
 					return;
 				}
@@ -162,7 +162,7 @@ namespace Myra.Graphics2D.UI
 			}
 			set
 			{
-				if (_wheelStep.EpsilonEquals(value))
+				if (value.EpsilonEquals(_wheelStep))
 				{
 					return;
 				}

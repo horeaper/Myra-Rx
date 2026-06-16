@@ -594,7 +594,7 @@ namespace Myra.Graphics2D.UI
 			get => _scale;
 			set
 			{
-				if (_scale.EpsilonEquals(value))
+				if (value.EpsilonEquals(_scale))
 				{
 					return;
 				}
@@ -616,7 +616,7 @@ namespace Myra.Graphics2D.UI
 			get => _transformOrigin;
 			set
 			{
-				if (_transformOrigin.EpsilonEquals(value))
+				if (value.EpsilonEquals(_transformOrigin))
 				{
 					return;
 				}
@@ -639,7 +639,7 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (_rotation.EpsilonEquals(value) )
+				if (value.EpsilonEquals(_rotation) )
 				{
 					return;
 				}
@@ -786,7 +786,7 @@ namespace Myra.Graphics2D.UI
 					throw new ArgumentOutOfRangeException("value");
 				}
 
-				if (_opacity.EpsilonEquals(value))
+				if (value.EpsilonEquals(_opacity))
 				{
 					return;
 				}

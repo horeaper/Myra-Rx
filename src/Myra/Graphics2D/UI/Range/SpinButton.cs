@@ -240,7 +240,7 @@ namespace Myra.Graphics2D.UI
 				}
 				else
 				{
-					if (_increment.EpsilonEquals(value))
+					if (value.EpsilonEquals(_increment))
 					{
 						return;
 					}
@@ -363,7 +363,7 @@ namespace Myra.Graphics2D.UI
 
 			set
 			{
-				if (value == _mulIncrement)
+				if (value.EpsilonEquals(_mulIncrement))
 				{
 					return;
 				}
